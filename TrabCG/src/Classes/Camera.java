@@ -268,7 +268,7 @@ public class Camera {
         for (int i = 0; i < z.length; i++) {
             z[i] = aux.get(2, i);
         }
-        Matriz newAux = aux.cut(aux.getLinhas(), aux.getColunas(), 2);
+        Matriz newAux = aux.cut(2);
 //        newAux.prlong("aux cutada");
         Matriz windowFinal = new Matriz(4, 2);
         Matriz cpRSRC = this.getcpPSRC();

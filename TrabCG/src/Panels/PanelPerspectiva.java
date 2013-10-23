@@ -118,14 +118,14 @@ public class PanelPerspectiva extends javax.swing.JPanel {
 //                        try {
                         //                        fillPolygon(zpol.getFaces().get(i), g2D, p.getCorFace(), p);
                         Face f2 = zpol.getFaces().get(i);
-                        System.out.println("============================================================================");
+//                        //System.out.println("============================================================================");
                         for (int j = 0; j < zpol.getFaces().size(); j++) {
-                            System.out.println("Face " + j);
+//                            //System.out.println("Face " + j);
                             for (int k = 0; k < zpol.getFaces().get(j).getPontos().size(); k++) {
-                                System.out.println("Pontos da face: " + zpol.getFaces().get(j).getPontos().get(k).getNome());
+                                //System.out.println("Pontos da face: " + zpol.getFaces().get(j).getPontos().get(k).getNome());
                             }
                             zpol.getFaces().get(j).gerarVetorPlano();
-                            zpol.getFaces().get(j).getVetorPlano().print("norma =");
+//                            zpol.getFaces().get(j).getVetorPlano().print("norma =");
                         }
 
 
@@ -142,7 +142,7 @@ public class PanelPerspectiva extends javax.swing.JPanel {
                                         mediaX += zpol.getFaces().get(k).getVetorPlano().get(0);
                                         mediaY += zpol.getFaces().get(k).getVetorPlano().get(1);
                                         mediaZ += zpol.getFaces().get(k).getVetorPlano().get(2);
-                                        System.out.println("cont = " + counter);
+                                        //System.out.println("cont = " + counter);
                                         counter++;
                                     }
                                 }
@@ -151,12 +151,12 @@ public class PanelPerspectiva extends javax.swing.JPanel {
                             f2.getPontos().get(j).setnY(mediaY / counter);
                             f2.getPontos().get(j).setnZ(mediaZ / counter);
                         }
-                        System.out.println("Pontos da face: ");
+                        //System.out.println("Pontos da face: ");
                         for (int j = 0; j < f2.getPontos().size(); j++) {
-                            System.out.println(f2.getPontos().get(j).getNome() + " nX = " + f2.getPontos().get(j).getnX() + " nY = " + f2.getPontos().get(j).getnY() + " nZ = " + f2.getPontos().get(j).getnZ());
+                            //System.out.println(f2.getPontos().get(j).getNome() + " nX = " + f2.getPontos().get(j).getnX() + " nY = " + f2.getPontos().get(j).getnY() + " nZ = " + f2.getPontos().get(j).getnZ());
                         }
-                        System.out.println("=========================================================================");
-//                            System.in.read();
+                        //System.out.println("=========================================================================");
+//                            //System.in.read();
                         PhongShading(p, f2, g);
 
                         //                        preencherFrente(f, g2D,p.getCorFace());
@@ -440,7 +440,7 @@ public class PanelPerspectiva extends javax.swing.JPanel {
 //    }
 
     public void PhongShading(Poligono p, Face f, Graphics g) {
-//        System.out.println("entrou");
+//        //System.out.println("entrou");
         java.util.List list = f.getArestas();
         double yinf = ((Aresta) list.get(0)).getP1().getX();
         double ysup = ((Aresta) list.get(0)).getP1().getY();
@@ -460,7 +460,7 @@ public class PanelPerspectiva extends javax.swing.JPanel {
         }
 
         for (int y = (int) ysup; y > (int) yinf && y > 0; y--) {
-//            System.out.println("for 1");
+//            //System.out.println("for 1");
             double x1 = 0.0D;
             double x2 = 0.0D;
             double u1 = 0.0D;
@@ -517,7 +517,7 @@ public class PanelPerspectiva extends javax.swing.JPanel {
             double e3 = (u2 * (pd.getY() - pc.getY())) / (pd.getY() - pc.getY());
             double e4 = ((1.0D - u2) * (pd.getY() - pc.getY())) / (pd.getY() - pc.getY());
             double Nxi = pb.getnX() * e1 + pa.getnX() * e2;
-//            System.out.println("pbnX = " + pb.getnX());
+//            //System.out.println("pbnX = " + pb.getnX());
             double Nyi = pb.getnY() * e1 + pa.getnY() * e2;
             double Nzi = pb.getnZ() * e1 + pa.getnZ() * e2;
             double Nxf = pd.getnX() * e3 + pc.getnX() * e4;
@@ -543,7 +543,7 @@ public class PanelPerspectiva extends javax.swing.JPanel {
             double Z = Zi;
             double X = Xi;
             for (double Y = Yi; x < x2; Y += deltaYM) {
-//                System.out.println(" for 2");
+//                //System.out.println(" for 2");
                 Ponto ponto = new Ponto("", X, Y, Z);
                 ponto.setnX(Nx);
                 ponto.setnY(Ny);
@@ -557,7 +557,7 @@ public class PanelPerspectiva extends javax.swing.JPanel {
 //                int blue = (int) (0.25 * (double) p.getCorFace().getBlue());//(int) (0.25 * (double) p.getCorFace().getBlue());//(int)(ponto.Ib * (double)p.getCor().getBlue());
                 Color cor = new Color(red <= 255 ? red >= 0 ? red : 0 : 255, green <= 255 ? green >= 0 ? green : 0 : 255, blue <= 255 ? blue >= 0 ? blue : 0 : 255);
                 g.setColor(cor);
-//                System.out.println("Color = "+cor.getRed()+" "+cor.getGreen()+" "+cor.getBlue());
+//                //System.out.println("Color = "+cor.getRed()+" "+cor.getGreen()+" "+cor.getBlue());
 
                 g.drawRect((int) x, y, 1, 1);
                 Nx += deltaNx;

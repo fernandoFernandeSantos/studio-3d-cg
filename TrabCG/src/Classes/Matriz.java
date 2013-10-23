@@ -420,21 +420,38 @@ public class Matriz//muda de tamanho
     //--------------------------------
     // funções de trasformação
     //--------------------------------
-    public Matriz cut(int i, int colunas, int linhaCortar) {
-        Matriz aux = new Matriz(i - 1, colunas);
-        int cont = 0;
-        for (int j = 0; j < i - 1; j++) {
-            if (j != linhaCortar) {
-                for (int k = 0; k < colunas; k++) {
-                    aux.set(j, k, this.get(j, k));
-                }
-            }
-            if (j == linhaCortar) {
-                for (int k = 0; k < colunas; k++) {
-                    aux.set(j, k, this.get(j+1, k));
-                }
+    public Matriz cut(int linhaCortar) {
+	Matriz aux = new Matriz(this.getLinhas() - 1, this.getColunas());
+	int cont = 0;
+        
+        for(int j = 0; j < this.getLinhas(); j++){
+            if(j != linhaCortar){
+                for (int k = 0; k < this.getColunas(); k++) {
+		    aux.set(j-cont, k, this.get(j, k));
+		}
+            }else{
+                cont=1;
             }
         }
-        return aux;
+           
+	return aux;
+    }
+
+    public static Matriz gerarJPV(double xmin, double ymin, double xmax, double ymax) {
+	double umax = xmax;
+	double vmax = ymax;
+	double umin = xmin;
+	double vmin = ymin;
+
+	Matriz res = new Matriz(3, 3);
+
+	res.setIdentidade();
+
+	res.set(0, 0, (umax - umin) / (xmax - xmin));
+	res.set(0, 2, (-xmin) * ((umax - umin) / (xmax - xmin)) + umin);
+	res.set(1, 1, (vmin - vmax) / (ymax - ymin));
+	res.set(1, 2, ymin * ((vmax - vmin) / (ymax - ymin)) + vmax);
+	return res;
+	
     }
 }
