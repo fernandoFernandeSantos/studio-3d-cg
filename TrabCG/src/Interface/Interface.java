@@ -88,8 +88,8 @@ public class Interface extends javax.swing.JFrame {
 
         initComponents();
         i = _i;
-        luzAmbiente = new Iluminacao(new Ponto("localI", 34, 32, 55), 23, 5, 3);
-        luzFundo = new Iluminacao();
+        luzAmbiente = new Iluminacao(new Ponto("localI", 0, 0, 0), 0.5, 0.5, 0.5);
+        luzFundo = new Iluminacao(new Ponto("localI", 0, 0, 0), 0.5, 0.5, 0.5   );
         setLocationRelativeTo(null);
         this.setResizable(false);
         vrpX = Double.valueOf(svrpX.getValue().toString());
