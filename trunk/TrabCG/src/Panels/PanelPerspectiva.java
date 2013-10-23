@@ -16,11 +16,7 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.geom.Line2D;
-import java.io.IOException;
 import java.util.ArrayList;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -91,7 +87,7 @@ public class PanelPerspectiva extends javax.swing.JPanel {
         }
 
 
-        if (this.inter.getVizualizacaoAtual() == 3) {
+        if (this.inter.getVizualizacaoAtual() == 4) {
             for (Poligono p : inter.getPoligonos()) {
                 g2D.setColor(p.getCor());
                 Poligono Paux = c.GerarPerspectiva(this.getWidth(), this.
@@ -178,7 +174,7 @@ public class PanelPerspectiva extends javax.swing.JPanel {
             }
 
         }
-        if (this.inter.getVizualizacaoAtual() == 4) {
+        if (this.inter.getVizualizacaoAtual() == 3) {
             for (Poligono p : inter.getPoligonos()) {
                 g2D.setColor(p.getCor());
                 Poligono Paux = c.GerarPerspectiva(this.getWidth(), this.
