@@ -11,7 +11,6 @@ import Classes.Ponto;
 import Classes.Vetor;
 import Interface.Interface;
 import java.awt.Color;
-import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
@@ -25,13 +24,12 @@ import java.util.ArrayList;
 public class PanelFrente extends javax.swing.JPanel {
 
     private Interface i;
+    private Vetor observador;
 
-    /**
-     * Creates new form PanelFrente
-     */
     public PanelFrente(Interface _i) {
         initComponents();
         i = _i;
+        observador = new Vetor(0, 0, 1);
     }
 
     @Override
@@ -42,75 +40,79 @@ public class PanelFrente extends javax.swing.JPanel {
                 RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
-        if (this.i.getVizualizacaoAtual() == 1) {
-            for (Poligono p : this.i.getPoligonosTransformados()) {
-                g2D.setColor(p.getCor());
+        int viusalizacao = i.getVizualizacaoAtual();
+        for (Poligono p : this.i.getPoligonosTransformados()) {
+            Poligono pol = p.copy();
+            pol.usarjpv();
+//            pol.getMatrizPontos().print("pol lateral zoado");
 
-                for (Aresta a : p.getArestas()) {
-                    this.drawline(g2D, a);
-                }
-                if (i.isMostrarVetores()) {
-                    for (Face f : p.getFaces()) {
+            switch (viusalizacao) {
+                case 1:
+                    g2D.setColor(pol.getCor());
+
+                    for (Aresta a : pol.getArestas()) {
+                        this.drawline(g2D, a);
+                    }
+                    break;
+                case 2:
+                    for (Face f : pol.getFaces()) {
                         f.gerarVetorPlano();
-                        this.paintVetor(f.getPontos().get(0), f.getVetorPlano(),
-                                g2D);
-                    }
-                }
-                if (i.isMostrarPontos()) {
-                    this.paintPointNumbers(p, g2D);
-                }
-            }
-
-        }
-        if (this.i.getVizualizacaoAtual() == 2) {
-            for (Poligono p : i.getPoligonosTransformados()) {
-                for (Face f : p.getFaces()) {
-                    f.gerarVetorPlano();
-                    Vetor normal = f.getVetorPlano();
-                    g2D.setColor(p.getCor());
-                    if (Vetor.produtoEscalar(normal, new Vetor(0, 0, 1)) > 0) {
-                        for (Aresta a : f.getArestas()) {
-                            this.drawline(g2D, a);
+                        Vetor normal = f.getVetorPlano();
+                        g2D.setColor(pol.getCor());
+                        if (Vetor.produtoEscalar(normal, observador) > 0) {
+                            for (Aresta a : f.getArestas()) {
+                                this.drawline(g2D, a);
+                            }
                         }
                     }
-                    if (i.isMostrarVetores()) {
-                        this.paintVetor(f.getPontos().get(0), f.getVetorPlano(),
-                                g2D);
-                    }
-                }
-                if (i.isMostrarPontos()) {
-                    this.paintPointNumbers(p, g2D);
-                }
-            }
-        }
-        if (this.i.getVizualizacaoAtual() == 3) {
-            for (Poligono p : i.getPoligonosTransformados()) {
-                for (Face f : p.getFaces()) {
-                    f.gerarVetorPlano();
-                    Vetor normal = f.getVetorPlano();
+                    break;
+                case 3:
+                    for (Face f : pol.getFaces()) {
+                        f.gerarVetorPlano();
+                        Vetor normal = f.getVetorPlano();
 
-                    if (Vetor.produtoEscalar(normal, new Vetor(0, 0, 1)) >= 0) {
-//                        fillPolygon(f.getPontos(), g2D, f.getCor());
-                        fillPolygon(f.getPontos(), g2D, p.getCorFace());
-                        g2D.setColor(p.getCor());
-                        for (Aresta a : f.getArestas()) {
-                            this.drawline(g2D, a);
+                        if (Vetor.produtoEscalar(normal, observador) > 0) {
+                            //                        fillPolygon(f.getPontos(), g2D, f.getCor());
+                            fillPolygon(f.getPontos(), g2D, pol.getCorFace());
+                            g2D.setColor(p.getCor());
+                            for (Aresta a : f.getArestas()) {
+                                this.drawline(g2D, a);
+                            }
                         }
                     }
-                    if (i.isMostrarVetores()) {
-                        this.paintVetor(f.getPontos().get(0), f.getVetorPlano(),
-                                g2D);
-                    }
-                }
-                if (i.isMostrarPontos()) {
-                    this.paintPointNumbers(p, g2D);
-                }
+                    break;
             }
+            
+            if(i.isMostrarPontos()){
+                paintPointNumbers(pol, g2D);
+            }
+            
         }
-
-
+        
+        
+        drawAxis(g2D);
+        
+        
     }
+    
+    public void drawAxis(Graphics2D g2D){
+        
+//        Graphics2D g2D = (Graphics2D) this.getGraphics();
+//        g2D.setRenderingHint(
+//                RenderingHints.KEY_ANTIALIASING,
+//                RenderingHints.VALUE_ANTIALIAS_ON);
 
+        g2D.setColor(Color.black);
+        g2D.drawLine(20, this.getHeight() - 20, 20, this.getHeight() - 80);
+        g2D.fillOval(18, this.getHeight() - 84, 5, 5);
+        g2D.drawString("Y", 18, this.getHeight() - 87);
+        
+        g2D.drawLine(20, this.getHeight() - 20, 80, this.getHeight() - 20);
+        g2D.fillOval(80, this.getHeight() - 22, 5, 5);
+        g2D.drawString("X", 87, this.getHeight() - 17);
+        
+    }
+    
     public void drawline(Graphics2D g, Aresta a) {
         g.drawLine((int) Math.round(a.getP1().getX()), (int) Math.round(a.getP1().getY()),
                 (int) Math.round(a.getP2().getX()), (int) Math.round(a.getP2().getY()));
@@ -126,35 +128,17 @@ public class PanelFrente extends javax.swing.JPanel {
             }
         }
     }
-
-    public void paintVetor(Ponto p, Vetor v, Graphics2D g) {
-
-        int t = i.getVetoresTamanho();
-        Ponto b = new Ponto();
-
-        b.setX(Math.round(p.getX() + (v.get(0)) * t));
-        b.setY(Math.round(p.getY() + (v.get(1)) * t));
-        b.setZ(Math.round(p.getZ() + (v.get(2)) * t));
-
-        if (v.get(2) < 0) {
-            g.setColor(Color.blue);
-        } else {
-            g.setColor(Color.red);
-
-        }
-
-        g.drawLine((int) p.getX(), (int) p.getY(), (int) b.getX(), (int) b.
-                getY());
-    }
-
 //Metodo que preenche o polígono através de uma scanline que percorre o poligono encontrando os pontos de intersecção
+
     public void fillPolygon(ArrayList<Ponto> p, Graphics2D g, Color cor) {
-        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
+                RenderingHints.VALUE_ANTIALIAS_ON);
         g.setColor(cor);
         double xl1, xl2, yl1, yl2;
         for (int i = 0; i < this.getHeight(); i++) {//percorro toda a altura
             ArrayList<Double> pontos = new ArrayList<>();
-            Line2D.Double scanline = new Line2D.Double(-10000, i + 0.5, this.getWidth() + 10000, i + 0.5);//defino a linha da scanline
+            Line2D.Double scanline = new Line2D.Double(-10000, i + 0.5, this.
+                    getWidth() + 10000, i + 0.5);//defino a linha da scanline
             for (int j = 0; j < p.size(); j++) {//faço a montagem dos pontos "X" e "Y" para formação da Scanline de comparação
                 if (j == p.size() - 1) {
                     xl1 = p.get(j).getX();
@@ -189,9 +173,10 @@ public class PanelFrente extends javax.swing.JPanel {
             }
         }
 
-
         repaint();
     }
+    
+    
 
     @SuppressWarnings(
             "unchecked")

@@ -37,6 +37,7 @@ public class Poligono implements java.io.Serializable {
     private int numPontos;
     private int raio;
     private int altura;
+
     double kar;
     double kdr;
     double ksr;
@@ -46,6 +47,9 @@ public class Poligono implements java.io.Serializable {
     double kab;
     double kdb;
     double ksb;
+    double ktr;
+    double ktg;
+    double ktb;
     double n;
 
     public Poligono() {
@@ -61,6 +65,9 @@ public class Poligono implements java.io.Serializable {
         kab = 1;
         kdb = 1;
         ksb = 1;
+        ktr = 0;
+        ktg = 0;
+        ktb = 0;
         n = 6;
 //        this.pontos.add(new Ponto("centro",0,0,0));
 
@@ -89,9 +96,146 @@ public class Poligono implements java.io.Serializable {
         corFace = Color.white;
 
     }
+    
+    
+    public double getKtR(){
+        return ktr;
+    }
+    
+    public double getKtG(){
+        return ktg;
+    }
+    
+    public double getKtB(){
+        return ktb;
+    }
+    
+    public void setKtR(double kt){
+        ktr = kt;
+    }
+    
+    public void setKtG(double kt){
+        ktg = kt;
+    }
+    
+    public void setKtB(double kt){
+        ktb = kt;
+    }
+    
+public double getKaR() {
+        return kar;
+    }
 
+    public void setKaR(double kar) {
+        this.kar = kar;
+    }
+
+    public double getKdR() {
+        return kdr;
+    }
+
+    public void setKdR(double kdr) {
+        this.kdr = kdr;
+    }
+
+    public double getKsR() {
+        return ksr;
+    }
+
+    public void setKsR(double ksr) {
+        this.ksr = ksr;
+    }
+
+    public double getKaG() {
+        return kag;
+    }
+
+    public void setKaG(double kag) {
+        this.kag = kag;
+    }
+
+    public double getKdG() {
+        return kdg;
+    }
+
+    public void setKdG(double kdg) {
+        this.kdg = kdg;
+    }
+
+    public double getKsG() {
+        return ksg;
+    }
+
+    public void setKsG(double ksg) {
+        this.ksg = ksg;
+    }
+
+    public double getKaB() {
+        return kab;
+    }
+
+    public void setKaB(double kab) {
+        this.kab = kab;
+    }
+
+    public double getKdB() {
+        return kdb;
+    }
+
+    public void setKdB(double kdb) {
+        this.kdb = kdb;
+    }
+
+    public double getKsB() {
+        return ksb;
+    }
+
+    public void setKsB(double ksb) {
+        this.ksb = ksb;
+    }
+
+    public double getN() {
+        return n;
+    }
+
+    public void setN(double n) {
+        this.n = n;
+    }    
+    
     public void setCorFace(Color cor) {
         this.corFace = cor;
+    }
+
+    public Poligono(ArrayList<Ponto> pontos, ArrayList<Aresta> arestas,
+                    ArrayList<Face> faces) {
+        this.pontos = pontos;
+        this.arestas = arestas;
+        this.faces = faces;
+
+        RotationX = 0;
+        RotationY = 0;
+        RotationZ = 0;
+
+        ScaleX = 1;
+        ScaleY = 1;
+        ScaleZ = 1;
+
+        ShearXonZ = 0;//Cizalhamento
+        ShearYonZ = 0;
+
+        ShearYonX = 0;
+        ShearZonX = 0;
+
+        ShearXonY = 0;
+        ShearZonY = 0;
+
+        TranslationX = 0;
+        TranslationY = 0;
+        TranslationZ = 0;
+
+        cor = Color.black;
+        corFace = Color.white;
+
     }
 
     public Poligono copy() {
@@ -102,8 +246,7 @@ public class Poligono implements java.io.Serializable {
                     p.getZ()));
         }
         for (Aresta a : this.arestas) {
-            resultado.addAresta(a.getNome(), a.getP1().getNome(), a.
-                    getP2().getNome());
+            resultado.addAresta(a.getNome(), a.getP1().getNome(), a.getP2().getNome());
         }
         Color fc = null;
         for (Face f : this.getFaces()) {
@@ -399,7 +542,7 @@ public class Poligono implements java.io.Serializable {
         this.ShearZonY += x;
     }
 
-    public Poligono Transformar() {
+    public Poligono Transformar(boolean isOrtogonal) {
         Poligono resultado = this.copy();
         //Matrizes de rotação
         Matriz Rx = Matriz.gerarRotacaoX(this.RotationX);
@@ -432,15 +575,17 @@ public class Poligono implements java.io.Serializable {
         //Calculos
 
         Matriz aux = Matriz.multiplicacao(TRF, SC);
-        aux = Matriz.multiplicacao(aux, Rz);
-        aux = Matriz.multiplicacao(aux, Ry);
-        aux = Matriz.multiplicacao(aux, Rx);
-        aux = Matriz.multiplicacao(aux, ShXonZ);
-        aux = Matriz.multiplicacao(aux, ShYonZ);
-        aux = Matriz.multiplicacao(aux, ShXonY);
-        aux = Matriz.multiplicacao(aux, ShZonY);
-        aux = Matriz.multiplicacao(aux, ShYonX);
-        aux = Matriz.multiplicacao(aux, ShZonX);
+
+        aux.multiplicacao(Rz);
+        aux.multiplicacao(Ry);
+        aux.multiplicacao(Rx);
+        aux.multiplicacao(ShXonZ);
+        aux.multiplicacao(ShYonZ);
+        aux.multiplicacao(ShXonY);
+        aux.multiplicacao(ShZonY);
+        aux.multiplicacao(ShYonX);
+        aux.multiplicacao(ShZonX);
+
         aux = Matriz.multiplicacao(aux, PTR);
 
 
@@ -452,7 +597,7 @@ public class Poligono implements java.io.Serializable {
 
         Poligono p = this.copy();
         p.Transladar(-150, -150, -150);
-        p = p.Transformar();
+        p = p.Transformar(false);
         return p;
     }
 
@@ -864,83 +1009,25 @@ public class Poligono implements java.io.Serializable {
 
     }
 
-    public double getKaR() {
-        return kar;
-    }
+    public void usarjpv() {
+        Matriz jpv = Matriz.gerarJPV(0, 0, 300, 300);
 
-    public void setKaR(double kar) {
-        this.kar = kar;
-    }
+        Matriz pt = this.getMatrizPontos().cut(2);
+        
+//        pt.print("pt antes");
 
-    public double getKdR() {
-        return kdr;
-    }
+//        jpv.print("jpv");
 
-    public void setKdR(double kdr) {
-        this.kdr = kdr;
-    }
+        Matriz res = Matriz.multiplicacao(jpv, pt);
 
-    public double getKsR() {
-        return ksr;
-    }
-
-    public void setKsR(double ksr) {
-        this.ksr = ksr;
-    }
-
-    public double getKaG() {
-        return kag;
-    }
-
-    public void setKaG(double kag) {
-        this.kag = kag;
-    }
-
-    public double getKdG() {
-        return kdg;
-    }
-
-    public void setKdG(double kdg) {
-        this.kdg = kdg;
-    }
-
-    public double getKsG() {
-        return ksg;
-    }
-
-    public void setKsG(double ksg) {
-        this.ksg = ksg;
-    }
-
-    public double getKaB() {
-        return kab;
-    }
-
-    public void setKaB(double kab) {
-        this.kab = kab;
-    }
-
-    public double getKdB() {
-        return kdb;
-    }
-
-    public void setKdB(double kdb) {
-        this.kdb = kdb;
-    }
-
-    public double getKsB() {
-        return ksb;
-    }
-
-    public void setKsB(double ksb) {
-        this.ksb = ksb;
-    }
-
-    public double getN() {
-        return n;
-    }
-
-    public void setN(double n) {
-        this.n = n;
+//        res.print("res");
+        for (int i = 0; i < this.getPontos().size(); i++) {
+            Ponto p = this.getPontos().get(i);
+            p.setX(res.get(0, i));
+            p.setY(res.get(1, i));
+            
+//        }
+//        this.setPontos(res);
+        }
     }
 }

@@ -4,19 +4,17 @@
  */
 package Classes;
 
-import java.awt.geom.Line2D;
-import java.util.ArrayList;
-
 /**
  *
  * @author alienware
  */
-public class Ponto implements java.io.Serializable {
+public class Ponto implements java.io.Serializable{
 
     private String nome;
     private double X;
     private double Y;
     private double Z;
+
     double nX;
     double nY;
     double nZ;
@@ -27,7 +25,7 @@ public class Ponto implements java.io.Serializable {
     public Ponto getNormal() {
         return new Ponto("", nX, nY, nZ);
     }
-
+    
     public Ponto() {
         nome = "";
     }
@@ -110,7 +108,7 @@ public class Ponto implements java.io.Serializable {
         }
         return true;
     }
-
+    
     public double getnX() {
         return nX;
     }
@@ -158,6 +156,4 @@ public class Ponto implements java.io.Serializable {
     public void setIb(double Ib) {
         this.Ib = Ib;
     }
-    
-    
 }
