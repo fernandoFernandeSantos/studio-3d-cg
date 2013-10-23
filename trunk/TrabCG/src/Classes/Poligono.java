@@ -52,7 +52,16 @@ public class Poligono implements java.io.Serializable {
         this.pontos = new ArrayList<>();
         this.arestas = new ArrayList<>();
         this.faces = new ArrayList<>();
-
+        kar = 1;
+        kdr = 1;
+        ksr = 1;
+        kag = 1;
+        kdg = 1;
+        ksg = 1;
+        kab = 1;
+        kdb = 1;
+        ksb = 1;
+        n = 6;
 //        this.pontos.add(new Ponto("centro",0,0,0));
 
         RotationX = 0;
@@ -83,38 +92,6 @@ public class Poligono implements java.io.Serializable {
 
     public void setCorFace(Color cor) {
         this.corFace = cor;
-    }
-
-    public Poligono(ArrayList<Ponto> pontos, ArrayList<Aresta> arestas,
-            ArrayList<Face> faces) {
-        this.pontos = pontos;
-        this.arestas = arestas;
-        this.faces = faces;
-
-        RotationX = 0;
-        RotationY = 0;
-        RotationZ = 0;
-
-        ScaleX = 1;
-        ScaleY = 1;
-        ScaleZ = 1;
-
-        ShearXonZ = 0;//Cizalhamento
-        ShearYonZ = 0;
-
-        ShearYonX = 0;
-        ShearZonX = 0;
-
-        ShearXonY = 0;
-        ShearZonY = 0;
-
-        TranslationX = 0;
-        TranslationY = 0;
-        TranslationZ = 0;
-
-        cor = Color.black;
-        corFace = Color.white;
-
     }
 
     public Poligono copy() {
