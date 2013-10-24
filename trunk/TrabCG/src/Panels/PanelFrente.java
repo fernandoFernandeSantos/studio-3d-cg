@@ -16,6 +16,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Iterator;
 
 /**
  *
@@ -43,7 +44,7 @@ public class PanelFrente extends javax.swing.JPanel {
         g2D.setRenderingHint(
                 RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
-        //identifica tipo de visualização | 1 -> Wireframe | 2 -> Wireframe com ocultação | 3 -> Sombreamento costante |
+        //identifica tipo de visualização | 1 -> Wireframe | 2 -> Wireframe com ocultação | 3 -> Sombreamento costante |4 - phong
         int viusalizacao = inter.getVizualizacaoAtual();
 
         //pega os poligonos transformados que foram criados na interface    
@@ -63,8 +64,8 @@ public class PanelFrente extends javax.swing.JPanel {
             Poligono pol = p.copy();
             //antes de desenhar tem que inverter o eixo y
             pol.usarjpv(this.getWidth(), this.getHeight());
-           //quando vai desenhar escolhe o tipo de visualização
-            //identifica tipo de visualização | 1 -> Wireframe | 2 -> Wireframe com ocultação | 3 -> Sombreamento costante |
+            //quando vai desenhar escolhe o tipo de visualização
+            //identifica tipo de visualização | 1 -> Wireframe | 2 -> Wireframe com ocultação | 3 -> Sombreamento costante |4 - phong
             switch (viusalizacao) {
                 case 1:
                     g2D.setColor(pol.getCor());
@@ -78,6 +79,7 @@ public class PanelFrente extends javax.swing.JPanel {
                         f.gerarVetorPlano();
                         Vetor normal = f.getVetorPlano();
                         g2D.setColor(pol.getCor());
+                        //faz a verificação se é visível ou não
                         if (Vetor.produtoEscalar(normal, observador) > 0) {
                             for (Aresta a : f.getArestas()) {
                                 this.drawline(g2D, a);
@@ -89,7 +91,7 @@ public class PanelFrente extends javax.swing.JPanel {
                     for (Face f : pol.getFaces()) {
                         f.gerarVetorPlano();
                         Vetor normal = f.getVetorPlano();
-
+                        //faz o preenchimento se for visível
                         if (Vetor.produtoEscalar(normal, observador) > 0) {
                             g.setColor(p.getCorFace());
                             preenchimento(f, g2D);
@@ -104,7 +106,7 @@ public class PanelFrente extends javax.swing.JPanel {
                     for (Face f : pol.getFaces()) {
                         f.gerarVetorPlano();
                         Vetor normal = f.getVetorPlano();
-
+                        //se visível obtem as variaveis necessárias para o phong
                         if (Vetor.produtoEscalar(normal, observador) > 0) {
                             Ponto origem = new Ponto("", 0.0D, 0.0D, 100D);
                             double Ir = getIr(p, f, origem);
@@ -278,58 +280,66 @@ public class PanelFrente extends javax.swing.JPanel {
                 getZ();
     }
 
+    /**
+     * Preenche a face que recebe por parametro
+     *
+     * @param f é a face que deseja preencher
+     * @param g onde vai desenhar a face
+     */
     public static void preenchimento(Face f, Graphics g) {
-        java.util.List list = f.getArestas();
-        double yinf = ((Aresta) list.get(0)).getP1().getX();
-        double ysup = ((Aresta) list.get(0)).getP1().getY();
-        for (int i = 1; i < list.size(); i++) {
-            if (((Aresta) list.get(i)).getP1().getY() < yinf) {
-                yinf = ((Aresta) list.get(i)).getP1().getY();
+        ArrayList<Aresta> arestaFaceAtual;
+        arestaFaceAtual = f.getArestas();
+        double yInferior = (arestaFaceAtual.get(0)).getP1().getX();
+        double ySuperior = (arestaFaceAtual.get(0)).getP1().getY();
+        //obtem o yInferior e o ySuperior
+        for (Aresta a : arestaFaceAtual) {
+            if (a.getP1().getY() < yInferior) {
+                yInferior = a.getP1().getY();
             }
-            if (((Aresta) list.get(i)).getP1().getY() > ysup) {
-                ysup = ((Aresta) list.get(i)).getP1().getY();
+            if (a.getP1().getY() > ySuperior) {
+                ySuperior = a.getP1().getY();
             }
-            if (((Aresta) list.get(i)).getP2().getY() < yinf) {
-                yinf = ((Aresta) list.get(i)).getP2().getY();
+            if (a.getP2().getY() < yInferior) {
+                yInferior = a.getP2().getY();
             }
-            if (((Aresta) list.get(i)).getP2().getY() > ysup) {
-                ysup = ((Aresta) list.get(i)).getP2().getY();
+            if (a.getP2().getY() > ySuperior) {
+                ySuperior = a.getP2().getY();
             }
         }
 
-        for (int y = (int) ysup; y > (int) yinf && y > 0; y--) {
-            double x1 = 0.0D;
-            double x2 = 0.0D;
+        for (int it = (int) ySuperior; it > (int) yInferior && it > 0; it--) {
+            double xFirst = 0.0;
+            double xSecond = 0.0;
             boolean first = true;
-            for (int i = 0; i < list.size(); i++) {
-                Ponto p1 = ((Aresta) list.get(i)).getP1();
-                Ponto p2 = ((Aresta) list.get(i)).getP2();
+
+            for (Aresta a : arestaFaceAtual) {
+                Ponto p1 = a.getP1();
+                Ponto p2 = a.getP2();
                 if ((int) p1.getY() == (int) p2.getY()) {
                     continue;
                 }
-                double u = ((double) y - p1.getY()) / (p2.getY() - p1.getY());
-                if (u < 0.0D || u > 1.0D || y
+                double parmetroU = ((double) it - p1.getY()) / (p2.getY() - p1.getY());
+                if (parmetroU < 0.0 || parmetroU > 1.0 || it
                         == (int) (p1.getY() <= p2.getY() ? p1.getY() : p2.getY())) {
                     continue;
                 }
                 if (first) {
-                    x1 = u * (p2.getX() - p1.getX()) + p1.getX();
+                    xFirst = parmetroU * (p2.getX() - p1.getX()) + p1.getX();
                     first = false;
                     continue;
                 }
-                x2 = u * (p2.getX() - p1.getX()) + p1.getX();
+                xSecond = parmetroU * (p2.getX() - p1.getX()) + p1.getX();
                 break;
             }
-
-            if (x1 == 0.0D && x2 == 0.0D) {
+            if (xFirst == 0.0 && xSecond == 0.0) {
                 continue;
             }
-            if (x1 > x2) {
-                double aux = x1;
-                x1 = x2;
-                x2 = aux;
+            if (xFirst > xSecond) {
+                double aux = xFirst;
+                xFirst = xSecond;
+                xSecond = aux;
             }
-            g.drawLine((int) Math.floor(x1), y, (int) Math.ceil(x2), y);
+            g.drawLine((int) Math.floor(xFirst), it, (int) Math.ceil(xSecond), it);
         }
 
     }
