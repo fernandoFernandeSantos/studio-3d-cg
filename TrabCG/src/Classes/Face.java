@@ -33,6 +33,10 @@ public class Face implements java.io.Serializable {
         arestas.add(this.parentPol.getAresta(nome));
     }
 
+    /**
+     * Método retorna as arestas da face
+     * @return ArrayList de Arestas
+     */
     public ArrayList<Aresta> getArestas() {
         return arestas;
     }
