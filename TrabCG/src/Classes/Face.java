@@ -166,6 +166,9 @@ public class Face implements java.io.Serializable {
         return vetorPlano;
     }
 
+    /**
+     * Gera o vetor do plano da face
+     */
     public void gerarVetorPlano() {
 
         ArrayList<Ponto> pontos = this.getPontos();
@@ -173,13 +176,14 @@ public class Face implements java.io.Serializable {
         Ponto a = pontos.get(0);
         Ponto b = null;
         Ponto c = null;
+        //pega um ponto que não é igual ao primeiro ponto
         for (Ponto p : pontos) {
             if (!p.equals(a)) {
                 b = p;
                 break;
             }
         }
-
+        //pega outro ponto que não é igual ao primeiro e nem ao segundo ponto
         for (Ponto p : pontos) {
             if (!p.equals(a) && !p.equals(b)) {
                 c = p;
@@ -192,18 +196,17 @@ public class Face implements java.io.Serializable {
 
         Vetor v2 = Vetor.subtracao(new Vetor(c.getX(), c.getY(), c.getZ()),
                 new Vetor(a.getX(), a.getY(), a.getZ()));
-
+        
         Ponto centrO = this.parentPol.getCentro();
-
+        //gera o vetor normal com os vetores obtidos acima
         Vetor normal = Vetor.produtoVetorial(v1, v2);
         normal.normalizar();
-//        if (normal.get(0) == 0 && normal.get(1) == 0 && normal.get(2) == 0) {
-//            normal.print("norma = ");
-//        }
+
         Vetor vcentro = Vetor.subtracao(new Vetor(centrO.getX(), centrO.getY(),
                 centrO.getZ()),
                 new Vetor(a.getX(), a.getY(), a.getZ()));
 
+        //verifica se o vetor está na direção certa, ou seja para fora da face
         if (Vetor.getAngulo(vcentro, normal) > 90) {
             normal.multiplicarEscalar(-1);
             this.vetorPlano = normal;

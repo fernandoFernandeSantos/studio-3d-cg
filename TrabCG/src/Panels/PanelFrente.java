@@ -43,7 +43,7 @@ public class PanelFrente extends javax.swing.JPanel {
         g2D.setRenderingHint(
                 RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
-         //identifica tipo de visualização | 1 -> Wireframe | 2 -> Wireframe com ocultação | 3 -> Sombreamento costante |
+        //identifica tipo de visualização | 1 -> Wireframe | 2 -> Wireframe com ocultação | 3 -> Sombreamento costante |
         int viusalizacao = inter.getVizualizacaoAtual();
 
         //pega os poligonos transformados que foram criados na interface    
@@ -58,12 +58,13 @@ public class PanelFrente extends javax.swing.JPanel {
                 }
             }
         }
-        
+
         for (Poligono p : poligonosOrganizados) {
             Poligono pol = p.copy();
             //antes de desenhar tem que inverter o eixo y
-            pol.usarjpv(this.getWidth(),this.getHeight());
-
+            pol.usarjpv(this.getWidth(), this.getHeight());
+           //quando vai desenhar escolhe o tipo de visualização
+            //identifica tipo de visualização | 1 -> Wireframe | 2 -> Wireframe com ocultação | 3 -> Sombreamento costante |
             switch (viusalizacao) {
                 case 1:
                     g2D.setColor(pol.getCor());
@@ -115,12 +116,12 @@ public class PanelFrente extends javax.swing.JPanel {
                                     getGreen());
                             int blue = (int) (Ib * (double) p.getCorFace().
                                     getBlue());
-                            int transparencia = (int)(255 * (1-p.getKt()));
-                            
+                            int transparencia = (int) (255 * (1 - p.getKt()));
+
                             Color cor = new Color(
                                     red <= 255 ? red >= 0 ? red : 0 : 255, green
                                     <= 255 ? green >= 0 ? green : 0 : 255, blue
-                                    <= 255 ? blue >= 0 ? blue : 0 : 255,transparencia);
+                                    <= 255 ? blue >= 0 ? blue : 0 : 255, transparencia);
                             g.setColor(cor);
                             preenchimento(f, g);
                             for (Aresta a : f.getArestas()) {
@@ -137,9 +138,7 @@ public class PanelFrente extends javax.swing.JPanel {
 
         }
 
-
         drawAxis(g2D);
-
 
     }
 
@@ -159,7 +158,7 @@ public class PanelFrente extends javax.swing.JPanel {
         g.drawLine((int) Math.round(a.getP1().getX()), (int) Math.round(a.
                 getP1().getY()),
                 (int) Math.round(a.getP2().getX()), (int) Math.round(a.getP2().
-                getY()));
+                        getY()));
     }
 
     public void paintPointNumbers(Poligono p, Graphics2D g2D) {
@@ -220,7 +219,7 @@ public class PanelFrente extends javax.swing.JPanel {
     }
 
     private static double difusa(double Il, double Kd, Ponto normal, Ponto L,
-                                 Ponto pontoObservado) {
+            Ponto pontoObservado) {
         Ponto l = new Ponto("", pontoObservado.getX() - L.getX(),
                 pontoObservado.getY() - L.getY(), pontoObservado.getZ() - L.
                 getZ());
@@ -240,7 +239,7 @@ public class PanelFrente extends javax.swing.JPanel {
     }
 
     private static double especular(double Il, double Ks, double expoenteN,
-                                    Ponto L, Ponto N, Ponto VRP, Ponto A) {
+            Ponto L, Ponto N, Ponto VRP, Ponto A) {
         Ponto l = new Ponto("", A.getX() - L.getX(), A.getY() - L.getY(), A.
                 getZ() - L.getZ());
         double normaL = norma(l);
