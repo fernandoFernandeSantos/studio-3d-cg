@@ -41,152 +41,290 @@ public class PanelPerspectiva extends javax.swing.JPanel {
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
         Camera c = inter.getCamera();
-        
-    ArrayList<Poligono> poligonosOrganizados = (ArrayList<Poligono>) this.inter.getPoligonos().clone();
+
+        int visualizacaoAtual = this.inter.getVizualizacaoAtual();
+
+        ArrayList<Poligono> poligonosOrganizados = new ArrayList<>();
+        ArrayList<Matriz> matrizesAux = new ArrayList<>();
+
+        for (Poligono p : inter.getPoligonos()) {
+            poligonosOrganizados.add(c.GerarPerspectiva(this.getWidth(), this.
+                    getHeight(), p));
+            matrizesAux.add(c.getMatrizAux());
+        }
 
         for (int cc = 0; cc < (poligonosOrganizados.size() - 1); cc++) {
             for (int d = 0; d < poligonosOrganizados.size() - cc - 1; d++) {
-                
+
                 Vetor a = new Vetor(poligonosOrganizados.get(d).getCentro());
-                Vetor b = new Vetor(poligonosOrganizados.get(d+1).getCentro());
-                
-                if (Vetor.subtracao(a, c.getVRP3()).getModulo() > Vetor.subtracao(b, c.getVRP3()).getModulo()) /* For descending order use < */ {
+                Vetor b = new Vetor(poligonosOrganizados.get(d + 1).getCentro());
+                double modulo = c.getVRPtoFP().getModulo();
+
+                if (poligonosOrganizados.get(d).getCentro().getZ()
+                        < poligonosOrganizados.get(d + 1).getCentro().getZ()) {
+//                if (Vetor.subtracao(a, c.getVRP3()).getModulo() < Vetor.
+//                        subtracao(b, c.getVRP3()).getModulo()) /* For descending order use < */ {
                     Collections.swap(poligonosOrganizados, d, d + 1);
+                    Collections.swap(matrizesAux, d, d + 1);
                 }
             }
         }
 
-        
-        if (this.inter.getVizualizacaoAtual() == 1) {
-            for (Poligono p : poligonosOrganizados) {
-                g2D.setColor(p.getCor());
-                Poligono Paux = c.GerarPerspectiva(this.getWidth(), this.
-                        getHeight(), p);
-                for (Aresta a : Paux.getArestas()) {
-                    this.drawline(g2D, a);
-                }
-                if (inter.isMostrarPontos()) {
-                    this.paintPointNumbers(Paux, g2D);
-                }
-            }
-        }
-        if (this.inter.getVizualizacaoAtual() == 2) {
-            for (Poligono p : poligonosOrganizados) {
-                g2D.setColor(p.getCor());
-                Poligono Paux = c.GerarPerspectiva(this.getWidth(), this.
-                        getHeight(), p);
-                Matriz aux = c.getMatrizAux();
-                Poligono ocultaFace = Paux.copy();
-                ocultaFace.setPontos(aux);
-                for (int i = 0; i < Paux.getFaces().size(); i++) {
-                    Face f = Paux.getFaces().get(i);
-                    Face f1 = ocultaFace.getFaces().get(i);
-                    f1.gerarVetorPlano();
-                    Vetor norma = f1.getVetorPlano();
-                    norma.normalizar();
-                    if (Vetor.produtoEscalar(c.getVRPtoFP3(), norma) > 0) {
-                        g2D.setColor(p.getCor());
-                        for (Aresta a : f.getArestas()) {
-                            this.drawline(g2D, a);
+        for (Poligono Paux : poligonosOrganizados) {
+            Matriz aux = null;
+            Poligono ocultaFace = null;
+            switch (visualizacaoAtual) {
+                case 1:
+                    g2D.setColor(Paux.getCor());
+                    for (Aresta a : Paux.getArestas()) {
+                        this.drawline(g2D, a);
+                    }
+                    break;
+                case 2:
+                    g2D.setColor(Paux.getCor());
+                    aux = matrizesAux.get(poligonosOrganizados.indexOf(Paux));
+                    ocultaFace = Paux.copy();
+                    ocultaFace.setPontos(aux);
+                    for (int i = 0; i < Paux.getFaces().size(); i++) {
+                        Face f = Paux.getFaces().get(i);
+                        Face f1 = ocultaFace.getFaces().get(i);
+                        f1.gerarVetorPlano();
+                        Vetor norma = f1.getVetorPlano();
+                        norma.normalizar();
+                        if (Vetor.produtoEscalar(c.getVRPtoFP3(), norma) > 0) {
+                            g2D.setColor(Paux.getCor());
+                            for (Aresta a : f.getArestas()) {
+                                this.drawline(g2D, a);
+                            }
+                        }
+
+                    }
+                    break;
+                case 3:
+                    g2D.setColor(Paux.getCor());
+                    aux = matrizesAux.get(poligonosOrganizados.indexOf(Paux));
+                    ocultaFace = Paux.copy();
+                    ocultaFace.setPontos(aux);
+                    for (int i = 0; i < Paux.getFaces().size(); i++) {
+                        Face f = Paux.getFaces().get(i);
+                        Face f1 = ocultaFace.getFaces().get(i);
+                        f1.gerarVetorPlano();
+                        Vetor norma = f1.getVetorPlano();
+                        norma.normalizar();
+                        if (Vetor.produtoEscalar(c.getVRPtoFP3(), norma) > 0) {
+                            g.setColor(Paux.getCorFace());
+                            preenchimento(f, g);
+                            g2D.setColor(Paux.getCor());
+                            for (Aresta a : f.getArestas()) {
+                                this.drawline(g2D, a);
+                            }
                         }
                     }
 
-                }
-                if (inter.isMostrarPontos()) {
-                    this.paintPointNumbers(Paux, g2D);
-                }
-            }
 
-        }
+                    break;
+                case 4:
+                    g2D.setColor(Paux.getCor());
+                    aux = matrizesAux.get(poligonosOrganizados.indexOf(Paux));
+                    ocultaFace = Paux.copy();
+                    ocultaFace.setPontos(aux);
+                    Poligono zpol = Paux.copy();
 
-
-        if (this.inter.getVizualizacaoAtual() == 4) {
-            for (Poligono p : poligonosOrganizados) {
-                g2D.setColor(p.getCor());
-                Poligono Paux = c.GerarPerspectiva(this.getWidth(), this.getHeight(), p);
-                Matriz aux = c.getMatrizAux();
-                Poligono ocultaFace = Paux.copy();
-                ocultaFace.setPontos(aux);
-                Poligono zpol = Paux.copy();
-
-                Matriz zmaux = new Matriz();
-                for (int i = zpol.getPontos().size() - 1; i >= 0; i--) {
-                    zmaux.set(0, i, zpol.getPontos().get(i).getX());
-                    zmaux.set(1, i, zpol.getPontos().get(i).getY());
-                    zmaux.set(2, i, aux.get(2, i));
-                }
-                zpol.setPontos(zmaux);
-                for (int i = 0; i < Paux.getFaces().size(); i++) {
-                    Face f = Paux.getFaces().get(i);
-                    Face f1 = ocultaFace.getFaces().get(i);
-                    f1.gerarVetorPlano();
-                    Vetor norma = f1.getVetorPlano();
-                    norma.normalizar();
-                    if (Vetor.produtoEscalar(c.getVRPtoFP3(), norma) > 0) {
-                        Face f2 = zpol.getFaces().get(i);
-                        for (int j = 0; j < f2.getPontos().size(); j++) {
-                            double mediaX = 0;
-                            double mediaY = 0;
-                            double mediaZ = 0;
-                            int counter = 1;
-                            for (int k = 0; k < zpol.getFaces().size(); k++) {
-                                for (int l = 0; l < zpol.getFaces().get(k).getPontos().size(); l++) {
-                                    if (f2.getPontos().get(j).getNome() == zpol.getFaces().get(k).getPontos().get(l).getNome()) {
-                                        zpol.getFaces().get(k).gerarVetorPlano();
-                                        zpol.getFaces().get(k).getVetorPlano().normalizar();
-                                        mediaX += zpol.getFaces().get(k).getVetorPlano().get(0);
-                                        mediaY += zpol.getFaces().get(k).getVetorPlano().get(1);
-                                        mediaZ += zpol.getFaces().get(k).getVetorPlano().get(2);
-                                        counter++;
+                    Matriz zmaux = new Matriz();
+                    for (int i = zpol.getPontos().size() - 1; i >= 0; i--) {
+                        zmaux.set(0, i, zpol.getPontos().get(i).getX());
+                        zmaux.set(1, i, zpol.getPontos().get(i).getY());
+                        zmaux.set(2, i, aux.get(2, i));
+                    }
+                    zpol.setPontos(zmaux);
+                    for (int i = 0; i < Paux.getFaces().size(); i++) {
+                        Face f = Paux.getFaces().get(i);
+                        Face f1 = ocultaFace.getFaces().get(i);
+                        f1.gerarVetorPlano();
+                        Vetor norma = f1.getVetorPlano();
+                        norma.normalizar();
+                        if (Vetor.produtoEscalar(c.getVRPtoFP3(), norma) > 0) {
+                            Face f2 = zpol.getFaces().get(i);
+                            for (int j = 0; j < f2.getPontos().size(); j++) {
+                                double mediaX = 0;
+                                double mediaY = 0;
+                                double mediaZ = 0;
+                                int counter = 1;
+                                for (int k = 0; k < zpol.getFaces().size();
+                                        k++) {
+                                    for (int l = 0; l < zpol.getFaces().get(
+                                            k).getPontos().size(); l++) {
+                                        if (f2.getPontos().get(j).getNome()
+                                                == zpol.getFaces().get(k).
+                                                getPontos().get(l).getNome()) {
+                                            zpol.getFaces().get(k).
+                                                    gerarVetorPlano();
+                                            zpol.getFaces().get(k).
+                                                    getVetorPlano().
+                                                    normalizar();
+                                            mediaX += zpol.getFaces().get(k).
+                                                    getVetorPlano().get(0);
+                                            mediaY += zpol.getFaces().get(k).
+                                                    getVetorPlano().get(1);
+                                            mediaZ += zpol.getFaces().get(k).
+                                                    getVetorPlano().get(2);
+                                            counter++;
+                                        }
                                     }
                                 }
+                                f2.getPontos().get(j).
+                                        setnX(mediaX / counter);
+                                f2.getPontos().get(j).
+                                        setnY(mediaY / counter);
+                                f2.getPontos().get(j).
+                                        setnZ(mediaZ / counter);
                             }
-                            f2.getPontos().get(j).setnX(mediaX / counter);
-                            f2.getPontos().get(j).setnY(mediaY / counter);
-                            f2.getPontos().get(j).setnZ(mediaZ / counter);
+                            sobreamento(Paux, f2, g);
+                            g2D.setColor(Paux.getCor());
+                            for (Aresta a : f.getArestas()) {
+                                this.drawline(g2D, a);
+                            }
                         }
-                        sobreamento(p, f2, g);
-                        g2D.setColor(p.getCor());
-                        for (Aresta a : f.getArestas()) {
-                            this.drawline(g2D, a);
-                        }
+
                     }
 
-                }
-                if (inter.isMostrarPontos()) {
-                    this.paintPointNumbers(Paux, g2D);
-                }
+                    break;
             }
-
-        }
-        if (this.inter.getVizualizacaoAtual() == 3) {
-            for (Poligono p : poligonosOrganizados) {
-                g2D.setColor(p.getCor());
-                Poligono Paux = c.GerarPerspectiva(this.getWidth(), this.getHeight(), p);
-                Matriz aux = c.getMatrizAux();
-                Poligono ocultaFace = Paux.copy();
-                ocultaFace.setPontos(aux);
-                for (int i = 0; i < Paux.getFaces().size(); i++) {
-                    Face f = Paux.getFaces().get(i);
-                    Face f1 = ocultaFace.getFaces().get(i);
-                    f1.gerarVetorPlano();
-                    Vetor norma = f1.getVetorPlano();
-                    norma.normalizar();
-                    if (Vetor.produtoEscalar(c.getVRPtoFP3(), norma) > 0) {
-                        g.setColor(p.getCorFace());
-                        preenchimento(f, g);
-                        g2D.setColor(p.getCor());
-                        for (Aresta a : f.getArestas()) {
-                            this.drawline(g2D, a);
-                        }
-                    }
-                }
-                if (inter.isMostrarPontos()) {
-                    this.paintPointNumbers(Paux, g2D);
-                }
+            if (inter.isMostrarPontos()) {
+                this.paintPointNumbers(Paux, g2D);
             }
-
         }
+
+//        if (this.inter.getVizualizacaoAtual() == 1) {
+//            for (Poligono p : poligonosOrganizados) {
+//                g2D.setColor(p.getCor());
+//                Poligono Paux = c.GerarPerspectiva(this.getWidth(), this.
+//                        getHeight(), p);
+//                for (Aresta a : Paux.getArestas()) {
+//                    this.drawline(g2D, a);
+//                }
+//                if (inter.isMostrarPontos()) {
+//                    this.paintPointNumbers(Paux, g2D);
+//                }
+//            }
+//        }
+//        if (this.inter.getVizualizacaoAtual() == 2) {
+//            for (Poligono p : poligonosOrganizados) {
+//                g2D.setColor(p.getCor());
+//                Poligono Paux = c.GerarPerspectiva(this.getWidth(), this.
+//                        getHeight(), p);
+//                Matriz aux = c.getMatrizAux();
+//                Poligono ocultaFace = Paux.copy();
+//                ocultaFace.setPontos(aux);
+//                for (int i = 0; i < Paux.getFaces().size(); i++) {
+//                    Face f = Paux.getFaces().get(i);
+//                    Face f1 = ocultaFace.getFaces().get(i);
+//                    f1.gerarVetorPlano();
+//                    Vetor norma = f1.getVetorPlano();
+//                    norma.normalizar();
+//                    if (Vetor.produtoEscalar(c.getVRPtoFP3(), norma) > 0) {
+//                        g2D.setColor(p.getCor());
+//                        for (Aresta a : f.getArestas()) {
+//                            this.drawline(g2D, a);
+//                        }
+//                    }
+//
+//                }
+//                if (inter.isMostrarPontos()) {
+//                    this.paintPointNumbers(Paux, g2D);
+//                }
+//            }
+
+//        }
+
+//
+//        if (this.inter.getVizualizacaoAtual() == 4) {
+//            for (Poligono p : poligonosOrganizados) {
+//                g2D.setColor(p.getCor());
+//                Paux = c.GerarPerspectiva(this.getWidth(), this.getHeight(), p);
+//                aux = c.getMatrizAux();
+//                ocultaFace = Paux.copy();
+//                ocultaFace.setPontos(aux);
+//                Poligono zpol = Paux.copy();
+//
+//                Matriz zmaux = new Matriz();
+//                for (int i = zpol.getPontos().size() - 1; i >= 0; i--) {
+//                    zmaux.set(0, i, zpol.getPontos().get(i).getX());
+//                    zmaux.set(1, i, zpol.getPontos().get(i).getY());
+//                    zmaux.set(2, i, aux.get(2, i));
+//                }
+//                zpol.setPontos(zmaux);
+//                for (int i = 0; i < Paux.getFaces().size(); i++) {
+//                    Face f = Paux.getFaces().get(i);
+//                    Face f1 = ocultaFace.getFaces().get(i);
+//                    f1.gerarVetorPlano();
+//                    Vetor norma = f1.getVetorPlano();
+//                    norma.normalizar();
+//                    if (Vetor.produtoEscalar(c.getVRPtoFP3(), norma) > 0) {
+//                        Face f2 = zpol.getFaces().get(i);
+//                        for (int j = 0; j < f2.getPontos().size(); j++) {
+//                            double mediaX = 0;
+//                            double mediaY = 0;
+//                            double mediaZ = 0;
+//                            int counter = 1;
+//                            for (int k = 0; k < zpol.getFaces().size(); k++) {
+//                                for (int l = 0; l < zpol.getFaces().get(k).getPontos().size(); l++) {
+//                                    if (f2.getPontos().get(j).getNome() == zpol.getFaces().get(k).getPontos().get(l).getNome()) {
+//                                        zpol.getFaces().get(k).gerarVetorPlano();
+//                                        zpol.getFaces().get(k).getVetorPlano().normalizar();
+//                                        mediaX += zpol.getFaces().get(k).getVetorPlano().get(0);
+//                                        mediaY += zpol.getFaces().get(k).getVetorPlano().get(1);
+//                                        mediaZ += zpol.getFaces().get(k).getVetorPlano().get(2);
+//                                        counter++;
+//                                    }
+//                                }
+//                            }
+//                            f2.getPontos().get(j).setnX(mediaX / counter);
+//                            f2.getPontos().get(j).setnY(mediaY / counter);
+//                            f2.getPontos().get(j).setnZ(mediaZ / counter);
+//                        }
+//                        sobreamento(p, f2, g);
+//                        g2D.setColor(p.getCor());
+//                        for (Aresta a : f.getArestas()) {
+//                            this.drawline(g2D, a);
+//                        }
+//                    }
+//
+//                }
+//                if (inter.isMostrarPontos()) {
+//                    this.paintPointNumbers(Paux, g2D);
+//                }
+//            }
+//
+//        }
+//        if (this.inter.getVizualizacaoAtual() == 3) {
+//            for (Poligono p : poligonosOrganizados) {
+//                g2D.setColor(p.getCor());
+//                Poligono Paux = c.GerarPerspectiva(this.getWidth(), this.getHeight(), p);
+//                Matriz aux = c.getMatrizAux();
+//                Poligono ocultaFace = Paux.copy();
+//                ocultaFace.setPontos(aux);
+//                for (int i = 0; i < Paux.getFaces().size(); i++) {
+//                    Face f = Paux.getFaces().get(i);
+//                    Face f1 = ocultaFace.getFaces().get(i);
+//                    f1.gerarVetorPlano();
+//                    Vetor norma = f1.getVetorPlano();
+//                    norma.normalizar();
+//                    if (Vetor.produtoEscalar(c.getVRPtoFP3(), norma) > 0) {
+//                        g.setColor(p.getCorFace());
+//                        preenchimento(f, g);
+//                        g2D.setColor(p.getCor());
+//                        for (Aresta a : f.getArestas()) {
+//                            this.drawline(g2D, a);
+//                        }
+//                    }
+//                }
+//                if (inter.isMostrarPontos()) {
+//                    this.paintPointNumbers(Paux, g2D);
+//                }
+//            }
+//
+//        }
 
 
     }
@@ -206,8 +344,10 @@ public class PanelPerspectiva extends javax.swing.JPanel {
     }
 
     public void drawline(Graphics2D g, Aresta a) {
-        g.drawLine((int) Math.round(a.getP1().getX()), (int) Math.round(a.getP1().getY()),
-                (int) Math.round(a.getP2().getX()), (int) Math.round(a.getP2().getY()));
+        g.drawLine((int) Math.round(a.getP1().getX()), (int) Math.round(a.
+                getP1().getY()),
+                (int) Math.round(a.getP2().getX()), (int) Math.round(a.getP2().
+                getY()));
     }
 
     @SuppressWarnings("unchecked")
@@ -266,7 +406,8 @@ public class PanelPerspectiva extends javax.swing.JPanel {
                     continue;
                 }
                 double u = ((double) y - p1.getY()) / (p2.getY() - p1.getY());
-                if (u < 0.0D || u > 1.0D || y == (int) (p1.getY() <= p2.getY() ? p1.getY() : p2.getY())) {
+                if (u < 0.0D || u > 1.0D || y
+                        == (int) (p1.getY() <= p2.getY() ? p1.getY() : p2.getY())) {
                     continue;
                 }
                 if (first) {
@@ -302,9 +443,11 @@ public class PanelPerspectiva extends javax.swing.JPanel {
                 u2 = aux;
             }
             double e1 = (u1 * (pb.getY() - pa.getY())) / (pb.getY() - pa.getY());
-            double e2 = ((1.0D - u1) * (pb.getY() - pa.getY())) / (pb.getY() - pa.getY());
+            double e2 = ((1.0D - u1) * (pb.getY() - pa.getY())) / (pb.getY()
+                    - pa.getY());
             double e3 = (u2 * (pd.getY() - pc.getY())) / (pd.getY() - pc.getY());
-            double e4 = ((1.0D - u2) * (pd.getY() - pc.getY())) / (pd.getY() - pc.getY());
+            double e4 = ((1.0D - u2) * (pd.getY() - pc.getY())) / (pd.getY()
+                    - pc.getY());
             double Nxi = pb.getnX() * e1 + pa.getnX() * e2;
             double Nyi = pb.getnY() * e1 + pa.getnY() * e2;
             double Nzi = pb.getnZ() * e1 + pa.getnZ() * e2;
@@ -336,10 +479,18 @@ public class PanelPerspectiva extends javax.swing.JPanel {
                 ponto.setnY(Ny);
                 ponto.setnZ(Nz);
                 phong(p, ponto);
-                int red = (int) (ponto.getIr() * (double) p.getCorFace().getRed());
-                int green = (int) (ponto.getIg() * (double) p.getCorFace().getGreen());
-                int blue = (int) (ponto.getIb() * (double) p.getCorFace().getBlue());
-                Color cor = new Color(red <= 255 ? red >= 0 ? red : 0 : 255, green <= 255 ? green >= 0 ? green : 0 : 255, blue <= 255 ? blue >= 0 ? blue : 0 : 255);
+                int red = (int) (ponto.getIr() * (double) p.getCorFace().
+                        getRed());
+                int green = (int) (ponto.getIg() * (double) p.getCorFace().
+                        getGreen());
+                int blue = (int) (ponto.getIb() * (double) p.getCorFace().
+                        getBlue());
+                int transparencia = (int) (255 * (1 - p.getKt()));
+
+                Color cor = new Color(
+                        red <= 255 ? red >= 0 ? red : 0 : 255, green
+                        <= 255 ? green >= 0 ? green : 0 : 255, blue
+                        <= 255 ? blue >= 0 ? blue : 0 : 255, transparencia);
                 g.setColor(cor);
                 g.drawRect((int) x, y, 1, 1);
                 Nx += deltaNx;
@@ -362,22 +513,34 @@ public class PanelPerspectiva extends javax.swing.JPanel {
 
     private double getIr(Poligono p, Ponto ponto) {
         double ambiente = ambiente(inter.getLuzAmbiente().getIr(), p.getKaR());
-        double difusa = difusa(inter.getLuzFundo().getIr(), p.getKdR(), ponto.getNormal(), inter.getLuzFundo().getLocal(), ponto);
-        double especular = difusa == 0.0D ? 0.0D : especular(inter.getLuzFundo().getIr(), p.getKsR(), p.getN(), inter.getLuzFundo().getLocal(), ponto.getNormal(), new Ponto("", inter.getCamera().getVx(), inter.getCamera().getVy(), inter.getCamera().getVz()), ponto);
+        double difusa = difusa(inter.getLuzFundo().getIr(), p.getKdR(), ponto.
+                getNormal(), inter.getLuzFundo().getLocal(), ponto);
+        double especular = difusa == 0.0D ? 0.0D : especular(inter.getLuzFundo().
+                getIr(), p.getKsR(), p.getN(), inter.getLuzFundo().getLocal(),
+                ponto.getNormal(), new Ponto("", inter.getCamera().getVx(),
+                inter.getCamera().getVy(), inter.getCamera().getVz()), ponto);
         return ambiente + difusa + especular;
     }
 
     private double getIg(Poligono p, Ponto ponto) {
         double ambiente = ambiente(inter.getLuzAmbiente().getIg(), p.getKaG());
-        double difusa = difusa(inter.getLuzFundo().getIg(), p.getKdG(), ponto.getNormal(), inter.getLuzFundo().getLocal(), ponto);
-        double especular = difusa == 0.0D ? 0.0D : especular(inter.getLuzFundo().getIg(), p.getKsG(), p.getN(), inter.getLuzFundo().getLocal(), ponto.getNormal(), new Ponto("", inter.getCamera().getVx(), inter.getCamera().getVy(), inter.getCamera().getVz()), ponto);
+        double difusa = difusa(inter.getLuzFundo().getIg(), p.getKdG(), ponto.
+                getNormal(), inter.getLuzFundo().getLocal(), ponto);
+        double especular = difusa == 0.0D ? 0.0D : especular(inter.getLuzFundo().
+                getIg(), p.getKsG(), p.getN(), inter.getLuzFundo().getLocal(),
+                ponto.getNormal(), new Ponto("", inter.getCamera().getVx(),
+                inter.getCamera().getVy(), inter.getCamera().getVz()), ponto);
         return ambiente + difusa + especular;
     }
 
     private double getIb(Poligono p, Ponto ponto) {
         double ambiente = ambiente(inter.getLuzAmbiente().getIb(), p.getKaB());
-        double difusa = difusa(inter.getLuzFundo().getIb(), p.getKdB(), ponto.getNormal(), inter.getLuzFundo().getLocal(), ponto);
-        double especular = difusa == 0.0D ? 0.0D : especular(inter.getLuzFundo().getIb(), p.getKsB(), p.getN(), inter.getLuzFundo().getLocal(), ponto.getNormal(), new Ponto("", inter.getCamera().getVx(), inter.getCamera().getVy(), inter.getCamera().getVz()), ponto);
+        double difusa = difusa(inter.getLuzFundo().getIb(), p.getKdB(), ponto.
+                getNormal(), inter.getLuzFundo().getLocal(), ponto);
+        double especular = difusa == 0.0D ? 0.0D : especular(inter.getLuzFundo().
+                getIb(), p.getKsB(), p.getN(), inter.getLuzFundo().getLocal(),
+                ponto.getNormal(), new Ponto("", inter.getCamera().getVx(),
+                inter.getCamera().getVy(), inter.getCamera().getVz()), ponto);
         return ambiente + difusa + especular;
     }
 
@@ -385,14 +548,18 @@ public class PanelPerspectiva extends javax.swing.JPanel {
         return Ia * Ka;
     }
 
-    private static double difusa(double Il, double Kd, Ponto normal, Ponto L, Ponto pontoObservado) {
-        Ponto l = new Ponto("", pontoObservado.getX() - L.getX(), pontoObservado.getY() - L.getY(), pontoObservado.getZ() - L.getZ());
+    private static double difusa(double Il, double Kd, Ponto normal, Ponto L,
+                                 Ponto pontoObservado) {
+        Ponto l = new Ponto("", pontoObservado.getX() - L.getX(),
+                pontoObservado.getY() - L.getY(), pontoObservado.getZ() - L.
+                getZ());
         double normaL = norma(l);
         l.setX(l.getX() / normaL);
         l.setY(l.getY() / normaL);
         l.setZ(l.getZ() / normaL);
         double normaNormal = norma(normal);
-        Ponto n = new Ponto("", normal.getX() / normaNormal, normal.getY() / normaNormal, normal.getZ() / normaNormal);
+        Ponto n = new Ponto("", normal.getX() / normaNormal, normal.getY()
+                / normaNormal, normal.getZ() / normaNormal);
         double escalarNL = escalar(n, l);
         if (escalarNL > 0.0D) {
             return Il * Kd * escalarNL;
@@ -401,20 +568,24 @@ public class PanelPerspectiva extends javax.swing.JPanel {
         }
     }
 
-    private static double especular(double Il, double Ks, double expoenteN, Ponto L, Ponto N, Ponto VRP, Ponto A) {
-        Ponto l = new Ponto("", A.getX() - L.getX(), A.getY() - L.getY(), A.getZ() - L.getZ());
+    private static double especular(double Il, double Ks, double expoenteN,
+                                    Ponto L, Ponto N, Ponto VRP, Ponto A) {
+        Ponto l = new Ponto("", A.getX() - L.getX(), A.getY() - L.getY(), A.
+                getZ() - L.getZ());
         double normaL = norma(l);
         l.setX(l.getX() / normaL);
         l.setY(l.getY() / normaL);
         l.setZ(l.getZ() / normaL);
         double normaN = norma(N);
-        Ponto n = new Ponto("", N.getX() / normaN, N.getY() / normaN, N.getZ() / normaN);
+        Ponto n = new Ponto("", N.getX() / normaN, N.getY() / normaN, N.getZ()
+                / normaN);
         Ponto r = new Ponto();
         double DoisLN = 2D * escalar(l, n);
         r.setX(l.getX() - DoisLN * n.getX());
         r.setY(l.getY() - DoisLN * n.getY());
         r.setZ(l.getZ() - DoisLN * n.getZ());
-        Ponto s = new Ponto("", VRP.getX() - A.getX(), VRP.getY() - A.getY(), VRP.getZ() - A.getZ());
+        Ponto s = new Ponto("", VRP.getX() - A.getX(), VRP.getY() - A.getY(),
+                VRP.getZ() - A.getZ());
         double normaS = norma(s);
         s.setX(s.getX() / normaS);
         s.setY(s.getY() / normaS);
@@ -428,11 +599,13 @@ public class PanelPerspectiva extends javax.swing.JPanel {
     }
 
     public static double norma(Ponto p) {
-        return Math.sqrt(p.getX() * p.getX() + p.getY() * p.getY() + p.getZ() * p.getZ());
+        return Math.sqrt(p.getX() * p.getX() + p.getY() * p.getY() + p.getZ()
+                * p.getZ());
     }
 
     public static double escalar(Ponto p1, Ponto p2) {
-        return p1.getX() * p2.getX() + p1.getY() * p2.getY() + p1.getZ() * p2.getZ();
+        return p1.getX() * p2.getX() + p1.getY() * p2.getY() + p1.getZ() * p2.
+                getZ();
     }
 
     public static void preenchimento(Face f, Graphics g) {
@@ -465,7 +638,8 @@ public class PanelPerspectiva extends javax.swing.JPanel {
                     continue;
                 }
                 double u = ((double) y - p1.getY()) / (p2.getY() - p1.getY());
-                if (u < 0.0D || u > 1.0D || y == (int) (p1.getY() <= p2.getY() ? p1.getY() : p2.getY())) {
+                if (u < 0.0D || u > 1.0D || y
+                        == (int) (p1.getY() <= p2.getY() ? p1.getY() : p2.getY())) {
                     continue;
                 }
                 if (first) {

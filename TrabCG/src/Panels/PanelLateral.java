@@ -56,7 +56,7 @@ public class PanelLateral extends javax.swing.JPanel {
 
         for (Poligono p : poligonosOrganizados) {
             Poligono pol = p.copy();
-            pol.usarjpv(this.getWidth());
+            pol.usarjpv(this.getWidth(),this.getHeight());
 //            pol.getMatrizPontos().print("pol lateral zoado");
 
             switch (viusalizacao) {
@@ -106,8 +106,12 @@ public class PanelLateral extends javax.swing.JPanel {
                             int red = (int) (Ir * (double) p.getCorFace().getRed());
                             int green = (int) (Ig * (double) p.getCorFace().getGreen());
                             int blue = (int) (Ib * (double) p.getCorFace().getBlue());
-                            Color cor = new Color(red <= 255 ? red >= 0 ? red : 0 : 255, green <= 255 ? green >= 0 ? green : 0 : 255, blue <= 255 ? blue >= 0 ? blue : 0 : 255);
-                            g.setColor(cor);
+                            int transparencia = (int)(255 * (1-p.getKt()));
+                            
+                            Color cor = new Color(
+                                    red <= 255 ? red >= 0 ? red : 0 : 255, green
+                                    <= 255 ? green >= 0 ? green : 0 : 255, blue
+                                    <= 255 ? blue >= 0 ? blue : 0 : 255,transparencia);g.setColor(cor);
                             preenchimento(f, g2D);
                             for (Aresta a : f.getArestas()) {
                                 this.drawline(g2D, a);

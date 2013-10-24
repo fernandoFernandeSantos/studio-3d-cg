@@ -46,11 +46,16 @@ public class Poligono implements java.io.Serializable {
     double kab;
     double kdb;
     double ksb;
-    double ktr;
-    double ktg;
-    double ktb;
+    double kt;
     double n;
 
+    public double getKt() {
+        return kt;
+    }
+
+    public void setKt(double kt){
+        this.kt = kt;
+    }
     public Poligono() {
         this.pontos = new ArrayList<>();
         this.arestas = new ArrayList<>();
@@ -64,9 +69,6 @@ public class Poligono implements java.io.Serializable {
         kab = 1;
         kdb = 1;
         ksb = 1;
-        ktr = 0;
-        ktg = 0;
-        ktb = 0;
         n = 6;
 //        this.pontos.add(new Ponto("centro",0,0,0));
 
@@ -96,29 +98,7 @@ public class Poligono implements java.io.Serializable {
 
     }
 
-    public double getKtR() {
-        return ktr;
-    }
-
-    public double getKtG() {
-        return ktg;
-    }
-
-    public double getKtB() {
-        return ktb;
-    }
-
-    public void setKtR(double kt) {
-        ktr = kt;
-    }
-
-    public void setKtG(double kt) {
-        ktg = kt;
-    }
-
-    public void setKtB(double kt) {
-        ktb = kt;
-    }
+    
 
     public double getKaR() {
         return kar;
@@ -246,7 +226,8 @@ public class Poligono implements java.io.Serializable {
         for (Aresta a : this.arestas) {
             resultado.addAresta(a.getNome(), a.getP1().getNome(), a.getP2().getNome());
         }
-        Color fc = null;
+        resultado.setCor(this.getCor());
+        resultado.setCorFace(this.getCorFace());
         for (Face f : this.getFaces()) {
             Face face = new Face(resultado);
             for (Aresta a : f.getArestas()) {
@@ -283,9 +264,7 @@ public class Poligono implements java.io.Serializable {
         resultado.kab = kab;
         resultado.kdb = kdb;
         resultado.ksb = ksb;
-        resultado.ktr = ktr;
-        resultado.ktg = ktg;
-        resultado.ktb = ktb;
+        resultado.kt = kt;
         resultado.n = n;
 
         return resultado;
@@ -1019,8 +998,8 @@ public class Poligono implements java.io.Serializable {
 
     }
 
-    public void usarjpv(int x) {
-        Matriz jpv = Matriz.gerarJPV(0, 0, x, x);
+    public void usarjpv(int x,int y) {
+        Matriz jpv = Matriz.gerarJPV(0, 0, x, y);
 
         Matriz pt = this.getMatrizPontos().cut(2);
 

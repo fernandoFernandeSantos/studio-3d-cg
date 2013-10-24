@@ -14,7 +14,6 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
-import java.awt.geom.Line2D;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -58,7 +57,7 @@ public class PanelFrente extends javax.swing.JPanel {
 
         for (Poligono p : poligonosOrganizados) {
             Poligono pol = p.copy();
-            pol.usarjpv(this.getWidth());
+            pol.usarjpv(this.getWidth(),this.getHeight());
 //            pol.getMatrizPontos().print("pol lateral zoado");
 
             switch (viusalizacao) {
@@ -112,10 +111,12 @@ public class PanelFrente extends javax.swing.JPanel {
                                     getGreen());
                             int blue = (int) (Ib * (double) p.getCorFace().
                                     getBlue());
+                            int transparencia = (int)(255 * (1-p.getKt()));
+                            
                             Color cor = new Color(
                                     red <= 255 ? red >= 0 ? red : 0 : 255, green
                                     <= 255 ? green >= 0 ? green : 0 : 255, blue
-                                    <= 255 ? blue >= 0 ? blue : 0 : 255);
+                                    <= 255 ? blue >= 0 ? blue : 0 : 255,transparencia);
                             g.setColor(cor);
                             preenchimento(f, g);
                             for (Aresta a : f.getArestas()) {
