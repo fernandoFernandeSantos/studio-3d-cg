@@ -998,6 +998,11 @@ public class Poligono implements java.io.Serializable {
 
     }
 
+ /**
+  * O método usarjpv (int x, int y) serve para fazer a inversão das coordenadas do eixo y
+  * @param x
+  * @param y 
+  */
     public void usarjpv(int x,int y) {
         Matriz jpv = Matriz.gerarJPV(0, 0, x, y);
 

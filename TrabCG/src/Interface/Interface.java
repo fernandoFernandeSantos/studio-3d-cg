@@ -50,8 +50,10 @@ public class Interface extends javax.swing.JFrame {
     private double pontoY;
     private double pontoZ;
     private double distancia;
-    private int visualizacaoAtual;//identifica tipo de visualização | 1 -> Wireframe | 2 -> Wireframe com ocultação | 3 -> Sombreamento costante |
-    private int cliqueAtual; // identifica clique do mouse 1 - selecionar; 2 - transladar; 3 - rotacionar; 4 - escala; 5 - esfera; 6 - piramide; 7 - prisma; 8 - cizalhar
+    //identifica tipo de visualização | 1 -> Wireframe | 2 -> Wireframe com ocultação | 3 -> Sombreamento costante |
+    private int visualizacaoAtual;
+    // identifica clique do mouse 1 - selecionar; 2 - transladar; 3 - rotacionar; 4 - escala; 5 - esfera; 6 - piramide; 7 - prisma; 8 - cizalhar
+    private int cliqueAtual; 
     private ArrayList<Poligono> poligonos;
     private ArrayList<Poligono> poligonosTransformados;
     private Camera camera;
