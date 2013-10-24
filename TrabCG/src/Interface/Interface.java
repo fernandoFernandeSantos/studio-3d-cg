@@ -875,6 +875,7 @@ public class Interface extends javax.swing.JFrame {
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("VRP"));
 
         svrpX.setModel(new javax.swing.SpinnerNumberModel(0, null, null, 1));
+        svrpX.setModel(new javax.swing.SpinnerNumberModel());
         svrpX.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 svrpXStateChanged(evt);
@@ -882,6 +883,7 @@ public class Interface extends javax.swing.JFrame {
         });
 
         svrpY.setModel(new javax.swing.SpinnerNumberModel(30, null, null, 1));
+        svrpY.setModel(new javax.swing.SpinnerNumberModel());
         svrpY.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 svrpYStateChanged(evt);
@@ -889,6 +891,7 @@ public class Interface extends javax.swing.JFrame {
         });
 
         svrpZ.setModel(new javax.swing.SpinnerNumberModel(100, null, null, 1));
+        svrpZ.setModel(new javax.swing.SpinnerNumberModel(Integer.valueOf(400), null, null, Integer.valueOf(1)));
         svrpZ.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 svrpZStateChanged(evt);

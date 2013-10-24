@@ -26,10 +26,15 @@ import java.util.Collections;
 public class PanelPerspectiva extends javax.swing.JPanel {
 
     private Interface inter;
-
+    ArrayList<Matriz> matrizesCompostas;
+    ArrayList<Poligono> poligonosOrganizados;
+            ArrayList<Matriz> matrizesAux;
     public PanelPerspectiva(Interface _i) {
         initComponents();
         inter = _i;
+        matrizesCompostas = new ArrayList<>();
+        poligonosOrganizados = new ArrayList<>();
+        matrizesAux = new ArrayList<>();
     }
 
     @Override
@@ -44,13 +49,15 @@ public class PanelPerspectiva extends javax.swing.JPanel {
 
         int visualizacaoAtual = this.inter.getVizualizacaoAtual();
 
-        ArrayList<Poligono> poligonosOrganizados = new ArrayList<>();
-        ArrayList<Matriz> matrizesAux = new ArrayList<>();
+        matrizesCompostas.clear();
+        poligonosOrganizados.clear();
+        matrizesAux.clear();
 
         for (Poligono p : inter.getPoligonos()) {
             poligonosOrganizados.add(c.GerarPerspectiva(this.getWidth(), this.
                     getHeight(), p));
             matrizesAux.add(c.getMatrizAux());
+            matrizesCompostas.add(c.getComposta());
         }
 
         for (int cc = 0; cc < (poligonosOrganizados.size() - 1); cc++) {
@@ -60,12 +67,13 @@ public class PanelPerspectiva extends javax.swing.JPanel {
                 Vetor b = new Vetor(poligonosOrganizados.get(d + 1).getCentro());
                 double modulo = c.getVRPtoFP().getModulo();
 
-                if (poligonosOrganizados.get(d).getCentro().getZ()
-                        < poligonosOrganizados.get(d + 1).getCentro().getZ()) {
-//                if (Vetor.subtracao(a, c.getVRP3()).getModulo() < Vetor.
-//                        subtracao(b, c.getVRP3()).getModulo()) /* For descending order use < */ {
+//                if (poligonosOrganizados.get(d).getCentro().getZ()
+//                        < poligonosOrganizados.get(d + 1).getCentro().getZ()) {
+                if (Vetor.subtracao(a, c.getVRP3()).getModulo() < Vetor.
+                        subtracao(b, c.getVRP3()).getModulo()) /* For descending order use < */ {
                     Collections.swap(poligonosOrganizados, d, d + 1);
                     Collections.swap(matrizesAux, d, d + 1);
+                    Collections.swap(matrizesCompostas, d, d + 1);
                 }
             }
         }
@@ -125,7 +133,7 @@ public class PanelPerspectiva extends javax.swing.JPanel {
                     break;
                 case 4:
                     g2D.setColor(Paux.getCor());
-                    aux = matrizesAux.get(poligonosOrganizados.indexOf(Paux));
+                    aux = matrizesAux.get(poligonosOrganizados.indexOf(Paux));//persp
                     ocultaFace = Paux.copy();
                     ocultaFace.setPontos(aux);
                     Poligono zpol = Paux.copy();
@@ -512,31 +520,88 @@ public class PanelPerspectiva extends javax.swing.JPanel {
     }
 
     private double getIr(Poligono p, Ponto ponto) {
+        
+        Matriz src = matrizesCompostas.get(poligonosOrganizados.indexOf(p));
+        
+        Matriz local = new Matriz(4,1);
+        local.set(0,0,inter.getLuzFundo().getLocal().getX());
+        local.set(1,0,inter.getLuzFundo().getLocal().getY());
+        local.set(2,0,inter.getLuzFundo().getLocal().getZ());
+        local.set(3,0,1);
+        
+        local = Matriz.multiplicacao(src, local);
+        
+        Ponto plocal = new Ponto("", local.get(0, 0), local.get(1, 0), local.get(2, 0));
+        
         double ambiente = ambiente(inter.getLuzAmbiente().getIr(), p.getKaR());
+        
+//        double difusa = difusa(inter.getLuzFundo().getIr(), p.getKdR(), ponto.
+//                getNormal(), inter.getLuzFundo().getLocal(), ponto);
         double difusa = difusa(inter.getLuzFundo().getIr(), p.getKdR(), ponto.
-                getNormal(), inter.getLuzFundo().getLocal(), ponto);
+                getNormal(), plocal, ponto);
+        
+//        double especular = difusa == 0.0D ? 0.0D : especular(inter.getLuzFundo().
+//                getIr(), p.getKsR(), p.getN(), inter.getLuzFundo().getLocal(),
+//                ponto.getNormal(), new Ponto("", inter.getCamera().getVx(),
+//                inter.getCamera().getVy(), inter.getCamera().getVz()), ponto);
         double especular = difusa == 0.0D ? 0.0D : especular(inter.getLuzFundo().
-                getIr(), p.getKsR(), p.getN(), inter.getLuzFundo().getLocal(),
+                getIr(), p.getKsR(), p.getN(), plocal,
                 ponto.getNormal(), new Ponto("", inter.getCamera().getVx(),
                 inter.getCamera().getVy(), inter.getCamera().getVz()), ponto);
         return ambiente + difusa + especular;
     }
 
     private double getIg(Poligono p, Ponto ponto) {
+        
+        Matriz src = matrizesCompostas.get(poligonosOrganizados.indexOf(p));
+        
+        Matriz local = new Matriz(4,1);
+        local.set(0,0,inter.getLuzFundo().getLocal().getX());
+        local.set(1,0,inter.getLuzFundo().getLocal().getY());
+        local.set(2,0,inter.getLuzFundo().getLocal().getZ());
+        local.set(3,0,1);
+        
+        local = Matriz.multiplicacao(src, local);
+        
+        Ponto plocal = new Ponto("", local.get(0, 0), local.get(1, 0), local.get(2, 0));
+        
         double ambiente = ambiente(inter.getLuzAmbiente().getIg(), p.getKaG());
+        
+//        double difusa = difusa(inter.getLuzFundo().getIg(), p.getKdG(), ponto.
+//                getNormal(), inter.getLuzFundo().getLocal(), ponto);
         double difusa = difusa(inter.getLuzFundo().getIg(), p.getKdG(), ponto.
-                getNormal(), inter.getLuzFundo().getLocal(), ponto);
+                getNormal(), plocal, ponto);
+        
+//        double especular = difusa == 0.0D ? 0.0D : especular(inter.getLuzFundo().
+//                getIg(), p.getKsG(), p.getN(), inter.getLuzFundo().getLocal(),
+//                ponto.getNormal(), new Ponto("", inter.getCamera().getVx(),
+//                inter.getCamera().getVy(), inter.getCamera().getVz()), ponto);
         double especular = difusa == 0.0D ? 0.0D : especular(inter.getLuzFundo().
-                getIg(), p.getKsG(), p.getN(), inter.getLuzFundo().getLocal(),
+                getIg(), p.getKsG(), p.getN(), plocal,
                 ponto.getNormal(), new Ponto("", inter.getCamera().getVx(),
                 inter.getCamera().getVy(), inter.getCamera().getVz()), ponto);
         return ambiente + difusa + especular;
     }
 
     private double getIb(Poligono p, Ponto ponto) {
+        
+        Matriz src = matrizesCompostas.get(poligonosOrganizados.indexOf(p));
+        
+        Matriz local = new Matriz(4,1);
+        local.set(0,0,inter.getLuzFundo().getLocal().getX());
+        local.set(1,0,inter.getLuzFundo().getLocal().getY());
+        local.set(2,0,inter.getLuzFundo().getLocal().getZ());
+        local.set(3,0,1);
+        
+        local = Matriz.multiplicacao(src, local);
+        
+        Ponto plocal = new Ponto("", local.get(0, 0), local.get(1, 0), local.get(2, 0));
+        
         double ambiente = ambiente(inter.getLuzAmbiente().getIb(), p.getKaB());
+        
         double difusa = difusa(inter.getLuzFundo().getIb(), p.getKdB(), ponto.
                 getNormal(), inter.getLuzFundo().getLocal(), ponto);
+        
         double especular = difusa == 0.0D ? 0.0D : especular(inter.getLuzFundo().
                 getIb(), p.getKsB(), p.getN(), inter.getLuzFundo().getLocal(),
                 ponto.getNormal(), new Ponto("", inter.getCamera().getVx(),
