@@ -16,6 +16,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  *
@@ -41,7 +42,21 @@ public class PanelFrente extends javax.swing.JPanel {
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
         int viusalizacao = inter.getVizualizacaoAtual();
-        for (Poligono p : this.inter.getPoligonosTransformados()) {
+
+
+        ArrayList<Poligono> poligonosOrganizados = (ArrayList<Poligono>) this.inter.
+                getPoligonosTransformados().clone();
+
+        for (int c = 0; c < (poligonosOrganizados.size() - 1); c++) {
+            for (int d = 0; d < poligonosOrganizados.size() - c - 1; d++) {
+                if (poligonosOrganizados.get(d).getCentro().getZ()
+                        > poligonosOrganizados.get(d + 1).getCentro().getZ()) /* For descending order use < */ {
+                    Collections.swap(poligonosOrganizados, d, d + 1);
+                }
+            }
+        }
+
+        for (Poligono p : poligonosOrganizados) {
             Poligono pol = p.copy();
             pol.usarjpv(this.getWidth());
 //            pol.getMatrizPontos().print("pol lateral zoado");
@@ -91,10 +106,16 @@ public class PanelFrente extends javax.swing.JPanel {
                             double Ir = getIr(p, f, origem);
                             double Ig = getIg(p, f, origem);
                             double Ib = getIb(p, f, origem);
-                            int red = (int) (Ir * (double) p.getCorFace().getRed());
-                            int green = (int) (Ig * (double) p.getCorFace().getGreen());
-                            int blue = (int) (Ib * (double) p.getCorFace().getBlue());
-                            Color cor = new Color(red <= 255 ? red >= 0 ? red : 0 : 255, green <= 255 ? green >= 0 ? green : 0 : 255, blue <= 255 ? blue >= 0 ? blue : 0 : 255);
+                            int red = (int) (Ir * (double) p.getCorFace().
+                                    getRed());
+                            int green = (int) (Ig * (double) p.getCorFace().
+                                    getGreen());
+                            int blue = (int) (Ib * (double) p.getCorFace().
+                                    getBlue());
+                            Color cor = new Color(
+                                    red <= 255 ? red >= 0 ? red : 0 : 255, green
+                                    <= 255 ? green >= 0 ? green : 0 : 255, blue
+                                    <= 255 ? blue >= 0 ? blue : 0 : 255);
                             g.setColor(cor);
                             preenchimento(f, g);
                             for (Aresta a : f.getArestas()) {
@@ -130,8 +151,10 @@ public class PanelFrente extends javax.swing.JPanel {
     }
 
     public void drawline(Graphics2D g, Aresta a) {
-        g.drawLine((int) Math.round(a.getP1().getX()), (int) Math.round(a.getP1().getY()),
-                (int) Math.round(a.getP2().getX()), (int) Math.round(a.getP2().getY()));
+        g.drawLine((int) Math.round(a.getP1().getX()), (int) Math.round(a.
+                getP1().getY()),
+                (int) Math.round(a.getP2().getX()), (int) Math.round(a.getP2().
+                getY()));
     }
 
     public void paintPointNumbers(Poligono p, Graphics2D g2D) {
@@ -147,28 +170,43 @@ public class PanelFrente extends javax.swing.JPanel {
 
     private double getIr(Poligono p, Face f, Ponto origem) {
         f.gerarVetorPlano();
-        Ponto normal = new Ponto("normal", f.getVetorPlano().get(0), f.getVetorPlano().get(1), f.getVetorPlano().get(2));
+        Ponto normal = new Ponto("normal", f.getVetorPlano().get(0), f.
+                getVetorPlano().get(1), f.getVetorPlano().get(2));
         double ambiente = ambiente(inter.getLuzAmbiente().getIr(), p.getKaR());
-        double difusa = difusa(inter.getLuzFundo().getIr(), p.getKdR(), normal, inter.getLuzFundo().getLocal(), ((Aresta) f.getArestas().get(0)).getP1());
-        double especular = difusa == 0.0D ? 0.0D : especular(inter.getLuzFundo().getIr(), p.getKsR(), p.getN(), inter.getLuzFundo().getLocal(), normal, origem, ((Aresta) f.getArestas().get(0)).getP1());
+        double difusa = difusa(inter.getLuzFundo().getIr(), p.getKdR(), normal,
+                inter.getLuzFundo().getLocal(),
+                ((Aresta) f.getArestas().get(0)).getP1());
+        double especular = difusa == 0.0D ? 0.0D : especular(inter.getLuzFundo().
+                getIr(), p.getKsR(), p.getN(), inter.getLuzFundo().getLocal(),
+                normal, origem, ((Aresta) f.getArestas().get(0)).getP1());
         return ambiente + difusa + especular;
     }
 
     private double getIg(Poligono p, Face f, Ponto origem) {
         f.gerarVetorPlano();
-        Ponto normal = new Ponto("normal", f.getVetorPlano().get(0), f.getVetorPlano().get(1), f.getVetorPlano().get(2));
+        Ponto normal = new Ponto("normal", f.getVetorPlano().get(0), f.
+                getVetorPlano().get(1), f.getVetorPlano().get(2));
         double ambiente = ambiente(inter.getLuzAmbiente().getIg(), p.getKaG());
-        double difusa = difusa(inter.getLuzFundo().getIg(), p.getKdG(), normal, inter.getLuzFundo().getLocal(), ((Aresta) f.getArestas().get(0)).getP1());
-        double especular = difusa == 0.0D ? 0.0D : especular(inter.getLuzFundo().getIg(), p.getKsG(), p.getN(), inter.getLuzFundo().getLocal(), normal, origem, ((Aresta) f.getArestas().get(0)).getP1());
+        double difusa = difusa(inter.getLuzFundo().getIg(), p.getKdG(), normal,
+                inter.getLuzFundo().getLocal(),
+                ((Aresta) f.getArestas().get(0)).getP1());
+        double especular = difusa == 0.0D ? 0.0D : especular(inter.getLuzFundo().
+                getIg(), p.getKsG(), p.getN(), inter.getLuzFundo().getLocal(),
+                normal, origem, ((Aresta) f.getArestas().get(0)).getP1());
         return ambiente + difusa + especular;
     }
 
     private double getIb(Poligono p, Face f, Ponto origem) {
         f.gerarVetorPlano();
-        Ponto normal = new Ponto("normal", f.getVetorPlano().get(0), f.getVetorPlano().get(1), f.getVetorPlano().get(2));
+        Ponto normal = new Ponto("normal", f.getVetorPlano().get(0), f.
+                getVetorPlano().get(1), f.getVetorPlano().get(2));
         double ambiente = ambiente(inter.getLuzAmbiente().getIb(), p.getKaB());
-        double difusa = difusa(inter.getLuzFundo().getIb(), p.getKdB(), normal, inter.getLuzFundo().getLocal(), ((Aresta) f.getArestas().get(0)).getP1());
-        double especular = difusa == 0.0D ? 0.0D : especular(inter.getLuzFundo().getIb(), p.getKsB(), p.getN(), inter.getLuzFundo().getLocal(), normal, origem, ((Aresta) f.getArestas().get(0)).getP1());
+        double difusa = difusa(inter.getLuzFundo().getIb(), p.getKdB(), normal,
+                inter.getLuzFundo().getLocal(),
+                ((Aresta) f.getArestas().get(0)).getP1());
+        double especular = difusa == 0.0D ? 0.0D : especular(inter.getLuzFundo().
+                getIb(), p.getKsB(), p.getN(), inter.getLuzFundo().getLocal(),
+                normal, origem, ((Aresta) f.getArestas().get(0)).getP1());
         return ambiente + difusa + especular;
     }
 
@@ -176,14 +214,18 @@ public class PanelFrente extends javax.swing.JPanel {
         return Ia * Ka;
     }
 
-    private static double difusa(double Il, double Kd, Ponto normal, Ponto L, Ponto pontoObservado) {
-        Ponto l = new Ponto("", pontoObservado.getX() - L.getX(), pontoObservado.getY() - L.getY(), pontoObservado.getZ() - L.getZ());
+    private static double difusa(double Il, double Kd, Ponto normal, Ponto L,
+                                 Ponto pontoObservado) {
+        Ponto l = new Ponto("", pontoObservado.getX() - L.getX(),
+                pontoObservado.getY() - L.getY(), pontoObservado.getZ() - L.
+                getZ());
         double normaL = norma(l);
         l.setX(l.getX() / normaL);
         l.setY(l.getY() / normaL);
         l.setZ(l.getZ() / normaL);
         double normaNormal = norma(normal);
-        Ponto n = new Ponto("", normal.getX() / normaNormal, normal.getY() / normaNormal, normal.getZ() / normaNormal);
+        Ponto n = new Ponto("", normal.getX() / normaNormal, normal.getY()
+                / normaNormal, normal.getZ() / normaNormal);
         double escalarNL = escalar(n, l);
         if (escalarNL > 0.0D) {
             return Il * Kd * escalarNL;
@@ -192,20 +234,24 @@ public class PanelFrente extends javax.swing.JPanel {
         }
     }
 
-    private static double especular(double Il, double Ks, double expoenteN, Ponto L, Ponto N, Ponto VRP, Ponto A) {
-        Ponto l = new Ponto("", A.getX() - L.getX(), A.getY() - L.getY(), A.getZ() - L.getZ());
+    private static double especular(double Il, double Ks, double expoenteN,
+                                    Ponto L, Ponto N, Ponto VRP, Ponto A) {
+        Ponto l = new Ponto("", A.getX() - L.getX(), A.getY() - L.getY(), A.
+                getZ() - L.getZ());
         double normaL = norma(l);
         l.setX(l.getX() / normaL);
         l.setY(l.getY() / normaL);
         l.setZ(l.getZ() / normaL);
         double normaN = norma(N);
-        Ponto n = new Ponto("", N.getX() / normaN, N.getY() / normaN, N.getZ() / normaN);
+        Ponto n = new Ponto("", N.getX() / normaN, N.getY() / normaN, N.getZ()
+                / normaN);
         Ponto r = new Ponto();
         double DoisLN = 2D * escalar(l, n);
         r.setX(l.getX() - DoisLN * n.getX());
         r.setY(l.getY() - DoisLN * n.getY());
         r.setZ(l.getZ() - DoisLN * n.getZ());
-        Ponto s = new Ponto("", VRP.getX() - A.getX(), VRP.getY() - A.getY(), VRP.getZ() - A.getZ());
+        Ponto s = new Ponto("", VRP.getX() - A.getX(), VRP.getY() - A.getY(),
+                VRP.getZ() - A.getZ());
         double normaS = norma(s);
         s.setX(s.getX() / normaS);
         s.setY(s.getY() / normaS);
@@ -219,11 +265,13 @@ public class PanelFrente extends javax.swing.JPanel {
     }
 
     public static double norma(Ponto p) {
-        return Math.sqrt(p.getX() * p.getX() + p.getY() * p.getY() + p.getZ() * p.getZ());
+        return Math.sqrt(p.getX() * p.getX() + p.getY() * p.getY() + p.getZ()
+                * p.getZ());
     }
 
     public static double escalar(Ponto p1, Ponto p2) {
-        return p1.getX() * p2.getX() + p1.getY() * p2.getY() + p1.getZ() * p2.getZ();
+        return p1.getX() * p2.getX() + p1.getY() * p2.getY() + p1.getZ() * p2.
+                getZ();
     }
 
     public static void preenchimento(Face f, Graphics g) {
@@ -256,7 +304,8 @@ public class PanelFrente extends javax.swing.JPanel {
                     continue;
                 }
                 double u = ((double) y - p1.getY()) / (p2.getY() - p1.getY());
-                if (u < 0.0D || u > 1.0D || y == (int) (p1.getY() <= p2.getY() ? p1.getY() : p2.getY())) {
+                if (u < 0.0D || u > 1.0D || y
+                        == (int) (p1.getY() <= p2.getY() ? p1.getY() : p2.getY())) {
                     continue;
                 }
                 if (first) {

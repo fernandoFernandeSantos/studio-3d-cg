@@ -16,6 +16,7 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.awt.geom.Line2D;
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  *
@@ -41,7 +42,19 @@ public class PanelLateral extends javax.swing.JPanel {
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
         int viusalizacao = inter.getVizualizacaoAtual();
-        for (Poligono p : this.inter.getPoligonosTransformados()) {
+        ArrayList<Poligono> poligonosOrganizados = (ArrayList<Poligono>) this.inter.
+                getPoligonosTransformados().clone();
+
+        for (int c = 0; c < (poligonosOrganizados.size() - 1); c++) {
+            for (int d = 0; d < poligonosOrganizados.size() - c - 1; d++) {
+                if (poligonosOrganizados.get(d).getCentro().getX()
+                        > poligonosOrganizados.get(d + 1).getCentro().getX()) /* For descending order use < */ {
+                    Collections.swap(poligonosOrganizados, d, d + 1);
+                }
+            }
+        }
+
+        for (Poligono p : poligonosOrganizados) {
             Poligono pol = p.copy();
             pol.usarjpv(this.getWidth());
 //            pol.getMatrizPontos().print("pol lateral zoado");
