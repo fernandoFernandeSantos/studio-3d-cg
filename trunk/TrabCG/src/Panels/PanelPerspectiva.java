@@ -17,6 +17,7 @@ import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.util.ArrayList;
+import java.util.Collections;
 
 /**
  *
@@ -40,10 +41,24 @@ public class PanelPerspectiva extends javax.swing.JPanel {
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
         Camera c = inter.getCamera();
+        
+    ArrayList<Poligono> poligonosOrganizados = (ArrayList<Poligono>) this.inter.getPoligonos().clone();
 
+        for (int cc = 0; cc < (poligonosOrganizados.size() - 1); cc++) {
+            for (int d = 0; d < poligonosOrganizados.size() - cc - 1; d++) {
+                
+                Vetor a = new Vetor(poligonosOrganizados.get(d).getCentro());
+                Vetor b = new Vetor(poligonosOrganizados.get(d+1).getCentro());
+                
+                if (Vetor.subtracao(a, c.getVRP3()).getModulo() > Vetor.subtracao(b, c.getVRP3()).getModulo()) /* For descending order use < */ {
+                    Collections.swap(poligonosOrganizados, d, d + 1);
+                }
+            }
+        }
 
+        
         if (this.inter.getVizualizacaoAtual() == 1) {
-            for (Poligono p : this.inter.getPoligonos()) {
+            for (Poligono p : poligonosOrganizados) {
                 g2D.setColor(p.getCor());
                 Poligono Paux = c.GerarPerspectiva(this.getWidth(), this.
                         getHeight(), p);
@@ -56,7 +71,7 @@ public class PanelPerspectiva extends javax.swing.JPanel {
             }
         }
         if (this.inter.getVizualizacaoAtual() == 2) {
-            for (Poligono p : inter.getPoligonos()) {
+            for (Poligono p : poligonosOrganizados) {
                 g2D.setColor(p.getCor());
                 Poligono Paux = c.GerarPerspectiva(this.getWidth(), this.
                         getHeight(), p);
@@ -86,7 +101,7 @@ public class PanelPerspectiva extends javax.swing.JPanel {
 
 
         if (this.inter.getVizualizacaoAtual() == 4) {
-            for (Poligono p : inter.getPoligonos()) {
+            for (Poligono p : poligonosOrganizados) {
                 g2D.setColor(p.getCor());
                 Poligono Paux = c.GerarPerspectiva(this.getWidth(), this.getHeight(), p);
                 Matriz aux = c.getMatrizAux();
@@ -145,7 +160,7 @@ public class PanelPerspectiva extends javax.swing.JPanel {
 
         }
         if (this.inter.getVizualizacaoAtual() == 3) {
-            for (Poligono p : inter.getPoligonos()) {
+            for (Poligono p : poligonosOrganizados) {
                 g2D.setColor(p.getCor());
                 Poligono Paux = c.GerarPerspectiva(this.getWidth(), this.getHeight(), p);
                 Matriz aux = c.getMatrizAux();

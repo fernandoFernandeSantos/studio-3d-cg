@@ -8,12 +8,20 @@ package Classes;
  *
  * @author alienware
  */
-public class Vetor {
+public final class Vetor {
 
     private double[] vetor;
 
     public Vetor() {
         this.vetor = new double[3];
+    }
+    
+    public Vetor(Ponto p){
+//        this.vetor = new double[3];
+        this();
+        this.set(0,p.getX());
+        this.set(1,p.getY());
+        this.set(2,p.getZ());
     }
 
     public Vetor(int n) {
