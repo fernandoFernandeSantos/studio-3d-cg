@@ -43,7 +43,7 @@ public class PanelTopo extends javax.swing.JPanel {
         int viusalizacao = inter.getVizualizacaoAtual();
         for (Poligono p : this.inter.getPoligonosTransformados()) {
             Poligono pol = p.copy();
-            pol.usarjpv();
+            pol.usarjpv(this.getWidth());
 //            pol.getMatrizPontos().print("pol lateral zoado");
 
             switch (viusalizacao) {

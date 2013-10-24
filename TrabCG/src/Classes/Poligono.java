@@ -1019,8 +1019,8 @@ public class Poligono implements java.io.Serializable {
 
     }
 
-    public void usarjpv() {
-        Matriz jpv = Matriz.gerarJPV(0, 0, 300, 300);
+    public void usarjpv(int x) {
+        Matriz jpv = Matriz.gerarJPV(0, 0, x, x);
 
         Matriz pt = this.getMatrizPontos().cut(2);
 

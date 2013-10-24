@@ -1440,11 +1440,7 @@ public class Interface extends javax.swing.JFrame {
 
         jScrollPane1.setBorder(javax.swing.BorderFactory.createTitledBorder("Propriedades"));
 
-        jPanel10.setLayout(null);
-
         jLabel13.setText("n:");
-        jPanel10.add(jLabel13);
-        jLabel13.setBounds(131, 17, 10, 14);
 
         jPanel11.setBorder(javax.swing.BorderFactory.createTitledBorder("Ka"));
 
@@ -1492,7 +1488,7 @@ public class Interface extends javax.swing.JFrame {
                             .addComponent(jLabel15))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel11Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(KaR, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
+                            .addComponent(KaR)
                             .addComponent(KaG))))
                 .addGap(0, 0, 0))
         );
@@ -1512,9 +1508,6 @@ public class Interface extends javax.swing.JFrame {
                     .addComponent(jLabel16))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        jPanel10.add(jPanel11);
-        jPanel11.setBounds(0, 40, 80, 105);
 
         jPanel12.setBorder(javax.swing.BorderFactory.createTitledBorder("Kd"));
 
@@ -1562,7 +1555,7 @@ public class Interface extends javax.swing.JFrame {
                             .addComponent(jLabel18))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel12Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(KdR, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
+                            .addComponent(KdR)
                             .addComponent(KdG))))
                 .addGap(0, 0, 0))
         );
@@ -1582,9 +1575,6 @@ public class Interface extends javax.swing.JFrame {
                     .addComponent(jLabel19))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        jPanel10.add(jPanel12);
-        jPanel12.setBounds(80, 40, 80, 105);
 
         jPanel13.setBorder(javax.swing.BorderFactory.createTitledBorder("Ks"));
 
@@ -1632,7 +1622,7 @@ public class Interface extends javax.swing.JFrame {
                             .addComponent(jLabel21))
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(KsR, javax.swing.GroupLayout.DEFAULT_SIZE, 43, Short.MAX_VALUE)
+                            .addComponent(KsR)
                             .addComponent(KsG))))
                 .addGap(0, 0, 0))
         );
@@ -1652,9 +1642,6 @@ public class Interface extends javax.swing.JFrame {
                     .addComponent(jLabel22))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        jPanel10.add(jPanel13);
-        jPanel13.setBounds(160, 40, 80, 105);
 
         jPanel14.setBorder(javax.swing.BorderFactory.createTitledBorder("Kt"));
 
@@ -1723,17 +1710,47 @@ public class Interface extends javax.swing.JFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jPanel10.add(jPanel14);
-        jPanel14.setBounds(240, 40, 80, 105);
-
         nPol.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(1.0f), Float.valueOf(0.0f), null, Float.valueOf(0.1f)));
         nPol.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
                 nPolStateChanged(evt);
             }
         });
-        jPanel10.add(nPol);
-        nPol.setBounds(159, 11, 43, 20);
+
+        javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
+        jPanel10.setLayout(jPanel10Layout);
+        jPanel10Layout.setHorizontalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel10Layout.createSequentialGroup()
+                .addGap(131, 131, 131)
+                .addComponent(jLabel13)
+                .addGap(18, 18, 18)
+                .addComponent(nPol, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel10Layout.createSequentialGroup()
+                .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        jPanel10Layout.setVerticalGroup(
+            jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel10Layout.createSequentialGroup()
+                .addGap(11, 11, 11)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel10Layout.createSequentialGroup()
+                        .addGap(6, 6, 6)
+                        .addComponent(jLabel13))
+                    .addComponent(nPol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(9, 9, 9)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)))
+        );
 
         jScrollPane1.setViewportView(jPanel10);
 
@@ -2827,6 +2844,10 @@ public class Interface extends javax.swing.JFrame {
                 Poligono aux2 = poligonosTransformados.get(i);
                 aux.EscalarX(tamanhoPanelFundoX / tamanhoPanelFrenteX);
                 aux.EscalarY(tamanhoPanelFundoY / tamanhoPanelFrenteY);
+                aux.EscalarZ(tamanhoPanelFundoY / tamanhoPanelFrenteY);
+//                aux.EscalarX(1.5);
+//                aux.EscalarY(1.5);
+//                aux.EscalarZ(1.5);
                 long novoX = (Math.round((tamanhoPanelFundoX * aux2.getCentro().
                         getX()) / tamanhoPanelFrenteX));
                 long novoY = (Math.round((tamanhoPanelFundoY * aux2.getCentro().
@@ -2860,6 +2881,7 @@ public class Interface extends javax.swing.JFrame {
 
                 aux.EscalarX(0.5);
                 aux.EscalarY(0.5);
+                aux.EscalarZ(0.5);
                 aux2.setPontos(aux.getPontosTransformados());
             }
             repaint();
