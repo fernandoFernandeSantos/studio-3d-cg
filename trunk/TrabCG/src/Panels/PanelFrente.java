@@ -33,19 +33,23 @@ public class PanelFrente extends javax.swing.JPanel {
     }
 
     @Override
+    /*
+     * O método paintComponent pinta os objetos no panel, 
+     * o metodo abaixo sobreescreveu o paintComponent do panel atual
+     */
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2D = (Graphics2D) g;
         g2D.setRenderingHint(
                 RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
-
+         //identifica tipo de visualização | 1 -> Wireframe | 2 -> Wireframe com ocultação | 3 -> Sombreamento costante |
         int viusalizacao = inter.getVizualizacaoAtual();
 
-
+        //pega os poligonos transformados que foram criados na interface    
         ArrayList<Poligono> poligonosOrganizados = (ArrayList<Poligono>) this.inter.
                 getPoligonosTransformados().clone();
-
+        //ordena os poligonos
         for (int c = 0; c < (poligonosOrganizados.size() - 1); c++) {
             for (int d = 0; d < poligonosOrganizados.size() - c - 1; d++) {
                 if (poligonosOrganizados.get(d).getCentro().getZ()
@@ -54,11 +58,11 @@ public class PanelFrente extends javax.swing.JPanel {
                 }
             }
         }
-
+        
         for (Poligono p : poligonosOrganizados) {
             Poligono pol = p.copy();
+            //antes de desenhar tem que inverter o eixo y
             pol.usarjpv(this.getWidth(),this.getHeight());
-//            pol.getMatrizPontos().print("pol lateral zoado");
 
             switch (viusalizacao) {
                 case 1:

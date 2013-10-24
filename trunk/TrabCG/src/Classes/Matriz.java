@@ -436,7 +436,14 @@ public class Matriz//muda de tamanho
            
 	return aux;
     }
-
+    /**
+     * O método gera a matriz de inversão do eixo y para coordenadas de tela
+     * @param xmin
+     * @param ymin
+     * @param xmax
+     * @param ymax
+     * @return 
+     */
     public static Matriz gerarJPV(double xmin, double ymin, double xmax, double ymax) {
 	double umax = xmax;
 	double vmax = ymax;
