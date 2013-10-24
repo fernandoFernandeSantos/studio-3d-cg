@@ -23,12 +23,12 @@ import java.util.ArrayList;
  */
 public class PanelLateral extends javax.swing.JPanel {
 
-    private Interface i;
+    private Interface inter;
     private Vetor observador;
 
     public PanelLateral(Interface _i) {
         initComponents();
-        i = _i;
+        inter = _i;
         observador = new Vetor(1, 0, 0);
     }
 
@@ -40,8 +40,8 @@ public class PanelLateral extends javax.swing.JPanel {
                 RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
 
-        int viusalizacao = i.getVizualizacaoAtual();
-        for (Poligono p : this.i.getPoligonosTransformados()) {
+        int viusalizacao = inter.getVizualizacaoAtual();
+        for (Poligono p : this.inter.getPoligonosTransformados()) {
             Poligono pol = p.copy();
             pol.usarjpv();
 //            pol.getMatrizPontos().print("pol lateral zoado");
@@ -70,10 +70,9 @@ public class PanelLateral extends javax.swing.JPanel {
                     for (Face f : pol.getFaces()) {
                         f.gerarVetorPlano();
                         Vetor normal = f.getVetorPlano();
-
                         if (Vetor.produtoEscalar(normal, observador) > 0) {
-                            //                        fillPolygon(f.getPontos(), g2D, f.getCor());
-                            fillPolygon(f.getPontos(), g2D, pol.getCorFace());
+                            g.setColor(p.getCorFace());
+                            preenchimento(f, g2D);
                             g2D.setColor(p.getCor());
                             for (Aresta a : f.getArestas()) {
                                 this.drawline(g2D, a);
@@ -81,34 +80,53 @@ public class PanelLateral extends javax.swing.JPanel {
                         }
                     }
                     break;
+                case 4:
+                    for (Face f : pol.getFaces()) {
+                        f.gerarVetorPlano();
+                        Vetor normal = f.getVetorPlano();
+
+                        if (Vetor.produtoEscalar(normal, observador) > 0) {
+                            Ponto origem = new Ponto("", 100, 0, 0);
+                            double Ir = getIr(p, f, origem);
+                            double Ig = getIg(p, f, origem);
+                            double Ib = getIb(p, f, origem);
+                            int red = (int) (Ir * (double) p.getCorFace().getRed());
+                            int green = (int) (Ig * (double) p.getCorFace().getGreen());
+                            int blue = (int) (Ib * (double) p.getCorFace().getBlue());
+                            Color cor = new Color(red <= 255 ? red >= 0 ? red : 0 : 255, green <= 255 ? green >= 0 ? green : 0 : 255, blue <= 255 ? blue >= 0 ? blue : 0 : 255);
+                            g.setColor(cor);
+                            preenchimento(f, g2D);
+                            for (Aresta a : f.getArestas()) {
+                                this.drawline(g2D, a);
+                            }
+                        }
+                    }
+                    break;
             }
-            
-            if(i.isMostrarPontos()){
+
+            if (inter.isMostrarPontos()) {
                 paintPointNumbers(pol, g2D);
             }
         }
-    drawAxis(g2D);
-        
-        
+        drawAxis(g2D);
+
+
     }
-    
-    public void drawAxis(Graphics2D g2D){
-        
-//        Graphics2D g2D = (Graphics2D) this.getGraphics();
-//        g2D.setRenderingHint(
-//                RenderingHints.KEY_ANTIALIASING,
-//                RenderingHints.VALUE_ANTIALIAS_ON);
+
+    public void drawAxis(Graphics2D g2D) {
+
 
         g2D.setColor(Color.black);
         g2D.drawLine(20, this.getHeight() - 20, 20, this.getHeight() - 80);
         g2D.fillOval(18, this.getHeight() - 84, 5, 5);
         g2D.drawString("Y", 18, this.getHeight() - 87);
-        
+
         g2D.drawLine(20, this.getHeight() - 20, 80, this.getHeight() - 20);
         g2D.fillOval(80, this.getHeight() - 22, 5, 5);
         g2D.drawString("Z", 87, this.getHeight() - 17);
-        
+
     }
+
     public void drawline(Graphics2D g, Aresta a) {
         g.drawLine((int) Math.round(a.getP1().getZ()), (int) Math.round(a.getP1().getY()),
                 (int) Math.round(a.getP2().getZ()), (int) Math.round(a.getP2().getY()));
@@ -125,50 +143,140 @@ public class PanelLateral extends javax.swing.JPanel {
         }
     }
 
-    //Metodo que preenche o polígono através de uma scanline que percorre a area de desenho e o poligono encontrando os pontos de intersecção
-    public void fillPolygon(ArrayList<Ponto> p, Graphics2D g, Color cor) {
-        g.setRenderingHint(RenderingHints.KEY_ANTIALIASING,
-                RenderingHints.VALUE_ANTIALIAS_ON);
-        g.setColor(cor);
-        double xl1, xl2, yl1, yl2;
-        for (int i = 0; i < this.getHeight(); i++) {//percorro toda a altura
-            ArrayList<Double> pontos = new ArrayList<>();
-            Line2D.Double scanline = new Line2D.Double(-1000, i + 0.5, this.
-                    getWidth() + 1000, i + 0.5);//defino a linha da scanline
-            for (int j = 0; j < p.size(); j++) {//faço a montagem dos pontos "X" e "Y" para formação da Scanline de comparação
-                if (j == p.size() - 1) {
-                    xl1 = p.get(j).getZ();
-                    yl1 = p.get(j).getY();
-                    xl2 = p.get(0).getZ();
-                    yl2 = p.get(0).getY();
-                } else {
-                    xl1 = p.get(j).getZ();
-                    yl1 = p.get(j).getY();
-                    xl2 = p.get(j + 1).getZ();
-                    yl2 = p.get(j + 1).getY();
-                }
-                Line2D.Double l = new Line2D.Double(xl1, yl1, xl2, yl2);//defino scanLine
-                if (l.intersectsLine(scanline)) {//calculo interseçao pela equacao da retav
-                    if (l.x1 == l.x2) {
-                        pontos.add(l.ptLineDist(0, i + 0.5));
-                    } else {
-                        double m = (l.y1 - l.y2) / (l.x1 - l.x2);
-                        pontos.add((((i + 0.5) - l.y1) / m) + l.x1);
+    private double getIr(Poligono p, Face f, Ponto origem) {
+        f.gerarVetorPlano();
+        Ponto normal = new Ponto("normal", f.getVetorPlano().get(0), f.getVetorPlano().get(1), f.getVetorPlano().get(2));
+        double ambiente = ambiente(inter.getLuzAmbiente().getIr(), p.getKaR());
+        double difusa = difusa(inter.getLuzFundo().getIr(), p.getKdR(), normal, inter.getLuzFundo().getLocal(), ((Aresta) f.getArestas().get(0)).getP1());
+        double especular = difusa == 0.0D ? 0.0D : especular(inter.getLuzFundo().getIr(), p.getKsR(), p.getN(), inter.getLuzFundo().getLocal(), normal, origem, ((Aresta) f.getArestas().get(0)).getP1());
+        return ambiente + difusa + especular;
+    }
 
-                    }
-                }
+    private double getIg(Poligono p, Face f, Ponto origem) {
+        f.gerarVetorPlano();
+        Ponto normal = new Ponto("normal", f.getVetorPlano().get(0), f.getVetorPlano().get(1), f.getVetorPlano().get(2));
+        double ambiente = ambiente(inter.getLuzAmbiente().getIg(), p.getKaG());
+        double difusa = difusa(inter.getLuzFundo().getIg(), p.getKdG(), normal, inter.getLuzFundo().getLocal(), ((Aresta) f.getArestas().get(0)).getP1());
+        double especular = difusa == 0.0D ? 0.0D : especular(inter.getLuzFundo().getIg(), p.getKsG(), p.getN(), inter.getLuzFundo().getLocal(), normal, origem, ((Aresta) f.getArestas().get(0)).getP1());
+        return ambiente + difusa + especular;
+    }
+
+    private double getIb(Poligono p, Face f, Ponto origem) {
+        f.gerarVetorPlano();
+        Ponto normal = new Ponto("normal", f.getVetorPlano().get(0), f.getVetorPlano().get(1), f.getVetorPlano().get(2));
+        double ambiente = ambiente(inter.getLuzAmbiente().getIb(), p.getKaB());
+        double difusa = difusa(inter.getLuzFundo().getIb(), p.getKdB(), normal, inter.getLuzFundo().getLocal(), ((Aresta) f.getArestas().get(0)).getP1());
+        double especular = difusa == 0.0D ? 0.0D : especular(inter.getLuzFundo().getIb(), p.getKsB(), p.getN(), inter.getLuzFundo().getLocal(), normal, origem, ((Aresta) f.getArestas().get(0)).getP1());
+        return ambiente + difusa + especular;
+    }
+
+    private static double ambiente(double Ia, double Ka) {
+        return Ia * Ka;
+    }
+
+    private static double difusa(double Il, double Kd, Ponto normal, Ponto L, Ponto pontoObservado) {
+        Ponto l = new Ponto("", pontoObservado.getX() - L.getX(), pontoObservado.getY() - L.getY(), pontoObservado.getZ() - L.getZ());
+        double normaL = norma(l);
+        l.setX(l.getX() / normaL);
+        l.setY(l.getY() / normaL);
+        l.setZ(l.getZ() / normaL);
+        double normaNormal = norma(normal);
+        Ponto n = new Ponto("", normal.getX() / normaNormal, normal.getY() / normaNormal, normal.getZ() / normaNormal);
+        double escalarNL = escalar(n, l);
+        if (escalarNL > 0.0D) {
+            return Il * Kd * escalarNL;
+        } else {
+            return 0.0D;
+        }
+    }
+
+    private static double especular(double Il, double Ks, double expoenteN, Ponto L, Ponto N, Ponto VRP, Ponto A) {
+        Ponto l = new Ponto("", A.getX() - L.getX(), A.getY() - L.getY(), A.getZ() - L.getZ());
+        double normaL = norma(l);
+        l.setX(l.getX() / normaL);
+        l.setY(l.getY() / normaL);
+        l.setZ(l.getZ() / normaL);
+        double normaN = norma(N);
+        Ponto n = new Ponto("", N.getX() / normaN, N.getY() / normaN, N.getZ() / normaN);
+        Ponto r = new Ponto();
+        double DoisLN = 2D * escalar(l, n);
+        r.setX(l.getX() - DoisLN * n.getX());
+        r.setY(l.getY() - DoisLN * n.getY());
+        r.setZ(l.getZ() - DoisLN * n.getZ());
+        Ponto s = new Ponto("", VRP.getX() - A.getX(), VRP.getY() - A.getY(), VRP.getZ() - A.getZ());
+        double normaS = norma(s);
+        s.setX(s.getX() / normaS);
+        s.setY(s.getY() / normaS);
+        s.setZ(s.getZ() / normaS);
+        double escalarRS = escalar(r, s);
+        if (escalarRS > 0.0D) {
+            return Il * Ks * Math.pow(escalarRS, expoenteN);
+        } else {
+            return 0.0D;
+        }
+    }
+
+    public static double norma(Ponto p) {
+        return Math.sqrt(p.getX() * p.getX() + p.getY() * p.getY() + p.getZ() * p.getZ());
+    }
+
+    public static double escalar(Ponto p1, Ponto p2) {
+        return p1.getX() * p2.getX() + p1.getY() * p2.getY() + p1.getZ() * p2.getZ();
+    }
+
+    public static void preenchimento(Face f, Graphics g) {
+        java.util.List list = f.getArestas();
+        double yinf = ((Aresta) list.get(0)).getP1().getZ();
+        double ysup = ((Aresta) list.get(0)).getP1().getY();
+        for (int i = 1; i < list.size(); i++) {
+            if (((Aresta) list.get(i)).getP1().getY() < yinf) {
+                yinf = ((Aresta) list.get(i)).getP1().getY();
             }
-            while (!pontos.isEmpty()) {//se ocorreu interseçao pinta
-                // Recupera o valor de x1
-                double auxx1;
-                auxx1 = (pontos.get(0));
-                pontos.remove(0);
-                double auxx2 = pontos.get(0) + 1;
-                pontos.remove(0);
-                g.drawLine((int) auxx1, i, (int) auxx2, i);
+            if (((Aresta) list.get(i)).getP1().getY() > ysup) {
+                ysup = ((Aresta) list.get(i)).getP1().getY();
+            }
+            if (((Aresta) list.get(i)).getP2().getY() < yinf) {
+                yinf = ((Aresta) list.get(i)).getP2().getY();
+            }
+            if (((Aresta) list.get(i)).getP2().getY() > ysup) {
+                ysup = ((Aresta) list.get(i)).getP2().getY();
             }
         }
-        repaint();
+
+        for (int y = (int) ysup; y > (int) yinf && y > 0; y--) {
+            double x1 = 0.0D;
+            double x2 = 0.0D;
+            boolean first = true;
+            for (int i = 0; i < list.size(); i++) {
+                Ponto p1 = ((Aresta) list.get(i)).getP1();
+                Ponto p2 = ((Aresta) list.get(i)).getP2();
+                if ((int) p1.getY() == (int) p2.getY()) {
+                    continue;
+                }
+                double u = ((double) y - p1.getY()) / (p2.getY() - p1.getY());
+                if (u < 0.0D || u > 1.0D || y == (int) (p1.getY() <= p2.getY() ? p1.getY() : p2.getY())) {
+                    continue;
+                }
+                if (first) {
+                    x1 = u * (p2.getZ() - p1.getZ()) + p1.getZ();
+                    first = false;
+                    continue;
+                }
+                x2 = u * (p2.getZ() - p1.getZ()) + p1.getZ();
+                break;
+            }
+
+            if (x1 == 0.0D && x2 == 0.0D) {
+                continue;
+            }
+            if (x1 > x2) {
+                double aux = x1;
+                x1 = x2;
+                x2 = aux;
+            }
+            g.drawLine((int) Math.floor(x1), y, (int) Math.ceil(x2), y);
+        }
+
     }
 
     @SuppressWarnings("unchecked")

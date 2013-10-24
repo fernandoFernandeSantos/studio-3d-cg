@@ -37,7 +37,6 @@ public class Poligono implements java.io.Serializable {
     private int numPontos;
     private int raio;
     private int altura;
-
     double kar;
     double kdr;
     double ksr;
@@ -96,33 +95,32 @@ public class Poligono implements java.io.Serializable {
         corFace = Color.white;
 
     }
-    
-    
-    public double getKtR(){
+
+    public double getKtR() {
         return ktr;
     }
-    
-    public double getKtG(){
+
+    public double getKtG() {
         return ktg;
     }
-    
-    public double getKtB(){
+
+    public double getKtB() {
         return ktb;
     }
-    
-    public void setKtR(double kt){
+
+    public void setKtR(double kt) {
         ktr = kt;
     }
-    
-    public void setKtG(double kt){
+
+    public void setKtG(double kt) {
         ktg = kt;
     }
-    
-    public void setKtB(double kt){
+
+    public void setKtB(double kt) {
         ktb = kt;
     }
-    
-public double getKaR() {
+
+    public double getKaR() {
         return kar;
     }
 
@@ -200,14 +198,14 @@ public double getKaR() {
 
     public void setN(double n) {
         this.n = n;
-    }    
-    
+    }
+
     public void setCorFace(Color cor) {
         this.corFace = cor;
     }
 
     public Poligono(ArrayList<Ponto> pontos, ArrayList<Aresta> arestas,
-                    ArrayList<Face> faces) {
+            ArrayList<Face> faces) {
         this.pontos = pontos;
         this.arestas = arestas;
         this.faces = faces;
@@ -276,7 +274,19 @@ public double getKaR() {
 
         resultado.setCor(this.getCor());
         resultado.setCorFace(this.getCorFace());
-
+        resultado.kar = kar;
+        resultado.kdr = kdr;
+        resultado.ksr = ksr;
+        resultado.kag = kag;
+        resultado.kdg = kdg;
+        resultado.ksg = ksg;
+        resultado.kab = kab;
+        resultado.kdb = kdb;
+        resultado.ksb = ksb;
+        resultado.ktr = ktr;
+        resultado.ktg = ktg;
+        resultado.ktb = ktb;
+        resultado.n = n;
 
         return resultado;
 
@@ -1013,7 +1023,7 @@ public double getKaR() {
         Matriz jpv = Matriz.gerarJPV(0, 0, 300, 300);
 
         Matriz pt = this.getMatrizPontos().cut(2);
-        
+
 //        pt.print("pt antes");
 
 //        jpv.print("jpv");
@@ -1025,7 +1035,7 @@ public double getKaR() {
             Ponto p = this.getPontos().get(i);
             p.setX(res.get(0, i));
             p.setY(res.get(1, i));
-            
+
 //        }
 //        this.setPontos(res);
         }
