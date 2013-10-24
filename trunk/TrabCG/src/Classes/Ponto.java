@@ -155,5 +155,5 @@ public class Ponto implements java.io.Serializable{
 
     public void setIb(double Ib) {
         this.Ib = Ib;
-    }
+    }   
 }
