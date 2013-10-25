@@ -16,7 +16,6 @@ import java.awt.Graphics2D;
 import java.awt.RenderingHints;
 import java.util.ArrayList;
 import java.util.Collections;
-import java.util.Iterator;
 
 /**
  *
@@ -45,7 +44,8 @@ public class PanelFrente extends javax.swing.JPanel {
         g2D.setRenderingHint(
                 RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
-        //identifica tipo de visualização | 1 -> Wireframe | 2 -> Wireframe com ocultação | 3 -> Sombreamento costante |4 - phong
+        //identifica tipo de visualização | 1 -> Wireframe | 2 -> Wireframe com ocultação |
+        //3 -> Sombreamento costante |4 - phong
         int viusalizacao = inter.getVizualizacaoAtual();
 
         //pega os poligonos transformados que foram criados na interface    
