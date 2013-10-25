@@ -452,17 +452,22 @@ public class PanelFrente extends javax.swing.JPanel {
                 if ((int) p1.getY() == (int) p2.getY()) {
                     continue;
                 }
-                double parmetroU = ((double) it - p1.getY()) / (p2.getY() - p1.getY());
-                if (parmetroU < 0.0 || parmetroU > 1.0 || it
-                        == (int) (p1.getY() <= p2.getY() ? p1.getY() : p2.getY())) {
+                double parametroU = ((double) it - p1.getY()) / (p2.getY() - p1.getY());
+                int auxCompara;
+                if(p1.getY() <= p2.getY()){
+                    auxCompara = (int) p1.getY();
+                }else{
+                    auxCompara = (int) p2.getY();
+                }
+                if (parametroU < 0.0 || parametroU > 1.0 || it == auxCompara) {
                     continue;
                 }
                 if (first) {
-                    xFirst = parmetroU * (p2.getX() - p1.getX()) + p1.getX();
+                    xFirst = parametroU * (p2.getX() - p1.getX()) + p1.getX();
                     first = false;
                     continue;
                 }
-                xSecond = parmetroU * (p2.getX() - p1.getX()) + p1.getX();
+                xSecond = parametroU * (p2.getX() - p1.getX()) + p1.getX();
                 break;
             }
             if (xFirst == 0.0 && xSecond == 0.0) {
