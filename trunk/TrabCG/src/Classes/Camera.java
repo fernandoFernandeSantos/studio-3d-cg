@@ -25,17 +25,29 @@ public class Camera {
     private Matriz composta;
     private Matriz cpPSRC;
     private Matriz matrizAux;
-
+/**
+ * Construtor padrão da classe camera
+ * Começa com VRP em (0,0,100)
+ */
     public Camera() {
         Vx = 0;//VRP
         Vy = 0;
         Vz = 100;
 
-        FPx = 0;//Ponto focal
+        FPx = 0;//Ponto focal 
         FPy = 0;
         FPz = 0;
     }
-
+/**
+ * Construtor da classe camera com os parametros de (vx,vy,vz,fx,fy,fz e distancia)
+ * @param _vx VRP
+ * @param _vy VRP
+ * @param _vz VRP
+ * @param _fx Ponto focal
+ * @param _fy Ponto focal
+ * @param _fz Ponto focal
+ * @param _distancia 
+ */
     public Camera(double _vx, double _vy, double _vz, double _fx, double _fy, double _fz, double _distancia) {
         Vx = _vx;//VRP
         Vy = _vy;
@@ -75,19 +87,31 @@ public class Camera {
     public double getDistancia() {
         return distancia;
     }
-
+/**
+ * Cria um vetor com ponto focal
+ * @return vetor
+ */
     public Vetor getFP() {
         return new Vetor(this.getFPx(), this.getFPy(), this.getFPz(), 1);
     }
-
+/**
+ * Cria um vetor com ponto focal, sem cordenada homogenea
+ * @return vetor
+ */
     public Vetor getFP3() {
         return new Vetor(this.getFPx(), this.getFPy(), this.getFPz());
     }
-
+/**
+ * VRP com cordenada homogenea
+ * @return 
+ */
     public Vetor getVRP() {
         return new Vetor(this.getVx(), this.getVy(), this.Vz, 1);
     }
-
+/**
+ * VRP sem coordenada homogenea
+ * @return 
+ */
     public Vetor getVRP3() {
         return new Vetor(this.getVx(), this.getVy(), this.Vz);
     }
@@ -127,7 +151,12 @@ public class Camera {
     public void setDistancia(double distancia) {
         this.distancia = distancia;
     }
-
+/**
+ * Seta o ponto focal
+ * @param x
+ * @param y
+ * @param z 
+ */
     public void setFP(double x, double y, double z) {
         this.setFPx(x);
         this.setFPy(y);
@@ -200,14 +229,7 @@ public class Camera {
 
         Matriz matrizTranslacao = Matriz.gerarTranslacao(-VRP.get(0),
                 -VRP.get(1), -VRP.get(2));
-        //--------------------------------------------
-//        Matriz matrizTranslacao = new Matriz(4, 4);
-//        matrizTranslacao.setIdentidade();
-//        matrizTranslacao.set(0, 3, -VRP.get(0));
-//        matrizTranslacao.set(1, 3, -VRP.get(1));
-//        matrizTranslacao.set(2, 3, -VRP.get(2));
-//        matrizTranslacao.prlong("matriz translacao");
-        //----------------------------------------------
+        
         Matriz SRC = Matriz.multiplicacao(matrizRotacao, matrizTranslacao);
 
         Matriz cpPSRC = Matriz.multiplicacao(SRC, cpP);
