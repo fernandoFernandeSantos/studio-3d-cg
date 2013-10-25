@@ -24,6 +24,7 @@ import java.util.Iterator;
  */
 public class PanelFrente extends javax.swing.JPanel {
 
+    //possui uma referencia a interface principal
     private Interface inter;
     private Vetor observador;
 
@@ -108,10 +109,12 @@ public class PanelFrente extends javax.swing.JPanel {
                         Vetor normal = f.getVetorPlano();
                         //se visível obtem as variaveis necessárias para o phong
                         if (Vetor.produtoEscalar(normal, observador) > 0) {
-                            Ponto origem = new Ponto("", 0.0D, 0.0D, 100D);
+                            Ponto origem = new Ponto("", 0.0, 0.0, 100);
+                            //chama os métodos que fazem o calculo de ir, ig e ib
                             double Ir = getIr(p, f, origem);
                             double Ig = getIg(p, f, origem);
                             double Ib = getIb(p, f, origem);
+                            //faz o calculo de cada cor de acordo com o ir, ig e ib já calculado
                             int red = (int) (Ir * (double) p.getCorFace().
                                     getRed());
                             int green = (int) (Ig * (double) p.getCorFace().
@@ -119,11 +122,41 @@ public class PanelFrente extends javax.swing.JPanel {
                             int blue = (int) (Ib * (double) p.getCorFace().
                                     getBlue());
                             int transparencia = (int) (255 * (1 - p.getKt()));
-
-                            Color cor = new Color(
-                                    red <= 255 ? red >= 0 ? red : 0 : 255, green
-                                    <= 255 ? green >= 0 ? green : 0 : 255, blue
-                                    <= 255 ? blue >= 0 ? blue : 0 : 255, transparencia);
+                            //para a verificação das variáveis
+                            int auxRed = 0, auxGreen = 0, auxBlue = 0;
+                            if ((red <= 255) && (red >= 0)) {
+                                auxRed = red;
+                            } else {
+                                if (red > 255) {
+                                    auxRed = 255;
+                                }
+                                if (red < 0) {
+                                    auxRed = 0;
+                                }
+                            }
+                            //----------------------------
+                            if ((green <= 255) && (green >= 0)) {
+                                auxGreen = green ;
+                            } else {
+                                if (green > 255) {
+                                    auxGreen = 255;
+                                }
+                                if (green < 0) {
+                                    auxGreen = 0;
+                                }
+                            }
+                            //----------------------------
+                            if ((blue <= 255) && (blue >= 0)) {
+                                auxBlue = blue;
+                            } else {
+                                if (red > 255) {
+                                    auxBlue = 255;
+                                }
+                                if (red < 0) {
+                                    auxBlue = 0;
+                                }
+                            }
+                            Color cor = new Color(auxRed, auxGreen, auxBlue, transparencia);
                             g.setColor(cor);
                             preenchimento(f, g);
                             for (Aresta a : f.getArestas()) {
