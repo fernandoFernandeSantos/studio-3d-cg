@@ -4,11 +4,6 @@
  */
 package Classes;
 
-import java.io.IOException;
-import java.lang.management.GarbageCollectorMXBean;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-
 /**
  * Armazena as configurações da camera
  *
@@ -26,10 +21,21 @@ public class Camera {
     private Matriz composta;
     private Matriz cpPSRC;
     private Matriz matrizAux;
+    private Matriz SRC;
+
+    public Matriz getSRC() {
+        return SRC;
+    }
+
+    public void setSRC(Matriz SRC) {
+        this.SRC = SRC;
+    }
+
 
     /**
      * Construtor padrão da classe camera Começa com VRP em (0,0,100)
      */
+
     public Camera() {
         Vx = 0;//VRP
         Vy = 0;
@@ -247,10 +253,10 @@ public class Camera {
         Matriz matrizTranslacao = Matriz.gerarTranslacao(-VRP.get(0),
                 -VRP.get(1), -VRP.get(2));
 
-        Matriz SRC = Matriz.multiplicacao(matrizRotacao, matrizTranslacao);
+        Matriz src = Matriz.multiplicacao(matrizRotacao, matrizTranslacao);
 
-        Matriz cpPSRC = Matriz.multiplicacao(SRC, cpP);
-
+        Matriz cpPSRC = Matriz.multiplicacao(src, cpP);
+        this.SRC = src;
         double distanciaVRPePP = Math.sqrt(Math.pow((cpPSRC.get(0, 0) - 0), 2) + Math.
                 pow((cpPSRC.get(1, 0) - 0), 2) + Math.
                 pow((cpPSRC.get(2, 0) - 0), 2));
