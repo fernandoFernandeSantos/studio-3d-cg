@@ -7,7 +7,7 @@ package Main;
 import Interface.Interface;
 
 /**
- *
+ * Somente inicia a interface
  * @author Mateus
  */
 public class Init {

@@ -21,7 +21,13 @@ public class Iluminacao
     public double Ir;
     public double Ig;
     public double Ib;
-    
+    /**
+     * Construtor da classe Iluminação com o ponto focal e os I's ds cores
+     * @param local
+     * @param Ir red
+     * @param Ig green
+     * @param Ib blue
+     */
     public Iluminacao(Ponto local, double Ir, double Ig, double Ib)
     {
         this.local = local;
