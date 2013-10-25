@@ -52,11 +52,11 @@ public class Interface extends javax.swing.JFrame {
     private double pontoZ;
     private double distancia;
     //identifica tipo de visualização | 1 -> Wireframe | 2 -> Wireframe com ocultação | 
-   //3 -> Sombreamento costante | 4 - phong
+    //3 -> Sombreamento costante | 4 - phong
     private int visualizacaoAtual;
     // identifica clique do mouse 1 - selecionar; 2 - transladar; 3 - rotacionar; 4 - escala;
     //5 - esfera; 6 - piramide; 7 - prisma; 8 - cizalhar
-    private int cliqueAtual; 
+    private int cliqueAtual;
     private ArrayList<Poligono> poligonos;
     private ArrayList<Poligono> poligonosTransformados;
     private Camera camera;
@@ -64,6 +64,8 @@ public class Interface extends javax.swing.JFrame {
     private int Yanteior;
     private boolean vetores;
     private boolean pontos;
+    //variaveis que gardão o tamanho dos paineis
+    //usados para fazer as escalas dos paineis
     private int tamanhoPanelFrenteX;
     private int tamanhoPanelFrenteY;
     private int tamanhoPanelLateralX;
@@ -72,9 +74,11 @@ public class Interface extends javax.swing.JFrame {
     private int tamanhoPanelTopoY;
     private int tamanhoPanelFundoX;
     private int tamanhoPanelFundoY;
+    //é a quantidade de cada objeto
     public int prismas;
     public int piramides;
     public int esferas;
+    //qual está maximizado
     private static int maximized = 0;
     /* 0 = nenhum
      * 1 = frente
@@ -82,8 +86,8 @@ public class Interface extends javax.swing.JFrame {
      * 3 = topo
      * 4 = perspectiva
      */
+    //se foi salvo ou não
     boolean jaSalvo = false;
-//    File file;
     String nomeArquivo;
     Init i;
     Iluminacao luzAmbiente;
@@ -92,21 +96,23 @@ public class Interface extends javax.swing.JFrame {
     public Interface(Init _i) {
 
         initComponents();
-
+        //inicializa a luz do ambiente
         luzAmbiente = new Iluminacao(new Ponto("localI", 0, 0, 100), 0.5, 0.5,
                 0.5);
+        //define uma iluminação de fundo
         luzFundo = new Iluminacao(new Ponto("localI", 0, 0, 0), 0.5, 0.5, 0.5);
-
-
         i = _i;
         setLocationRelativeTo(null);
         this.setResizable(false);
+        //pega os valores iniciais dos spiner do vrp
         vrpX = Double.valueOf(svrpX.getValue().toString());
         vrpY = Double.valueOf(svrpY.getValue().toString());
         vrpZ = Double.valueOf(svrpZ.getValue().toString());
+        //pega o valores do ponto de foco iniciais
         pontoX = Double.valueOf(spontoX.getValue().toString());
         pontoY = Double.valueOf(spontoY.getValue().toString());
         pontoZ = Double.valueOf(spontoZ.getValue().toString());
+        //valores dos spiners
         distancia = Double.valueOf(sdistancia.getValue().toString());
         BaseSpinner.setValue(4);
         RaioSpinner.setValue(20);
@@ -123,9 +129,9 @@ public class Interface extends javax.swing.JFrame {
                 BorderLayout.PAGE_END);
 
         vetores = false;
-
+        //clique atual recebe o do painel da frente
         cliqueAtual = 1;
-
+        //tamanho sem maximizar
         tamanhoPanelFrenteX = panelFrente.getWidth();
         tamanhoPanelLateralX = panelLateral.getWidth();
         tamanhoPanelTopoX = panelTopo.getWidth();
@@ -139,36 +145,45 @@ public class Interface extends javax.swing.JFrame {
         piramides = 0;
         esferas = 0;
         jaSalvo = false;
-
+        //nome do arquivo
         this.nomeArquivo = "/nothing";
 
     }
 
+    /**
+     * Adiciona o poligono já transformado para todos os paineis
+     *
+     * @param p poligono
+     */
     public void addPoligono(Poligono p) {
         this.poligonos.add(p);
         this.poligonosTransformados.add(p.Transformar(true));
-//        if (p.getTipo().equals("Prisma")) {
-//            this.prismas++;
-//            this.addPoligonosBox("Prisma",this.prismas );
-//        }
-//        if (p.getTipo().equals("Piramide")) {
-//            this.prismas++;
-//            this.addPoligonosBox("Piramide",this.piramides );
-//        }
-//        if (p.getTipo().equals("Esfera")) {
-//            this.prismas++;
-//            this.addPoligonosBox("Esfera",this.esferas );
-//        }
+
     }
 
+    /**
+     * Nome do arquivo
+     *
+     * @return
+     */
     public String getNomeArquivo() {
         return this.nomeArquivo;
     }
 
+    /**
+     * Seta o nome do arquivo
+     *
+     * @param nome
+     */
     public void setNomeArquivo(String nome) {
         this.nomeArquivo = nome;
     }
 
+    /**
+     * Variavel Maximized
+     *
+     * @return
+     */
     public static int getMaximized() {
         return maximized;
     }
@@ -179,12 +194,19 @@ public class Interface extends javax.swing.JFrame {
 
     /**
      * Verifica se o mostrar pontos está selecionado
+     *
      * @return boolean pontos
      */
     public boolean isMostrarPontos() {
         return pontos;
     }
 
+    /**
+     * identifica tipo de visualização | 1 -> Wireframe | 2 -> Wireframe com
+     * ocultação | 3 -> Sombreamento costante | 4 - phong
+     *
+     * @return
+     */
     public int getVizualizacaoAtual() {
         return visualizacaoAtual;
     }
@@ -200,13 +222,16 @@ public class Interface extends javax.swing.JFrame {
     public ArrayList<Poligono> getPoligonosTransformados() {
         return this.poligonosTransformados;
     }
-
+    /**
+     * Seta os spinner do vrp e do ponto focal e a camera
+     * @param camera 
+     */
     public void setCamera(Camera camera) {
-
+        //vrp
         svrpX.setValue((int) camera.getVx());
         svrpY.setValue((int) camera.getVy());
         svrpZ.setValue((int) camera.getVz());
-
+        //ponto focal
         spontoX.setValue((int) camera.getFPx());
         spontoY.setValue((int) camera.getFPy());
         spontoZ.setValue((int) camera.getFPz());
@@ -227,6 +252,7 @@ public class Interface extends javax.swing.JFrame {
     }
 
     public void addPoligonosBox(String what, int value) {
+        //adiciona o poligono ao combo box 
         this.PoligonosBox.addItem(what + " " + String.valueOf(value));
     }
 
@@ -1842,12 +1868,18 @@ public class Interface extends javax.swing.JFrame {
     private void buttonPrismaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonPrismaActionPerformed
         this.cliqueAtual = 7;
     }//GEN-LAST:event_buttonPrismaActionPerformed
-
+/**
+ * Conforme o evento e o poligono  selecionado cria o evento no painel frente
+ * @param evt 
+ */
     private void panelFrenteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelFrenteMouseClicked
+       //Clicou no painel frente ve qual poligono está selecionado
+       // e cria o poligono
         Poligono pol = new Poligono();
         switch (cliqueAtual) {
             case 1:
                 if (this.poligonos.size() > 0) {
+                    //cria um vetor com as cordenadas do clique
                     Vetor click = new Vetor(2);
                     click.set(0, evt.getX());
                     click.set(1, panelFrente.getHeight() - evt.getY());
@@ -1914,29 +1946,25 @@ public class Interface extends javax.swing.JFrame {
     private void panelFrenteMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelFrenteMouseEntered
         // TODO add your handling code here:
     }//GEN-LAST:event_panelFrenteMouseEntered
-
+/**
+ * Se mudou o estado do spinner svrpx
+ * @param evt 
+ */
     private void svrpXStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_svrpXStateChanged
+       
         vrpX = Double.valueOf(svrpX.getValue().toString());
         if (this.camera != null) {
             this.camera.setVx(vrpX);
             this.camera.GerarIntermediarios();
         }
         repaint();
-//        paint(vrpX, vrpY, vrpZ, pontoX, pontoY, pontoZ, distancia, poli);
-
         jaSalvo = false;
-//        if (zbuffer == null) {
-//            zbuffer = new ZBuffer(this.getZBuffer(), this.panelPerspectiva.
-//                    getWidth(), this.panelPerspectiva.getHeight());
-//            zbuffer.setVisible(true);
-//            zbuffer.repaint();
-//        } else {
-//            setZBuffer();
-//        }
-
 
     }//GEN-LAST:event_svrpXStateChanged
-
+/**
+ * Se mudou o estado do spinner svrpy
+ * @param evt 
+ */
     private void svrpYStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_svrpYStateChanged
         vrpY = Double.valueOf(svrpY.getValue().toString());
         this.camera.setVy(vrpY);
@@ -1944,19 +1972,11 @@ public class Interface extends javax.swing.JFrame {
         repaint();
 
         jaSalvo = false;
-//        if (zbuffer == null) {
-//            zbuffer = new ZBuffer(this.getZBuffer(), this.panelPerspectiva.
-//                    getWidth(), this.panelPerspectiva.getHeight());
-//            zbuffer.setVisible(true);
-//            zbuffer.repaint();
-//        } else {
-//            setZBuffer();
-//        }
-
-
-//        paint(vrpX, vrpY, vrpZ, pontoX, pontoY, pontoZ, distancia, poli);
     }//GEN-LAST:event_svrpYStateChanged
-
+/**
+ * Se mudou o estado do spinner svrpz
+ * @param evt 
+ */
     private void svrpZStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_svrpZStateChanged
         vrpZ = Double.valueOf(svrpZ.getValue().toString());
         this.camera.setVz(vrpZ);
@@ -1964,19 +1984,12 @@ public class Interface extends javax.swing.JFrame {
         repaint();
 
         jaSalvo = false;
-//        if (zbuffer == null) {
-//            zbuffer = new ZBuffer(this.getZBuffer(), this.panelPerspectiva.
-//                    getWidth(), this.panelPerspectiva.getHeight());
-//            zbuffer.setVisible(true);
-//            zbuffer.repaint();
-//        } else {
-//            setZBuffer();
-//        }
 
-
-//        paint(vrpX, vrpY, vrpZ, pontoX, pontoY, pontoZ, distancia, poli);
     }//GEN-LAST:event_svrpZStateChanged
-
+/**
+ * Se mudou o estado do spinner spontox (ponto focal)
+ * @param evt 
+ */
     private void spontoXStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spontoXStateChanged
         pontoX = Double.valueOf(spontoX.getValue().toString());
         this.camera.setFPx(pontoX);
@@ -1984,19 +1997,12 @@ public class Interface extends javax.swing.JFrame {
         repaint();
 
         jaSalvo = false;
-//        if (zbuffer == null) {
-//            zbuffer = new ZBuffer(this.getZBuffer(), this.panelPerspectiva.
-//                    getWidth(), this.panelPerspectiva.getHeight());
-//            zbuffer.setVisible(true);
-//            zbuffer.repaint();
-//        } else {
-//            setZBuffer();
-//        }
 
-
-//        paint(vrpX, vrpY, vrpZ, pontoX, pontoY, pontoZ, distancia, poli);
     }//GEN-LAST:event_spontoXStateChanged
-
+/**
+ * Se mudou o estado do spinner spontoY (ponto focal)
+ * @param evt 
+ */
     private void spontoYStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spontoYStateChanged
         pontoY = Double.valueOf(spontoY.getValue().toString());
         this.camera.setFPy(pontoY);
@@ -2004,17 +2010,6 @@ public class Interface extends javax.swing.JFrame {
         repaint();
 
         jaSalvo = false;
-//        if (zbuffer == null) {
-//            zbuffer = new ZBuffer(this.getZBuffer(), this.panelPerspectiva.
-//                    getWidth(), this.panelPerspectiva.getHeight());
-//            zbuffer.setVisible(true);
-//            zbuffer.repaint();
-//        } else {
-//            setZBuffer();
-//        }
-
-
-//        paint(vrpX, vrpY, vrpZ, pontoX, pontoY, pontoZ, distancia, poli);
     }//GEN-LAST:event_spontoYStateChanged
 
     private void spontoZStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spontoZStateChanged
@@ -3511,7 +3506,7 @@ public class Interface extends javax.swing.JFrame {
     }
 
     private BufferedImage cortaBuffer(BufferedImage bufferImagem, int largura,
-                                      int altura, int fator) {
+            int altura, int fator) {
         BufferedImage buffer = new BufferedImage(largura, altura,
                 BufferedImage.TYPE_INT_RGB);
         for (int j = 0; j < largura; j++) {
