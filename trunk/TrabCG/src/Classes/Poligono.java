@@ -663,8 +663,8 @@ public class Poligono implements java.io.Serializable {
         return resultado;
     }
 /**
- * 
- * @return 
+ * faz a adaptação do poligono para a perspectiva
+ * @return poligono
  */
     public Poligono TransformarPerspectiva() {
 
