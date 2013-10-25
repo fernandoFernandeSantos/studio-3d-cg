@@ -14,7 +14,9 @@ public class Matriz//muda de tamanho
 {
 
     private double[][] matriz;
-
+/**
+ * 
+ */
     public Matriz() {
         this.matriz = new double[4][4];
     }
