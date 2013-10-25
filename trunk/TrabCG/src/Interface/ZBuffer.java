@@ -9,7 +9,7 @@ import java.awt.Color;
 import java.awt.image.BufferedImage;
 
 /**
- *
+ * Janela do ZBuffer
  * @author Mateus
  */
 public class ZBuffer extends javax.swing.JFrame {
