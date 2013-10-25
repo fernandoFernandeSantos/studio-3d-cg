@@ -174,7 +174,9 @@ public class Camera {
                 vrp.get(1),
                 vrp.get(2));
     }
-
+/**
+ * Gera as matrizes que são usadas na perspectiva, para evitar recalculo
+ */
     public void GerarIntermediarios() {
         //Cria vetor VRP
         Vetor VRP = this.getVRP();
@@ -248,20 +250,32 @@ public class Camera {
         this.cpPSRC = cpPSRC;
        
     }
-
+/**
+ * Gera um poligono novo com a perspectiva aplicada
+ * @param width da tela
+ * @param heigh da tela
+ * @param p poligono
+ * @return  poligono resultado
+ */
     public Poligono GerarPerspectiva(long width, long heigh, Poligono p) {
         Matriz pontos = GerarPerspectiva(width, heigh, p.TransformarPerspectiva().getMatrizPontos());
         Poligono res = p.copy();
         res.setPontos(pontos);
         return res;
     }
-
+/**
+ * Vetor entre VRP e Ponto focal
+ * @return vetor
+ */
     public Vetor getVRPtoFP() {
         Vetor VRP = this.getVRP();
         Vetor FP = this.getFP();
         return Vetor.subtracao(VRP, FP);
     }
-
+/**
+ * Vetor entre VRP e Ponto focal normalizado
+ * @return 
+ */
     public Vetor getVRPtoFP3() {
         Vetor VRP = this.getVRP3();
         Vetor FP = this.getFP3();
@@ -269,7 +283,13 @@ public class Camera {
         r.normalizar();
         return r;
     }
-
+/**
+ * Gera a matriz perspectiva final
+ * @param width
+ * @param height
+ * @param pontos matriz de pontos
+ * @return matriz
+ */
     public Matriz GerarPerspectiva(long width, long height, Matriz pontos) {
 
         Vetor window = new Vetor(2);
@@ -278,20 +298,20 @@ public class Camera {
         Vetor viewPort = new Vetor(0, 0, width, height);
         Matriz aux = Matriz.multiplicacao(this.getComposta(), pontos);
         this.setMatrizAux(aux);
-//        aux.prlong("aux antes");
+
         for (int i = 0; i < aux.getColunas(); i++) {
             aux.set(0, i, aux.get(0, i) / aux.get(3, i));
             aux.set(1, i, aux.get(1, i) / aux.get(3, i));
             aux.set(2, i, aux.get(2, i) / aux.get(3, i));
             aux.set(3, i, aux.get(3, i) / aux.get(3, i));
         }
-//        aux.prlong("aux");\
+
         double[] z = new double[aux.getColunas()];
         for (int i = 0; i < z.length; i++) {
             z[i] = aux.get(2, i);
         }
         Matriz newAux = aux.cut(2);
-//        newAux.prlong("aux cutada");
+
         Matriz windowFinal = new Matriz(4, 2);
         Matriz cpRSRC = this.getcpPSRC();
 
@@ -303,7 +323,7 @@ public class Camera {
         windowFinal.set(2, 1, cpPSRC.get(2, 0));
         windowFinal.set(3, 0, cpPSRC.get(3, 0));
         windowFinal.set(3, 1, cpPSRC.get(3, 0));
-//        windowFinal.prlong("windowFinal");
+
         Matriz MJP = new Matriz(3, 3);
         MJP.setIdentidade();
         MJP.set(0, 0, (viewPort.get(2) - viewPort.get(0)) / (windowFinal.get(0,
@@ -316,16 +336,9 @@ public class Camera {
         MJP.
                 set(1, 2, (-windowFinal.get(1, 0)) * MJP.get(1, 1) + viewPort.
                 get(1));
-//        MJP.prlong("MJP");
+
         newAux = Matriz.multiplicacao(MJP, newAux);
-//        Matriz matrizComZ = new Matriz(newAux.getLinhas(), newAux.getColunas() + 1);
-//        matrizComZ = newAux.copy();
-//        for (int i = 0; i < z.length; i++) {
-//            matrizComZ.set(2, i, z[i]);
-//            matrizComZ.set(3, i, 1);
-//        }
-//        this.setMatrizComZ(matrizComZ);
-        //        newAux.prlong("newAux");
+
        
         return newAux;
 
