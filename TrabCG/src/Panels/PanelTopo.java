@@ -387,7 +387,11 @@ public class PanelTopo extends javax.swing.JPanel {
     public static double escalar(Ponto p1, Ponto p2) {
         return p1.getX() * p2.getX() + p1.getY() * p2.getY() + p1.getZ() * p2.getZ();
     }
-
+/**
+ * Faz o preenchimento da face passada
+ * @param f
+ * @param g 
+ */
     public static void preenchimento(Face f, Graphics g) {
         ArrayList<Aresta> arestaFaceAtual = f.getArestas();
         double yInferior = (arestaFaceAtual.get(0)).getP1().getX();
