@@ -396,24 +396,24 @@ public class PanelLateral extends javax.swing.JPanel {
     public static void preenchimento(Face f, Graphics g) {
         ArrayList<Aresta> arestaFaceAtual = f.getArestas();
         double yInferior = (arestaFaceAtual.get(0)).getP1().getZ();
-        double ySuperiro = (arestaFaceAtual.get(0)).getP1().getY();
+        double ySuperior = (arestaFaceAtual.get(0)).getP1().getY();
         //obtem o yInferior e o ySuperior
         for (Aresta a : arestaFaceAtual) {
             if (a.getP1().getY() < yInferior) {
                 yInferior = a.getP1().getY();
             }
-            if (a.getP1().getY() > ySuperiro) {
-                ySuperiro = a.getP1().getY();
+            if (a.getP1().getY() > ySuperior) {
+                ySuperior = a.getP1().getY();
             }
             if (a.getP2().getY() < yInferior) {
                 yInferior = a.getP2().getY();
             }
-            if (a.getP2().getY() > ySuperiro) {
-                ySuperiro = a.getP2().getY();
+            if (a.getP2().getY() > ySuperior) {
+                ySuperior = a.getP2().getY();
             }
         }
 
-        for (int y = (int) ySuperiro; y > (int) yInferior && y > 0; y--) {
+        for (int it = (int) ySuperior; it > (int) yInferior && it > 0; it--) {
             double xFirst = 0.0;
             double xSecond = 0.0;
             boolean first = true;
@@ -423,8 +423,14 @@ public class PanelLateral extends javax.swing.JPanel {
                 if ((int) p1.getY() == (int) p2.getY()) {
                     continue;
                 }
-                double parametroU = ((double) y - p1.getY()) / (p2.getY() - p1.getY());
-                if (parametroU < 0.0 || parametroU > 1.0 || y == (int) (p1.getY() <= p2.getY() ? p1.getY() : p2.getY())) {
+                double parametroU = ((double) it - p1.getY()) / (p2.getY() - p1.getY());
+                int auxCompara;
+                if(p1.getY() <= p2.getY()){
+                    auxCompara = (int) p1.getY();
+                }else{
+                    auxCompara = (int) p2.getY();
+                }
+                if (parametroU < 0.0 || parametroU > 1.0 || it == auxCompara) {
                     continue;
                 }
                 if (first) {
@@ -444,7 +450,7 @@ public class PanelLateral extends javax.swing.JPanel {
                 xFirst = xSecond;
                 xSecond = aux;
             }
-            g.drawLine((int) Math.floor(xFirst), y, (int) Math.ceil(xSecond), y);
+            g.drawLine((int) Math.floor(xFirst), it, (int) Math.ceil(xSecond), it);
         }
 
     }
