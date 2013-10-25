@@ -57,19 +57,15 @@ public class Face implements java.io.Serializable {
     public boolean isVisivel(Vetor v) {
 
         Vetor vp = this.getVetorPlano();
-//        vp.print("norma = ");
+
         Ponto a = this.getArestas().get(0).getP1();
-//        a.print("ponto =");
-//        double d = -(a.getX() * vp.get(0))
+
 
         double d = -(a.getX() * vp.get(0));
         d -= a.getY() * vp.get(1);
         d -= a.getZ() * vp.get(2);
 
-//        d *= -1;
-//        //System.out.println("d = " + d);
-//        double D = Vetor.produtoEscalar(v, vp) + d;
-//        double D = (vp.get(0) + (vp.get(1) + (vp.get(2)))) + d;
+
         double D = vp.get(0) * v.get(0) + vp.get(1) * v.get(1) + vp.get(2) * v.get(2) + d;
 
 
@@ -81,7 +77,10 @@ public class Face implements java.io.Serializable {
             return true;
         }
     }
-
+/**
+ * Obtem todos os pontos da face
+ * @return array de pontos
+ */
     public ArrayList<Ponto> getPontos() {
         ArrayList<Ponto> pontos = new ArrayList<>();
 
@@ -112,7 +111,12 @@ public class Face implements java.io.Serializable {
 
         return pontos;
     }
-
+/**
+ * Calcula a area entre dois vetores
+ * @param x vetor
+ * @param y vetor
+ * @return double
+ */
     private double getArea(Vetor x, Vetor y) {
         double area = 0;
         for (int i = 0; i < x.length(); i++) {
@@ -126,7 +130,10 @@ public class Face implements java.io.Serializable {
 
         return area;
     }
-
+/**
+ * Calcula area entre os vetores X e Y
+ * @return double
+ */
     public double calculaAreaXY() {
 
         ArrayList<Ponto> pontos = this.getPontos();
@@ -144,7 +151,10 @@ public class Face implements java.io.Serializable {
         return getArea(x, y);
 
     }
-
+/**
+ * Calcula area entre os vetores X e Z
+ * @return double
+ */
     public double calculaAreaXZ() {
 
         ArrayList<Ponto> pontos = this.getPontos();
@@ -161,7 +171,10 @@ public class Face implements java.io.Serializable {
 
         return getArea(x, z);
     }
-
+/**
+ * Calcula area entre os vetores Y e Z
+ * @return double
+ */
     public double calculaAreaYZ() {
 
         ArrayList<Ponto> pontos = this.getPontos();
@@ -183,9 +196,9 @@ public class Face implements java.io.Serializable {
         return vetorPlano;
     }
 
-    /**
-     * Gera o vetor do plano da face
-     */
+  /**
+   * Gera o vetor Normal ao plano da face
+   */
     public void gerarVetorPlano() {
 
         ArrayList<Ponto> pontos = this.getPontos();
