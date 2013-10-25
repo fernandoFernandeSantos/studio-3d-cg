@@ -9,11 +9,19 @@ import java.io.Serializable;
 
 // Referenced classes of package objetos:
 //            Ponto3D
-
+/**
+ * Armazena as informações de iluminação
+ * @author Mateus Felipe
+ */
 public class Iluminacao
     implements Serializable
 {
-
+    
+    public Ponto local;
+    public double Ir;
+    public double Ig;
+    public double Ib;
+    
     public Iluminacao(Ponto local, double Ir, double Ig, double Ib)
     {
         this.local = local;
@@ -67,8 +75,4 @@ public class Iluminacao
         this.local = local;
     }
 
-    public Ponto local;
-    public double Ir;
-    public double Ig;
-    public double Ib;
 }

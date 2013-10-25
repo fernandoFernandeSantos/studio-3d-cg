@@ -136,7 +136,7 @@ public class PanelFrente extends javax.swing.JPanel {
                             }
                             //----------------------------
                             if ((green <= 255) && (green >= 0)) {
-                                auxGreen = green ;
+                                auxGreen = green;
                             } else {
                                 if (green > 255) {
                                     auxGreen = 255;
@@ -157,6 +157,7 @@ public class PanelFrente extends javax.swing.JPanel {
                                 }
                             }
                             Color cor = new Color(auxRed, auxGreen, auxBlue, transparencia);
+                            //seta a cor antes do preenchimento
                             g.setColor(cor);
                             preenchimento(f, g);
                             for (Aresta a : f.getArestas()) {
@@ -166,7 +167,7 @@ public class PanelFrente extends javax.swing.JPanel {
                     }
                     break;
             }
-
+            //se o mostrar pontos está selecionado pinta os pontos do poligono
             if (inter.isMostrarPontos()) {
                 paintPointNumbers(pol, g2D);
             }
@@ -177,6 +178,11 @@ public class PanelFrente extends javax.swing.JPanel {
 
     }
 
+    /**
+     * Desenha os eixos na interface
+     *
+     * @param g2D o painel grafic onde vai desenhar
+     */
     public void drawAxis(Graphics2D g2D) {
         g2D.setColor(Color.black);
         g2D.drawLine(20, this.getHeight() - 20, 20, this.getHeight() - 80);
@@ -189,13 +195,25 @@ public class PanelFrente extends javax.swing.JPanel {
 
     }
 
+    /**
+     * Faz o desenho da linha que recebe por parâmetro
+     *
+     * @param g grapics onde ira desenhar
+     * @param a ares que vai desenhar
+     */
     public void drawline(Graphics2D g, Aresta a) {
         g.drawLine((int) Math.round(a.getP1().getX()), (int) Math.round(a.
                 getP1().getY()),
                 (int) Math.round(a.getP2().getX()), (int) Math.round(a.getP2().
-                        getY()));
+                getY()));
     }
 
+    /**
+     * Pinta os pontos do poligono
+     *
+     * @param p um poligono
+     * @param g2D Graphics2D onde vai desenhar
+     */
     public void paintPointNumbers(Poligono p, Graphics2D g2D) {
         for (Ponto pT : p.getPontos()) {
             if (!pT.getNome().equals("centro")) {
@@ -207,53 +225,112 @@ public class PanelFrente extends javax.swing.JPanel {
         }
     }
 
+    /**
+     * Faz o calcúlo de Ir
+     *
+     * @param p o poligono que a face está
+     * @param f a face que
+     * @param origem
+     * @return retorna um double com o valor de ir
+     */
     private double getIr(Poligono p, Face f, Ponto origem) {
         f.gerarVetorPlano();
         Ponto normal = new Ponto("normal", f.getVetorPlano().get(0), f.
                 getVetorPlano().get(1), f.getVetorPlano().get(2));
-        double ambiente = ambiente(inter.getLuzAmbiente().getIr(), p.getKaR());
-        double difusa = difusa(inter.getLuzFundo().getIr(), p.getKdR(), normal,
+        double ambiente = luzAmbiente(inter.getLuzAmbiente().getIr(), p.getKaR());
+
+        double difusa = reflexaoDifusa(inter.getLuzFundo().getIr(), p.getKdR(), normal,
                 inter.getLuzFundo().getLocal(),
                 ((Aresta) f.getArestas().get(0)).getP1());
-        double especular = difusa == 0.0D ? 0.0D : especular(inter.getLuzFundo().
-                getIr(), p.getKsR(), p.getN(), inter.getLuzFundo().getLocal(),
-                normal, origem, ((Aresta) f.getArestas().get(0)).getP1());
+
+        double especular = 0;
+        if (difusa == 0.0) {
+            especular = 0.0;
+        } else {
+            especular = reflexaoEspecular(inter.getLuzFundo().getIr(), p.getKsR(), p.getN(),
+                    inter.getLuzFundo().getLocal(), normal, origem, ((Aresta) f.getArestas().get(0)).getP1());
+        }
         return ambiente + difusa + especular;
     }
 
+    /**
+     * Faz o calcúlo de Ig
+     *
+     * @param p o poligono que a face está
+     * @param f a face que
+     * @param origem
+     * @return retorna um double com o valor de ig
+     */
     private double getIg(Poligono p, Face f, Ponto origem) {
         f.gerarVetorPlano();
         Ponto normal = new Ponto("normal", f.getVetorPlano().get(0), f.
                 getVetorPlano().get(1), f.getVetorPlano().get(2));
-        double ambiente = ambiente(inter.getLuzAmbiente().getIg(), p.getKaG());
-        double difusa = difusa(inter.getLuzFundo().getIg(), p.getKdG(), normal,
+        double ambiente = luzAmbiente(inter.getLuzAmbiente().getIg(), p.getKaG());
+        double difusa = reflexaoDifusa(inter.getLuzFundo().getIg(), p.getKdG(), normal,
                 inter.getLuzFundo().getLocal(),
                 ((Aresta) f.getArestas().get(0)).getP1());
-        double especular = difusa == 0.0D ? 0.0D : especular(inter.getLuzFundo().
-                getIg(), p.getKsG(), p.getN(), inter.getLuzFundo().getLocal(),
-                normal, origem, ((Aresta) f.getArestas().get(0)).getP1());
+
+        double especular = 0;
+        if (difusa == 0.0) {
+            especular = 0.0;
+        } else {
+            especular = reflexaoEspecular(inter.getLuzFundo().
+                    getIg(), p.getKsG(), p.getN(), inter.getLuzFundo().getLocal(),
+                    normal, origem, ((Aresta) f.getArestas().get(0)).getP1());
+        }
         return ambiente + difusa + especular;
     }
 
+    /**
+     * Faz o calcúlo de Ib
+     *
+     * @param p o poligono que a face está
+     * @param f a face que
+     * @param origem
+     * @return retorna um double com o valor de ib
+     */
     private double getIb(Poligono p, Face f, Ponto origem) {
         f.gerarVetorPlano();
         Ponto normal = new Ponto("normal", f.getVetorPlano().get(0), f.
                 getVetorPlano().get(1), f.getVetorPlano().get(2));
-        double ambiente = ambiente(inter.getLuzAmbiente().getIb(), p.getKaB());
-        double difusa = difusa(inter.getLuzFundo().getIb(), p.getKdB(), normal,
+        double ambiente = luzAmbiente(inter.getLuzAmbiente().getIb(), p.getKaB());
+        double difusa = reflexaoDifusa(inter.getLuzFundo().getIb(), p.getKdB(), normal,
                 inter.getLuzFundo().getLocal(),
                 ((Aresta) f.getArestas().get(0)).getP1());
-        double especular = difusa == 0.0D ? 0.0D : especular(inter.getLuzFundo().
-                getIb(), p.getKsB(), p.getN(), inter.getLuzFundo().getLocal(),
-                normal, origem, ((Aresta) f.getArestas().get(0)).getP1());
+        double especular;
+        if (difusa == 0.0) {
+            especular = 0.0;
+        } else {
+            especular = reflexaoEspecular(inter.getLuzFundo().
+                    getIb(), p.getKsB(), p.getN(), inter.getLuzFundo().getLocal(),
+                    normal, origem, ((Aresta) f.getArestas().get(0)).getP1());
+        }
+
         return ambiente + difusa + especular;
     }
 
-    private static double ambiente(double Ia, double Ka) {
+    /**
+     * Calculo da luz ambiente de acordo com o Ia e Ka passados
+     *
+     * @param Ia intencidade da luz ambiente
+     * @param Kaquantidade de luz ambiente
+     * @return double
+     */
+    private static double luzAmbiente(double Ia, double Ka) {
         return Ia * Ka;
     }
 
-    private static double difusa(double Il, double Kd, Ponto normal, Ponto L,
+    /**
+     * Cálculo da reflexão difusa
+     *
+     * @param Il
+     * @param Kd
+     * @param normal vetor normal
+     * @param L vetor L
+     * @param pontoObservado
+     * @return double
+     */
+    private static double reflexaoDifusa(double Il, double Kd, Ponto normal, Ponto L,
             Ponto pontoObservado) {
         Ponto l = new Ponto("", pontoObservado.getX() - L.getX(),
                 pontoObservado.getY() - L.getY(), pontoObservado.getZ() - L.
@@ -266,14 +343,26 @@ public class PanelFrente extends javax.swing.JPanel {
         Ponto n = new Ponto("", normal.getX() / normaNormal, normal.getY()
                 / normaNormal, normal.getZ() / normaNormal);
         double escalarNL = escalar(n, l);
-        if (escalarNL > 0.0D) {
+        if (escalarNL > 0.0) {
             return Il * Kd * escalarNL;
         } else {
-            return 0.0D;
+            return 0.0;
         }
     }
 
-    private static double especular(double Il, double Ks, double expoenteN,
+    /**
+     * Calculo da reflexão expecular
+     *
+     * @param Il
+     * @param Ks
+     * @param expoenteN
+     * @param L Luz incidente
+     * @param N normal a superficie
+     * @param VRP
+     * @param A
+     * @return valor da reflexão especular
+     */
+    private static double reflexaoEspecular(double Il, double Ks, double expoenteN,
             Ponto L, Ponto N, Ponto VRP, Ponto A) {
         Ponto l = new Ponto("", A.getX() - L.getX(), A.getY() - L.getY(), A.
                 getZ() - L.getZ());
@@ -285,7 +374,7 @@ public class PanelFrente extends javax.swing.JPanel {
         Ponto n = new Ponto("", N.getX() / normaN, N.getY() / normaN, N.getZ()
                 / normaN);
         Ponto r = new Ponto();
-        double DoisLN = 2D * escalar(l, n);
+        double DoisLN = 2 * escalar(l, n);
         r.setX(l.getX() - DoisLN * n.getX());
         r.setY(l.getY() - DoisLN * n.getY());
         r.setZ(l.getZ() - DoisLN * n.getZ());
@@ -296,18 +385,29 @@ public class PanelFrente extends javax.swing.JPanel {
         s.setY(s.getY() / normaS);
         s.setZ(s.getZ() / normaS);
         double escalarRS = escalar(r, s);
-        if (escalarRS > 0.0D) {
+        if (escalarRS > 0.0) {
             return Il * Ks * Math.pow(escalarRS, expoenteN);
         } else {
-            return 0.0D;
+            return 0.0;
         }
     }
 
+    /**
+     * Norma de um ponto
+     * @param p
+     * @return double
+     */
     public static double norma(Ponto p) {
         return Math.sqrt(p.getX() * p.getX() + p.getY() * p.getY() + p.getZ()
                 * p.getZ());
     }
 
+    /**
+     * Produto escalar de dois pontos
+     * @param p1
+     * @param p2
+     * @return o resultado
+     */
     public static double escalar(Ponto p1, Ponto p2) {
         return p1.getX() * p2.getX() + p1.getY() * p2.getY() + p1.getZ() * p2.
                 getZ();
