@@ -27,7 +27,13 @@ public class PanelPerspectiva extends javax.swing.JPanel {
 
     private Interface inter;
     ArrayList<Poligono> poligonosOrganizados;
-            ArrayList<Matriz> matrizesAux;
+    ArrayList<Matriz> matrizesAux;
+
+    /**
+     * Constroi o painel da perspectiva
+     *
+     * @param _i
+     */
     public PanelPerspectiva(Interface _i) {
         initComponents();
         inter = _i;
@@ -42,21 +48,22 @@ public class PanelPerspectiva extends javax.swing.JPanel {
         g2D.setRenderingHint(
                 RenderingHints.KEY_ANTIALIASING,
                 RenderingHints.VALUE_ANTIALIAS_ON);
-
+        //obtem a camera selecionada na interface
         Camera c = inter.getCamera();
 
         int visualizacaoAtual = this.inter.getVizualizacaoAtual();
 
-//        matrizesCompostas.clear();
+        //limpa lixo de operações anteriores
         poligonosOrganizados.clear();
         matrizesAux.clear();
 
         for (Poligono p : inter.getPoligonos()) {
+            //gera a perspectiva dos poligonos que estão na camera atual da interface
             poligonosOrganizados.add(c.GerarPerspectiva(this.getWidth(), this.
                     getHeight(), p));
             matrizesAux.add(c.getMatrizAux());
         }
-
+        //ordena os poligonos de acordo com o a distancia do vrp
         for (int cc = 0; cc < (poligonosOrganizados.size() - 1); cc++) {
             for (int d = 0; d < poligonosOrganizados.size() - cc - 1; d++) {
 
@@ -64,8 +71,6 @@ public class PanelPerspectiva extends javax.swing.JPanel {
                 Vetor b = new Vetor(poligonosOrganizados.get(d + 1).getCentro());
                 double modulo = c.getVRPtoFP().getModulo();
 
-//                if (poligonosOrganizados.get(d).getCentro().getZ()
-//                        < poligonosOrganizados.get(d + 1).getCentro().getZ()) {
                 if (Vetor.subtracao(a, c.getVRP3()).getModulo() < Vetor.
                         subtracao(b, c.getVRP3()).getModulo()) /* For descending order use < */ {
                     Collections.swap(poligonosOrganizados, d, d + 1);
@@ -78,6 +83,8 @@ public class PanelPerspectiva extends javax.swing.JPanel {
             Matriz aux = null;
             Poligono ocultaFace = null;
             switch (visualizacaoAtual) {
+                //identifica tipo de visualização | 1 -> Wireframe | 2 -> Wireframe com ocultação | 
+                //3 -> Sombreamento costante | 4 - phong
                 case 1:
                     g2D.setColor(Paux.getCor());
                     for (Aresta a : Paux.getArestas()) {
@@ -89,6 +96,7 @@ public class PanelPerspectiva extends javax.swing.JPanel {
                     aux = matrizesAux.get(poligonosOrganizados.indexOf(Paux));
                     ocultaFace = Paux.copy();
                     ocultaFace.setPontos(aux);
+                    //verifica que é visivel é desenha
                     for (int i = 0; i < Paux.getFaces().size(); i++) {
                         Face f = Paux.getFaces().get(i);
                         Face f1 = ocultaFace.getFaces().get(i);
@@ -115,6 +123,7 @@ public class PanelPerspectiva extends javax.swing.JPanel {
                         f1.gerarVetorPlano();
                         Vetor norma = f1.getVetorPlano();
                         norma.normalizar();
+                        //faz o preenchimento se for visível
                         if (Vetor.produtoEscalar(c.getVRPtoFP3(), norma) > 0) {
                             g.setColor(Paux.getCorFace());
                             preenchimento(f, g);
@@ -128,6 +137,7 @@ public class PanelPerspectiva extends javax.swing.JPanel {
 
                     break;
                 case 4:
+                    //pinta o poligono com o phong
                     g2D.setColor(Paux.getCor());
                     aux = matrizesAux.get(poligonosOrganizados.indexOf(Paux));//persp
                     ocultaFace = Paux.copy();
@@ -141,23 +151,30 @@ public class PanelPerspectiva extends javax.swing.JPanel {
                         zmaux.set(2, i, aux.get(2, i));
                     }
                     zpol.setPontos(zmaux);
+
                     for (int i = 0; i < Paux.getFaces().size(); i++) {
                         Face f = Paux.getFaces().get(i);
                         Face f1 = ocultaFace.getFaces().get(i);
                         f1.gerarVetorPlano();
                         Vetor norma = f1.getVetorPlano();
                         norma.normalizar();
+                        //verifica se é visivel ou não
                         if (Vetor.produtoEscalar(c.getVRPtoFP3(), norma) > 0) {
+                            //
                             Face f2 = zpol.getFaces().get(i);
                             for (int j = 0; j < f2.getPontos().size(); j++) {
                                 double mediaX = 0;
                                 double mediaY = 0;
                                 double mediaZ = 0;
                                 int counter = 1;
+                                /*
+                                 * procura todos os pontos em todas as faces do poligono
+                                 que sejam igual a face que ele ta olhando no momento ai ele pega a norma 
+                                 * dessas faces e faz a media
+                                 */
                                 for (int k = 0; k < zpol.getFaces().size();
                                         k++) {
-                                    for (int l = 0; l < zpol.getFaces().get(
-                                            k).getPontos().size(); l++) {
+                                    for (int l = 0; l < zpol.getFaces().get(k).getPontos().size(); l++) {
                                         if (f2.getPontos().get(j).getNome()
                                                 == zpol.getFaces().get(k).
                                                 getPontos().get(l).getNome()) {
@@ -166,6 +183,7 @@ public class PanelPerspectiva extends javax.swing.JPanel {
                                             zpol.getFaces().get(k).
                                                     getVetorPlano().
                                                     normalizar();
+                                            //faz uma media de uma face
                                             mediaX += zpol.getFaces().get(k).
                                                     getVetorPlano().get(0);
                                             mediaY += zpol.getFaces().get(k).
@@ -183,6 +201,7 @@ public class PanelPerspectiva extends javax.swing.JPanel {
                                 f2.getPontos().get(j).
                                         setnZ(mediaZ / counter);
                             }
+                            //chama o metodo sombreamento com a face que foi feita a media
                             sobreamento(Paux, f2, g);
                             g2D.setColor(Paux.getCor());
                             for (Aresta a : f.getArestas()) {
@@ -333,6 +352,12 @@ public class PanelPerspectiva extends javax.swing.JPanel {
 
     }
 
+    /**
+     * Pinta os pontos do poligono
+     *
+     * @param p um poligono
+     * @param g2D Graphics2D onde vai desenhar
+     */
     public void paintPointNumbers(Poligono p, Graphics2D g2D) {
         for (Ponto pT : p.getPontos()) {
             if (!pT.getNome().equals("centro")) {
@@ -347,6 +372,12 @@ public class PanelPerspectiva extends javax.swing.JPanel {
 
     }
 
+    /**
+     * Faz o desenho da linha que recebe por parâmetro
+     *
+     * @param g grapics onde ira desenhar
+     * @param a ares que vai desenhar
+     */
     public void drawline(Graphics2D g, Aresta a) {
         g.drawLine((int) Math.round(a.getP1().getX()), (int) Math.round(a.
                 getP1().getY()),
@@ -374,111 +405,122 @@ public class PanelPerspectiva extends javax.swing.JPanel {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 
+    /**
+     * Faz o sombreamento na perspectiva
+     *
+     * @param p poligono
+     * @param f face
+     * @param g graphics
+     */
     public void sobreamento(Poligono p, Face f, Graphics g) {
-        java.util.List list = f.getArestas();
-        double yinf = ((Aresta) list.get(0)).getP1().getX();
-        double ysup = ((Aresta) list.get(0)).getP1().getY();
-        for (int i = 1; i < list.size(); i++) {
-            if (((Aresta) list.get(i)).getP1().getY() < yinf) {
-                yinf = ((Aresta) list.get(i)).getP1().getY();
+        ArrayList<Aresta> arestaFaceAtual = f.getArestas();
+        double yInferior = ((Aresta) arestaFaceAtual.get(0)).getP1().getX();
+        double ySuperior = ((Aresta) arestaFaceAtual.get(0)).getP1().getY();
+        for (Aresta a : arestaFaceAtual) {
+            if (a.getP1().getY() < yInferior) {
+                yInferior = a.getP1().getY();
             }
-            if (((Aresta) list.get(i)).getP1().getY() > ysup) {
-                ysup = ((Aresta) list.get(i)).getP1().getY();
+            if (a.getP1().getY() > ySuperior) {
+                ySuperior = a.getP1().getY();
             }
-            if (((Aresta) list.get(i)).getP2().getY() < yinf) {
-                yinf = ((Aresta) list.get(i)).getP2().getY();
+            if (a.getP2().getY() < yInferior) {
+                yInferior = a.getP2().getY();
             }
-            if (((Aresta) list.get(i)).getP2().getY() > ysup) {
-                ysup = ((Aresta) list.get(i)).getP2().getY();
+            if (a.getP2().getY() > ySuperior) {
+                ySuperior = a.getP2().getY();
             }
         }
 
-        for (int y = (int) ysup; y > (int) yinf && y > 0; y--) {
-            double x1 = 0.0D;
-            double x2 = 0.0D;
-            double u1 = 0.0D;
-            double u2 = 0.0D;
+        for (int itY = (int) ySuperior; itY > (int) yInferior && itY > 0; itY--) {
+            double xFirst = 0.0;
+            double xSecond = 0.0;
+            double parametroU1 = 0.0;
+            double parametroU2 = 0.0;
             boolean first = true;
-            Ponto pa = null;
-            Ponto pb = null;
-            Ponto pc = null;
-            Ponto pd = null;
-            for (int i = 0; i < list.size(); i++) {
-                Ponto p1 = ((Aresta) list.get(i)).getP1();
-                Ponto p2 = ((Aresta) list.get(i)).getP2();
+            Ponto pA = null;
+            Ponto pB = null;
+            Ponto pC = null;
+            Ponto pD = null;
+            for (Aresta a : arestaFaceAtual) {
+                Ponto p1 = a.getP1();
+                Ponto p2 = a.getP2();
                 if ((int) p1.getY() == (int) p2.getY()) {
                     continue;
                 }
-                double u = ((double) y - p1.getY()) / (p2.getY() - p1.getY());
-                if (u < 0.0D || u > 1.0D || y
-                        == (int) (p1.getY() <= p2.getY() ? p1.getY() : p2.getY())) {
+                double parametroUOriginal = ((double) itY - p1.getY()) / (p2.getY() - p1.getY());
+                int auxYValue = 0;
+                if (p1.getY() <= p2.getY()) {
+                    auxYValue = (int) p1.getY();
+                } else {
+                    auxYValue = (int) p2.getY();
+                }
+                if (parametroUOriginal < 0.0 || parametroUOriginal > 1.0 || itY == auxYValue) {
                     continue;
                 }
                 if (first) {
-                    x1 = u * (p2.getX() - p1.getX()) + p1.getX();
-                    pa = p1;
-                    pb = p2;
-                    u1 = u;
+                    xFirst = parametroUOriginal * (p2.getX() - p1.getX()) + p1.getX();
+                    pA = p1;
+                    pB = p2;
+                    parametroU1 = parametroUOriginal;
                     first = false;
                     continue;
                 }
-                x2 = u * (p2.getX() - p1.getX()) + p1.getX();
-                pc = p1;
-                pd = p2;
-                u2 = u;
+                xSecond = parametroUOriginal * (p2.getX() - p1.getX()) + p1.getX();
+                pC = p1;
+                pD = p2;
+                parametroU2 = parametroUOriginal;
                 break;
             }
-
-            if (x1 == 0.0D && x2 == 0.0D) {
+            if (xFirst == 0.0 && xSecond == 0.0) {
                 continue;
             }
-            if (x1 > x2) {
-                double aux = x1;
-                x1 = x2;
-                x2 = aux;
-                Ponto paux = pa;
-                pa = pc;
-                pc = paux;
-                paux = pb;
-                pb = pd;
-                pd = paux;
-                aux = u1;
-                u1 = u2;
-                u2 = aux;
+            if (xFirst > xSecond) {
+                double auxiliar = xFirst;
+                xFirst = xSecond;
+                xSecond = auxiliar;
+                Ponto paux = pA;
+                pA = pC;
+                pC = paux;
+                paux = pB;
+                pB = pD;
+                pD = paux;
+                auxiliar = parametroU1;
+                parametroU1 = parametroU2;
+                parametroU2 = auxiliar;
             }
-            double e1 = (u1 * (pb.getY() - pa.getY())) / (pb.getY() - pa.getY());
-            double e2 = ((1.0D - u1) * (pb.getY() - pa.getY())) / (pb.getY()
-                    - pa.getY());
-            double e3 = (u2 * (pd.getY() - pc.getY())) / (pd.getY() - pc.getY());
-            double e4 = ((1.0D - u2) * (pd.getY() - pc.getY())) / (pd.getY()
-                    - pc.getY());
-            double Nxi = pb.getnX() * e1 + pa.getnX() * e2;
-            double Nyi = pb.getnY() * e1 + pa.getnY() * e2;
-            double Nzi = pb.getnZ() * e1 + pa.getnZ() * e2;
-            double Nxf = pd.getnX() * e3 + pc.getnX() * e4;
-            double Nyf = pd.getnY() * e3 + pc.getnY() * e4;
-            double Nzf = pd.getnZ() * e3 + pc.getnZ() * e4;
-            double Zi = pb.getZ() * e1 + pa.getZ() * e2;
-            double Zf = pd.getZ() * e3 + pc.getZ() * e4;
-            double Yi = pb.getY() * e1 + pa.getY() * e2;
-            double Yf = pd.getY() * e3 + pc.getY() * e4;
-            double Xi = pb.getX() * e1 + pa.getX() * e2;
-            double Xf = pd.getX() * e3 + pc.getX() * e4;
-            double deltaX = x2 - x1;
-            double deltaNx = (Nxf - Nxi) / deltaX;
-            double deltaNy = (Nyf - Nyi) / deltaX;
-            double deltaNz = (Nzf - Nzi) / deltaX;
-            double deltaZM = (Zf - Zi) / deltaX;
-            double deltaXM = (Xf - Xi) / deltaX;
-            double deltaYM = (Yf - Yi) / deltaX;
+            double e1 = (parametroU1 * (pB.getY() - pA.getY())) / (pB.getY() - pA.getY());
+            double e2 = ((1.0 - parametroU1) * (pB.getY() - pA.getY())) / (pB.getY()
+                    - pA.getY());
+            double e3 = (parametroU2 * (pD.getY() - pC.getY())) / (pD.getY() - pC.getY());
+            double e4 = ((1.0 - parametroU2) * (pD.getY() - pC.getY())) / (pD.getY()
+                    - pC.getY());
+            double Nxi = pB.getnX() * e1 + pA.getnX() * e2;
+            double Nyi = pB.getnY() * e1 + pA.getnY() * e2;
+            double Nzi = pB.getnZ() * e1 + pA.getnZ() * e2;
+            double Nxf = pD.getnX() * e3 + pC.getnX() * e4;
+            double Nyf = pD.getnY() * e3 + pC.getnY() * e4;
+            double Nzf = pD.getnZ() * e3 + pC.getnZ() * e4;
+            double Zi = pB.getZ() * e1 + pA.getZ() * e2;
+            double Zf = pD.getZ() * e3 + pC.getZ() * e4;
+            double Yi = pB.getY() * e1 + pA.getY() * e2;
+            double Yf = pD.getY() * e3 + pC.getY() * e4;
+            double Xi = pB.getX() * e1 + pA.getX() * e2;
+            double Xf = pD.getX() * e3 + pC.getX() * e4;
+            double variacaoX = xSecond - xFirst;
+            double variacaoNx = (Nxf - Nxi) / variacaoX;
+            double variacaoNy = (Nyf - Nyi) / variacaoX;
+            double variacaoNz = (Nzf - Nzi) / variacaoX;
+            double variacaZM = (Zf - Zi) / variacaoX;
+            double variacaoXM = (Xf - Xi) / variacaoX;
+            double variacaoYM = (Yf - Yi) / variacaoX;
             double Nx = Nxi;
             double Ny = Nyi;
             double Nz = Nzi;
-            double x = x1;
+            double x = xFirst;
             double Z = Zi;
             double X = Xi;
-            for (double Y = Yi; x < x2; Y += deltaYM) {
-                Ponto ponto = new Ponto("", X, Y, Z);
+            for (double iteradorY = Yi; x < xSecond; iteradorY += variacaoYM) {
+                Ponto ponto = new Ponto("", X, iteradorY, Z);
                 ponto.setnX(Nx);
                 ponto.setnY(Ny);
                 ponto.setnZ(Nz);
@@ -496,121 +538,168 @@ public class PanelPerspectiva extends javax.swing.JPanel {
                         <= 255 ? green >= 0 ? green : 0 : 255, blue
                         <= 255 ? blue >= 0 ? blue : 0 : 255, transparencia);
                 g.setColor(cor);
-                g.drawRect((int) x, y, 1, 1);
-                Nx += deltaNx;
-                Ny += deltaNy;
-                Nz += deltaNz;
+                g.drawRect((int) x, itY, 1, 1);
+                Nx += variacaoNx;
+                Ny += variacaoNy;
+                Nz += variacaoNz;
                 x++;
-                Z += deltaZM;
-                X += deltaXM;
+                Z += variacaZM;
+                X += variacaoXM;
             }
 
         }
 
     }
 
+    /**
+     * Chama os métodos necessários para obter as variaveis para o phong
+     *
+     * @param p poligono
+     * @param ponto
+     */
     public void phong(Poligono p, Ponto ponto) {
         ponto.setIr(getIr(p, ponto));
         ponto.setIg(getIg(p, ponto));
         ponto.setIb(getIb(p, ponto));
     }
 
+    /**
+     * Obtem o I red
+     *
+     * @param p poligono
+     * @param ponto
+     * @return o valor de red em double
+     */
     private double getIr(Poligono p, Ponto ponto) {
-        
+
         Matriz src = inter.getCamera().getSRC();
-        
-        Matriz local = new Matriz(4,1);
-        local.set(0,0,inter.getLuzFundo().getLocal().getX());
-        local.set(1,0,inter.getLuzFundo().getLocal().getY());
-        local.set(2,0,inter.getLuzFundo().getLocal().getZ());
-        local.set(3,0,1);
-        
+
+        Matriz local = new Matriz(4, 1);
+        local.set(0, 0, inter.getLuzFundo().getLocal().getX());
+        local.set(1, 0, inter.getLuzFundo().getLocal().getY());
+        local.set(2, 0, inter.getLuzFundo().getLocal().getZ());
+        local.set(3, 0, 1);
+
         local = Matriz.multiplicacao(src, local);
-        
+
         Ponto plocal = new Ponto("", local.get(0, 0), local.get(1, 0), local.get(2, 0));
-        
-        double ambiente = ambiente(inter.getLuzAmbiente().getIr(), p.getKaR());
-        
-//        double difusa = difusa(inter.getLuzFundo().getIr(), p.getKdR(), ponto.
-//                getNormal(), inter.getLuzFundo().getLocal(), ponto);
-        double difusa = difusa(inter.getLuzFundo().getIr(), p.getKdR(), ponto.
+
+        double ambiente = luzAmbiente(inter.getLuzAmbiente().getIr(), p.getKaR());
+
+
+        double difusa = reflexaoDifusa(inter.getLuzFundo().getIr(), p.getKdR(), ponto.
                 getNormal(), plocal, ponto);
-        
-//        double especular = difusa == 0.0D ? 0.0D : especular(inter.getLuzFundo().
-//                getIr(), p.getKsR(), p.getN(), inter.getLuzFundo().getLocal(),
-//                ponto.getNormal(), new Ponto("", inter.getCamera().getVx(),
-//                inter.getCamera().getVy(), inter.getCamera().getVz()), ponto);
-        double especular = difusa == 0.0D ? 0.0D : especular(inter.getLuzFundo().
-                getIr(), p.getKsR(), p.getN(), plocal,
-                ponto.getNormal(), new Ponto("", inter.getCamera().getVx(),
-                inter.getCamera().getVy(), inter.getCamera().getVz()), ponto);
+
+        double especular;
+        if (difusa == 0.0) {
+            especular = 0;
+        } else {
+            especular = reflexaoEspecular(inter.getLuzFundo().
+                    getIr(), p.getKsR(), p.getN(), plocal,
+                    ponto.getNormal(), new Ponto("", inter.getCamera().getVx(),
+                    inter.getCamera().getVy(), inter.getCamera().getVz()), ponto);
+        }
+
         return ambiente + difusa + especular;
     }
 
+    /**
+     * Obtem I do Green
+     *
+     * @param p poligono
+     * @param ponto
+     * @return valor double do Ig
+     */
     private double getIg(Poligono p, Ponto ponto) {
-        
+
         Matriz src = inter.getCamera().getSRC();
-        
-        Matriz local = new Matriz(4,1);
-        local.set(0,0,inter.getLuzFundo().getLocal().getX());
-        local.set(1,0,inter.getLuzFundo().getLocal().getY());
-        local.set(2,0,inter.getLuzFundo().getLocal().getZ());
-        local.set(3,0,1);
-        
-        local = Matriz.multiplicacao(src, local);
-        
-        Ponto plocal = new Ponto("", local.get(0, 0), local.get(1, 0), local.get(2, 0));
-        
-        double ambiente = ambiente(inter.getLuzAmbiente().getIg(), p.getKaG());
-        
-//        double difusa = difusa(inter.getLuzFundo().getIg(), p.getKdG(), ponto.
-//                getNormal(), inter.getLuzFundo().getLocal(), ponto);
-        double difusa = difusa(inter.getLuzFundo().getIg(), p.getKdG(), ponto.
-                getNormal(), plocal, ponto);
-        
-//        double especular = difusa == 0.0D ? 0.0D : especular(inter.getLuzFundo().
-//                getIg(), p.getKsG(), p.getN(), inter.getLuzFundo().getLocal(),
-//                ponto.getNormal(), new Ponto("", inter.getCamera().getVx(),
-//                inter.getCamera().getVy(), inter.getCamera().getVz()), ponto);
-        double especular = difusa == 0.0D ? 0.0D : especular(inter.getLuzFundo().
-                getIg(), p.getKsG(), p.getN(), plocal,
-                ponto.getNormal(), new Ponto("", inter.getCamera().getVx(),
-                inter.getCamera().getVy(), inter.getCamera().getVz()), ponto);
+
+        Matriz matrizLoca = new Matriz(4, 1);
+        matrizLoca.set(0, 0, inter.getLuzFundo().getLocal().getX());
+        matrizLoca.set(1, 0, inter.getLuzFundo().getLocal().getY());
+        matrizLoca.set(2, 0, inter.getLuzFundo().getLocal().getZ());
+        matrizLoca.set(3, 0, 1);
+
+        matrizLoca = Matriz.multiplicacao(src, matrizLoca);
+
+        Ponto pLocal = new Ponto("", matrizLoca.get(0, 0), matrizLoca.get(1, 0), matrizLoca.get(2, 0));
+
+        double ambiente = luzAmbiente(inter.getLuzAmbiente().getIg(), p.getKaG());
+
+
+        double difusa = reflexaoDifusa(inter.getLuzFundo().getIg(), p.getKdG(), ponto.
+                getNormal(), pLocal, ponto);
+
+        double especular;
+        if (difusa == 0.0) {
+            especular = 0;
+        } else {
+            especular = reflexaoEspecular(inter.getLuzFundo().
+                    getIg(), p.getKsG(), p.getN(), pLocal,
+                    ponto.getNormal(), new Ponto("", inter.getCamera().getVx(),
+                    inter.getCamera().getVy(), inter.getCamera().getVz()), ponto);
+        }
+
         return ambiente + difusa + especular;
     }
 
+    /**
+     * Obtem o valor de I do blue
+     *
+     * @param p
+     * @param ponto
+     * @return valor double do Ib
+     */
     private double getIb(Poligono p, Ponto ponto) {
-        
+
         Matriz src = inter.getCamera().getSRC();
-        
-        Matriz local = new Matriz(4,1);
-        local.set(0,0,inter.getLuzFundo().getLocal().getX());
-        local.set(1,0,inter.getLuzFundo().getLocal().getY());
-        local.set(2,0,inter.getLuzFundo().getLocal().getZ());
-        local.set(3,0,1);
-        
-        local = Matriz.multiplicacao(src, local);
-        
-        Ponto plocal = new Ponto("", local.get(0, 0), local.get(1, 0), local.get(2, 0));
-        
-        double ambiente = ambiente(inter.getLuzAmbiente().getIb(), p.getKaB());
-        
-        double difusa = difusa(inter.getLuzFundo().getIb(), p.getKdB(), ponto.
+
+        Matriz matrizLocal = new Matriz(4, 1);
+        matrizLocal.set(0, 0, inter.getLuzFundo().getLocal().getX());
+        matrizLocal.set(1, 0, inter.getLuzFundo().getLocal().getY());
+        matrizLocal.set(2, 0, inter.getLuzFundo().getLocal().getZ());
+        matrizLocal.set(3, 0, 1);
+
+        double ambiente = luzAmbiente(inter.getLuzAmbiente().getIb(), p.getKaB());
+
+        double difusa = reflexaoDifusa(inter.getLuzFundo().getIb(), p.getKdB(), ponto.
                 getNormal(), inter.getLuzFundo().getLocal(), ponto);
-        
-        double especular = difusa == 0.0D ? 0.0D : especular(inter.getLuzFundo().
-                getIb(), p.getKsB(), p.getN(), inter.getLuzFundo().getLocal(),
-                ponto.getNormal(), new Ponto("", inter.getCamera().getVx(),
-                inter.getCamera().getVy(), inter.getCamera().getVz()), ponto);
+
+        double especular;
+        if (difusa == 0) {
+            especular = 0;
+        } else {
+            especular = reflexaoEspecular(inter.getLuzFundo().
+                    getIb(), p.getKsB(), p.getN(), inter.getLuzFundo().getLocal(),
+                    ponto.getNormal(), new Ponto("", inter.getCamera().getVx(),
+                    inter.getCamera().getVy(), inter.getCamera().getVz()), ponto);
+        }
         return ambiente + difusa + especular;
     }
 
-    private static double ambiente(double Ia, double Ka) {
+    /**
+     * Calcula a luz ambiente
+     *
+     * @param Ia
+     * @param Ka
+     * @return double valor luz ambiente
+     */
+    private static double luzAmbiente(double Ia, double Ka) {
         return Ia * Ka;
     }
 
-    private static double difusa(double Il, double Kd, Ponto normal, Ponto L,
-                                 Ponto pontoObservado) {
+    /**
+     * Cálculo da reflexão difusa
+     *
+     * @param Il
+     * @param Kd
+     * @param normal
+     * @param L
+     * @param pontoObservado
+     * @return double
+     */
+    private static double reflexaoDifusa(double Il, double Kd, Ponto normal, Ponto L,
+            Ponto pontoObservado) {
         Ponto l = new Ponto("", pontoObservado.getX() - L.getX(),
                 pontoObservado.getY() - L.getY(), pontoObservado.getZ() - L.
                 getZ());
@@ -621,16 +710,28 @@ public class PanelPerspectiva extends javax.swing.JPanel {
         double normaNormal = norma(normal);
         Ponto n = new Ponto("", normal.getX() / normaNormal, normal.getY()
                 / normaNormal, normal.getZ() / normaNormal);
-        double escalarNL = escalar(n, l);
-        if (escalarNL > 0.0D) {
-            return Il * Kd * escalarNL;
+        //chama o produto escalar de l e n
+        if (escalar(n, l) > 0.0) {
+            return Il * Kd * escalar(n, l);
         } else {
-            return 0.0D;
+            return 0.0;
         }
     }
 
-    private static double especular(double Il, double Ks, double expoenteN,
-                                    Ponto L, Ponto N, Ponto VRP, Ponto A) {
+    /**
+     * Calculo da Reflexao epecular
+     *
+     * @param Il
+     * @param Ks
+     * @param expoenteN
+     * @param L
+     * @param N
+     * @param VRP
+     * @param A
+     * @return double com o valor da reflexao especular
+     */
+    private static double reflexaoEspecular(double Il, double Ks, double expoenteN,
+            Ponto L, Ponto N, Ponto VRP, Ponto A) {
         Ponto l = new Ponto("", A.getX() - L.getX(), A.getY() - L.getY(), A.
                 getZ() - L.getZ());
         double normaL = norma(l);
@@ -641,7 +742,7 @@ public class PanelPerspectiva extends javax.swing.JPanel {
         Ponto n = new Ponto("", N.getX() / normaN, N.getY() / normaN, N.getZ()
                 / normaN);
         Ponto r = new Ponto();
-        double DoisLN = 2D * escalar(l, n);
+        double DoisLN = 2 * escalar(l, n);
         r.setX(l.getX() - DoisLN * n.getX());
         r.setY(l.getY() - DoisLN * n.getY());
         r.setZ(l.getZ() - DoisLN * n.getZ());
@@ -651,68 +752,95 @@ public class PanelPerspectiva extends javax.swing.JPanel {
         s.setX(s.getX() / normaS);
         s.setY(s.getY() / normaS);
         s.setZ(s.getZ() / normaS);
-        double escalarRS = escalar(r, s);
-        if (escalarRS > 0.0D) {
-            return Il * Ks * Math.pow(escalarRS, expoenteN);
+
+        if (escalar(r, s) > 0.0) {
+            return Il * Ks * Math.pow(escalar(r, s), expoenteN);
         } else {
-            return 0.0D;
+            return 0.0;
         }
     }
 
+    /**
+     * Norma de um ponto p
+     *
+     * @param p
+     * @return double com o valor da norma
+     */
     public static double norma(Ponto p) {
         return Math.sqrt(p.getX() * p.getX() + p.getY() * p.getY() + p.getZ()
                 * p.getZ());
     }
 
+    /**
+     * Escalar de dois pontos p1 e p2
+     *
+     * @param p1
+     * @param p2
+     * @return
+     */
     public static double escalar(Ponto p1, Ponto p2) {
         return p1.getX() * p2.getX() + p1.getY() * p2.getY() + p1.getZ() * p2.
                 getZ();
     }
 
+    /**
+     * Faz o preenchimento da face passada
+     *
+     * @param f
+     * @param g
+     */
     public static void preenchimento(Face f, Graphics g) {
-        java.util.List list = f.getArestas();
-        double yinf = ((Aresta) list.get(0)).getP1().getX();
-        double ysup = ((Aresta) list.get(0)).getP1().getY();
-        for (int i = 1; i < list.size(); i++) {
-            if (((Aresta) list.get(i)).getP1().getY() < yinf) {
-                yinf = ((Aresta) list.get(i)).getP1().getY();
+        ArrayList<Aresta> arestaFaceAtual = f.getArestas();
+        double yInferior = arestaFaceAtual.get(0).getP1().getX();
+        double ySuperior = arestaFaceAtual.get(0).getP1().getY();
+
+        for (Aresta a : arestaFaceAtual) {
+            if (a.getP1().getY() < yInferior) {
+                yInferior = a.getP1().getY();
             }
-            if (((Aresta) list.get(i)).getP1().getY() > ysup) {
-                ysup = ((Aresta) list.get(i)).getP1().getY();
+            if (a.getP1().getY() > ySuperior) {
+                ySuperior = a.getP1().getY();
             }
-            if (((Aresta) list.get(i)).getP2().getY() < yinf) {
-                yinf = ((Aresta) list.get(i)).getP2().getY();
+            if (a.getP2().getY() < yInferior) {
+                yInferior = a.getP2().getY();
             }
-            if (((Aresta) list.get(i)).getP2().getY() > ysup) {
-                ysup = ((Aresta) list.get(i)).getP2().getY();
+            if (a.getP2().getY() > ySuperior) {
+                ySuperior = a.getP2().getY();
             }
         }
 
-        for (int y = (int) ysup; y > (int) yinf && y > 0; y--) {
+        for (int y = (int) ySuperior; y > (int) yInferior && y > 0; y--) {
             double x1 = 0.0D;
             double x2 = 0.0D;
             boolean first = true;
-            for (int i = 0; i < list.size(); i++) {
-                Ponto p1 = ((Aresta) list.get(i)).getP1();
-                Ponto p2 = ((Aresta) list.get(i)).getP2();
+            for (Aresta a : arestaFaceAtual) {
+                Ponto p1 = a.getP1();
+                Ponto p2 = a.getP2();
                 if ((int) p1.getY() == (int) p2.getY()) {
                     continue;
                 }
-                double u = ((double) y - p1.getY()) / (p2.getY() - p1.getY());
-                if (u < 0.0D || u > 1.0D || y
-                        == (int) (p1.getY() <= p2.getY() ? p1.getY() : p2.getY())) {
+                double parametroU = ((double) y - p1.getY()) / (p2.getY() - p1.getY());
+                int auxCompar;
+                if (p1.getY() <= p2.getY()) {
+                    auxCompar = (int) p1.getY();
+                } else {
+                    auxCompar = (int) p2.getY();
+                }
+                if (parametroU < 0.0 || parametroU > 1.0 || y
+                        == auxCompar) {
                     continue;
                 }
                 if (first) {
-                    x1 = u * (p2.getX() - p1.getX()) + p1.getX();
+                    x1 = parametroU * (p2.getX() - p1.getX()) + p1.getX();
                     first = false;
                     continue;
                 }
-                x2 = u * (p2.getX() - p1.getX()) + p1.getX();
+                x2 = parametroU * (p2.getX() - p1.getX()) + p1.getX();
                 break;
             }
 
-            if (x1 == 0.0D && x2 == 0.0D) {
+
+            if (x1 == 0.0 && x2 == 0.0) {
                 continue;
             }
             if (x1 > x2) {
