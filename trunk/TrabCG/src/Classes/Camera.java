@@ -228,7 +228,7 @@ public class Camera {
     }
 
     public Poligono GerarPerspectiva(long width, long heigh, Poligono p) {
-        Matriz pontos = GerarPerspectiva(width, heigh, p.TransformarPerpectiva().getMatrizPontos());
+        Matriz pontos = GerarPerspectiva(width, heigh, p.TransformarPerspectiva().getMatrizPontos());
         Poligono res = p.copy();
         res.setPontos(pontos);
         return res;
