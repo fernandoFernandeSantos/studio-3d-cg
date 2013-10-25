@@ -26,13 +26,11 @@ import java.util.Collections;
 public class PanelPerspectiva extends javax.swing.JPanel {
 
     private Interface inter;
-    ArrayList<Matriz> matrizesCompostas;
     ArrayList<Poligono> poligonosOrganizados;
             ArrayList<Matriz> matrizesAux;
     public PanelPerspectiva(Interface _i) {
         initComponents();
         inter = _i;
-        matrizesCompostas = new ArrayList<>();
         poligonosOrganizados = new ArrayList<>();
         matrizesAux = new ArrayList<>();
     }
@@ -49,7 +47,7 @@ public class PanelPerspectiva extends javax.swing.JPanel {
 
         int visualizacaoAtual = this.inter.getVizualizacaoAtual();
 
-        matrizesCompostas.clear();
+//        matrizesCompostas.clear();
         poligonosOrganizados.clear();
         matrizesAux.clear();
 
@@ -57,7 +55,6 @@ public class PanelPerspectiva extends javax.swing.JPanel {
             poligonosOrganizados.add(c.GerarPerspectiva(this.getWidth(), this.
                     getHeight(), p));
             matrizesAux.add(c.getMatrizAux());
-            matrizesCompostas.add(c.getComposta());
         }
 
         for (int cc = 0; cc < (poligonosOrganizados.size() - 1); cc++) {
@@ -73,7 +70,6 @@ public class PanelPerspectiva extends javax.swing.JPanel {
                         subtracao(b, c.getVRP3()).getModulo()) /* For descending order use < */ {
                     Collections.swap(poligonosOrganizados, d, d + 1);
                     Collections.swap(matrizesAux, d, d + 1);
-                    Collections.swap(matrizesCompostas, d, d + 1);
                 }
             }
         }
@@ -521,7 +517,7 @@ public class PanelPerspectiva extends javax.swing.JPanel {
 
     private double getIr(Poligono p, Ponto ponto) {
         
-        Matriz src = matrizesCompostas.get(poligonosOrganizados.indexOf(p));
+        Matriz src = inter.getCamera().getSRC();
         
         Matriz local = new Matriz(4,1);
         local.set(0,0,inter.getLuzFundo().getLocal().getX());
@@ -553,7 +549,7 @@ public class PanelPerspectiva extends javax.swing.JPanel {
 
     private double getIg(Poligono p, Ponto ponto) {
         
-        Matriz src = matrizesCompostas.get(poligonosOrganizados.indexOf(p));
+        Matriz src = inter.getCamera().getSRC();
         
         Matriz local = new Matriz(4,1);
         local.set(0,0,inter.getLuzFundo().getLocal().getX());
@@ -585,7 +581,7 @@ public class PanelPerspectiva extends javax.swing.JPanel {
 
     private double getIb(Poligono p, Ponto ponto) {
         
-        Matriz src = matrizesCompostas.get(poligonosOrganizados.indexOf(p));
+        Matriz src = inter.getCamera().getSRC();
         
         Matriz local = new Matriz(4,1);
         local.set(0,0,inter.getLuzFundo().getLocal().getX());
