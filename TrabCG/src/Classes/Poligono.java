@@ -20,7 +20,7 @@ public class Poligono implements java.io.Serializable {
     private double RotationX;
     private double RotationY;
     private double RotationZ;
-    private double ScaleX;
+    private double ScaleX; //variáveis de escala
     private double ScaleY;
     private double ScaleZ;
     private double ShearXonZ;//Cizalhamento
@@ -53,9 +53,13 @@ public class Poligono implements java.io.Serializable {
         return kt;
     }
 
-    public void setKt(double kt){
+    public void setKt(double kt) {
         this.kt = kt;
     }
+
+    /**
+     * Construtor padrão do poligono
+     */
     public Poligono() {
         this.pontos = new ArrayList<>();
         this.arestas = new ArrayList<>();
@@ -97,8 +101,6 @@ public class Poligono implements java.io.Serializable {
         corFace = Color.white;
 
     }
-
-    
 
     public double getKaR() {
         return kar;
@@ -184,6 +186,13 @@ public class Poligono implements java.io.Serializable {
         this.corFace = cor;
     }
 
+    /**
+     * Construtor com parametros do poligono
+     *
+     * @param pontos lista de pontos
+     * @param arestas lista de arestas
+     * @param faces listas de faces
+     */
     public Poligono(ArrayList<Ponto> pontos, ArrayList<Aresta> arestas,
             ArrayList<Face> faces) {
         this.pontos = pontos;
@@ -216,6 +225,11 @@ public class Poligono implements java.io.Serializable {
 
     }
 
+    /**
+     * Método faz uma cópia do poligono atual e retorna outro
+     *
+     * @return Poligono
+     */
     public Poligono copy() {
         Poligono resultado = new Poligono();
 
@@ -271,30 +285,73 @@ public class Poligono implements java.io.Serializable {
 
     }
 
+    /**
+     * Add ponto ao poligono
+     *
+     * @param p ponto
+     */
     public void addPonto(Ponto p) {
         pontos.add(p);
     }
 
+    /**
+     * Add ponto ao poligono
+     *
+     * @param nome
+     * @param x
+     * @param y
+     * @param z
+     */
     public void addPonto(String nome, double x, double y, double z) {
         pontos.add(new Ponto(nome, x, y, z));
     }
 
+    /**
+     * Add aresta ao Poligono
+     *
+     * @param a aresta
+     */
     public void addAresta(Aresta a) {
         arestas.add(a);
     }
 
+    /**
+     * Add aresta ao poligono
+     *
+     * @param nome string
+     * @param p1 ponto
+     * @param p2 ponto
+     */
     public void addAresta(String nome, Ponto p1, Ponto p2) {
         arestas.add(new Aresta(p1, p2, nome));
     }
 
+    /**
+     * add aresta ao poligono
+     *
+     * @param nome string
+     * @param p1 string
+     * @param p2 string
+     */
     public void addAresta(String nome, String p1, String p2) {
         this.addAresta(nome, getPonto(p1), getPonto(p2));
     }
 
+    /**
+     * Add face a lista de faces do poligono
+     *
+     * @param f face
+     */
     public void addFace(Face f) {
         this.faces.add(f);
     }
 
+    /**
+     * Busca um ponto qualquer do Poligono
+     *
+     * @param nome
+     * @return
+     */
     public Ponto getPonto(String nome) {
         for (Ponto p : pontos) {
             if (p.getNome().equals(nome)) {
@@ -387,7 +444,11 @@ public class Poligono implements java.io.Serializable {
     public void setCor(Color cor) {
         this.cor = cor;
     }
-
+/**
+ * Busca por uma aresta qualquer do poligono
+ * @param nome string
+ * @return 
+ */
     public Aresta getAresta(String nome) {
         for (Aresta a : arestas) {
             if (a.getNome().equals(nome)) {
@@ -396,7 +457,10 @@ public class Poligono implements java.io.Serializable {
         }
         return null;
     }
-
+    /**
+     * Retorna todos os pontos do poligono
+     * @return ArrayList ponto
+     */
     public ArrayList<Ponto> getPontos() {
         return this.pontos;
     }
@@ -408,23 +472,35 @@ public class Poligono implements java.io.Serializable {
     public ArrayList<Face> getFaces() {
         return this.faces;
     }
-
+/**
+ * Constroi uma matriz com os pontos e retorna esta matriz
+ * @return Matriz
+ */
     public Matriz getMatrizPontos() {
         Matriz resultado = new Matriz();
         resultado.setPontos(this.getPontos());
         return resultado;
 
     }
-
+/**
+ * Retorna o centro do poligono
+ * @return 
+ */
     public Ponto getCentro() {
         return this.getPonto("centro");
     }
-
+/**
+ * O tipo do poligono Esfera, Cubo ou Piramede de Base Generica
+ * @return 
+ */
     public String getTipo() {
 
         return tipo;
     }
-
+/**
+ * Seta os pontos do poligono de acordo com uma matriz passada
+ * @param mat Matriz
+ */
     public void setPontos(Matriz mat) {
         int iterador = 0;
         for (Ponto p : pontos) {
@@ -530,7 +606,12 @@ public class Poligono implements java.io.Serializable {
     public void CizalharZonY(double x) {
         this.ShearZonY += x;
     }
-
+/**
+ * Transforma o poligono conforme os valores das váriaveis Rotation(x,y ou z), Scale(x,y ou z)
+ * Shear(xonz, yonz,xony, zony, yonx, zonx) e retorna um poligono com as alterações feitas
+ * @param isOrtogonal
+ * @return poligono
+ */
     public Poligono Transformar(boolean isOrtogonal) {
         Poligono resultado = this.copy();
         //Matrizes de rotação
@@ -581,15 +662,23 @@ public class Poligono implements java.io.Serializable {
         resultado.setPontos(aux);
         return resultado;
     }
-
-    public Poligono TransformarPerpectiva() {
+/**
+ * 
+ * @return 
+ */
+    public Poligono TransformarPerspectiva() {
 
         Poligono p = this.copy();
         p.Transladar(-150, -150, -150);
         p = p.Transformar(false);
         return p;
     }
-
+/**
+ * Gera uma matriz de pontos transformados de acordo com o valor das variaveis
+ * Rotation(x,y ou z), Scale(x,y ou z)
+ * Shear(xonz, yonz,xony, zony, yonx, zonx) e retorna um poligono com as alterações feitas
+ * @return Matriz
+ */
     public Matriz getPontosTransformados() {
         Matriz Rx = Matriz.gerarRotacaoX(this.RotationX);
         Matriz Ry = Matriz.gerarRotacaoY(this.RotationY);
@@ -636,7 +725,12 @@ public class Poligono implements java.io.Serializable {
         return aux;
 
     }
-
+/**
+ * Gera um prisma de base generica
+ * @param nPontosBase numero de pontos da base
+ * @param raio raio do prism, ou seja o tamanho da sua base
+ * @param altura autura do prisma
+ */
     public void GerarPrisma(int nPontosBase, int raio, int altura) {
 
         this.tipo = "Prisma";
@@ -662,7 +756,7 @@ public class Poligono implements java.io.Serializable {
 
         int nome = 0;
         Ponto p;
-
+        //cria os pontos da base
         for (int i = 0; i < nPontosBase; i++) {
             angulo = ((360.0 / nPontosBase) * i);
             rotacao = Matriz.gerarRotacaoZ(angulo);
@@ -761,7 +855,12 @@ public class Poligono implements java.io.Serializable {
 
 
     }
-
+/**
+ * Gera uma piramide de Base generica
+ * @param nPontosBase numero de pontos da base
+ * @param raio raio da base
+ * @param altura altura da piramide 
+ */
     public void GerarPiramide(int nPontosBase, int raio, int altura) {
         this.tipo = "Piramide";
         this.pontos = new ArrayList<>();
@@ -786,7 +885,7 @@ public class Poligono implements java.io.Serializable {
 
         int nome = 0;
         Ponto p;
-
+        //cria os pontos da base
         for (int i = 0; i < nPontosBase; i++) {
             angulo = ((360.0 / nPontosBase) * i);
             rotacao = Matriz.gerarRotacaoZ(angulo);
@@ -848,7 +947,11 @@ public class Poligono implements java.io.Serializable {
 
 
     }
-
+    /**
+     * Gera a esfera
+     * @param nPontos numero de pontos desejado de um segmento
+     * @param raio raio da esfera
+     */
     public void GerarEsfera(int nPontos, int raio) {
 
         this.tipo = "Esfera";
@@ -874,13 +977,13 @@ public class Poligono implements java.io.Serializable {
         int i = 1;
         int j = 0;
         while (i <= nPontos) {
-
+           //gera um angulo para colocar na matriz de rotação Z
             double anguloZ = (180.0 / (nPontos + 1)) * i;
 
             Matriz rotacaoZ = Matriz.gerarRotacaoZ(anguloZ);
-
+            
             Matriz auxPonto = Matriz.multiplicacao(rotacaoZ, base);
-
+            //gera pontos rotacionando em Y
             for (j = ((i - 1) * (nPontos * 2)); j < ((i) * (nPontos * 2)); j++) {
                 double anguloY = (360.0 / (nPontos * 2)) * (j % (nPontos * 2));
 
@@ -974,7 +1077,7 @@ public class Poligono implements java.io.Serializable {
         //cria faces corpo
 
         for (a = 1; a <= ((Math.pow(nPontos, 2) * 2) - (nPontos * 2)); a = (a
-                        + (nPontos * 2))) {
+                + (nPontos * 2))) {
             for (int b = 0; b < nPontos * 2; b++) {
                 f = new Face(this);
                 if (b == ((nPontos * 2) - 1)) {
@@ -998,30 +1101,25 @@ public class Poligono implements java.io.Serializable {
 
     }
 
- /**
-  * O método usarjpv (int x, int y) serve para fazer a inversão das coordenadas do eixo y
-  * @param x
-  * @param y 
-  */
-    public void usarjpv(int x,int y) {
+    /**
+     * O método usarjpv (int x, int y) serve para fazer a inversão das
+     * coordenadas do eixo y
+     *
+     * @param x
+     * @param y
+     */
+    public void usarjpv(int x, int y) {
         Matriz jpv = Matriz.gerarJPV(0, 0, x, y);
 
         Matriz pt = this.getMatrizPontos().cut(2);
 
-//        pt.print("pt antes");
-
-//        jpv.print("jpv");
-
         Matriz res = Matriz.multiplicacao(jpv, pt);
 
-//        res.print("res");
         for (int i = 0; i < this.getPontos().size(); i++) {
             Ponto p = this.getPontos().get(i);
             p.setX(res.get(0, i));
             p.setY(res.get(1, i));
 
-//        }
-//        this.setPontos(res);
         }
     }
 }
