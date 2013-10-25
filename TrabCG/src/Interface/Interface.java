@@ -174,6 +174,10 @@ public class Interface extends javax.swing.JFrame {
         Interface.maximized = maximized;
     }
 
+    /**
+     * Verifica se o mostrar pontos está selecionado
+     * @return boolean pontos
+     */
     public boolean isMostrarPontos() {
         return pontos;
     }
