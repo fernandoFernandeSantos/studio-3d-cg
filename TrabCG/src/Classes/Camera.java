@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
+ * Armazena as configurações da camera
  *
  * @author Marcelo
  */
@@ -25,10 +26,10 @@ public class Camera {
     private Matriz composta;
     private Matriz cpPSRC;
     private Matriz matrizAux;
-/**
- * Construtor padrão da classe camera
- * Começa com VRP em (0,0,100)
- */
+
+    /**
+     * Construtor padrão da classe camera Começa com VRP em (0,0,100)
+     */
     public Camera() {
         Vx = 0;//VRP
         Vy = 0;
@@ -38,16 +39,19 @@ public class Camera {
         FPy = 0;
         FPz = 0;
     }
-/**
- * Construtor da classe camera com os parametros de (vx,vy,vz,fx,fy,fz e distancia)
- * @param _vx VRP
- * @param _vy VRP
- * @param _vz VRP
- * @param _fx Ponto focal
- * @param _fy Ponto focal
- * @param _fz Ponto focal
- * @param _distancia 
- */
+
+    /**
+     * Construtor da classe camera com os parametros de (vx,vy,vz,fx,fy,fz e
+     * distancia)
+     *
+     * @param _vx VRP
+     * @param _vy VRP
+     * @param _vz VRP
+     * @param _fx Ponto focal
+     * @param _fy Ponto focal
+     * @param _fz Ponto focal
+     * @param _distancia
+     */
     public Camera(double _vx, double _vy, double _vz, double _fx, double _fy, double _fz, double _distancia) {
         Vx = _vx;//VRP
         Vy = _vy;
@@ -87,31 +91,39 @@ public class Camera {
     public double getDistancia() {
         return distancia;
     }
-/**
- * Cria um vetor com ponto focal
- * @return vetor
- */
+
+    /**
+     * Cria um vetor com ponto focal
+     *
+     * @return vetor
+     */
     public Vetor getFP() {
         return new Vetor(this.getFPx(), this.getFPy(), this.getFPz(), 1);
     }
-/**
- * Cria um vetor com ponto focal, sem cordenada homogenea
- * @return vetor
- */
+
+    /**
+     * Cria um vetor com ponto focal, sem cordenada homogenea
+     *
+     * @return vetor
+     */
     public Vetor getFP3() {
         return new Vetor(this.getFPx(), this.getFPy(), this.getFPz());
     }
-/**
- * VRP com cordenada homogenea
- * @return 
- */
+
+    /**
+     * VRP com cordenada homogenea
+     *
+     * @return
+     */
     public Vetor getVRP() {
         return new Vetor(this.getVx(), this.getVy(), this.Vz, 1);
     }
-/**
- * VRP sem coordenada homogenea
- * @return 
- */
+
+    /**
+     * VRP sem coordenada homogenea
+     *
+     * @return
+     */
     public Vetor getVRP3() {
         return new Vetor(this.getVx(), this.getVy(), this.Vz);
     }
@@ -151,12 +163,14 @@ public class Camera {
     public void setDistancia(double distancia) {
         this.distancia = distancia;
     }
-/**
- * Seta o ponto focal
- * @param x
- * @param y
- * @param z 
- */
+
+    /**
+     * Seta o ponto focal
+     *
+     * @param x
+     * @param y
+     * @param z
+     */
     public void setFP(double x, double y, double z) {
         this.setFPx(x);
         this.setFPy(y);
@@ -174,9 +188,10 @@ public class Camera {
                 vrp.get(1),
                 vrp.get(2));
     }
-/**
- * Gera as matrizes que são usadas na perspectiva, para evitar recalculo
- */
+
+    /**
+     * Gera as matrizes que são usadas na perspectiva, para evitar recalculo
+     */
     public void GerarIntermediarios() {
         //Cria vetor VRP
         Vetor VRP = this.getVRP();
@@ -231,7 +246,7 @@ public class Camera {
 
         Matriz matrizTranslacao = Matriz.gerarTranslacao(-VRP.get(0),
                 -VRP.get(1), -VRP.get(2));
-        
+
         Matriz SRC = Matriz.multiplicacao(matrizRotacao, matrizTranslacao);
 
         Matriz cpPSRC = Matriz.multiplicacao(SRC, cpP);
@@ -248,34 +263,40 @@ public class Camera {
 
         this.composta = Perspectiva;
         this.cpPSRC = cpPSRC;
-       
+
     }
-/**
- * Gera um poligono novo com a perspectiva aplicada
- * @param width da tela
- * @param heigh da tela
- * @param p poligono
- * @return  poligono resultado
- */
+
+    /**
+     * Gera um poligono novo com a perspectiva aplicada
+     *
+     * @param width da tela
+     * @param heigh da tela
+     * @param p poligono
+     * @return poligono resultado
+     */
     public Poligono GerarPerspectiva(long width, long heigh, Poligono p) {
         Matriz pontos = GerarPerspectiva(width, heigh, p.TransformarPerspectiva().getMatrizPontos());
         Poligono res = p.copy();
         res.setPontos(pontos);
         return res;
     }
-/**
- * Vetor entre VRP e Ponto focal
- * @return vetor
- */
+
+    /**
+     * Vetor entre VRP e Ponto focal
+     *
+     * @return vetor
+     */
     public Vetor getVRPtoFP() {
         Vetor VRP = this.getVRP();
         Vetor FP = this.getFP();
         return Vetor.subtracao(VRP, FP);
     }
-/**
- * Vetor entre VRP e Ponto focal normalizado
- * @return 
- */
+
+    /**
+     * Vetor entre VRP e Ponto focal normalizado
+     *
+     * @return
+     */
     public Vetor getVRPtoFP3() {
         Vetor VRP = this.getVRP3();
         Vetor FP = this.getFP3();
@@ -283,13 +304,15 @@ public class Camera {
         r.normalizar();
         return r;
     }
-/**
- * Gera a matriz perspectiva final
- * @param width
- * @param height
- * @param pontos matriz de pontos
- * @return matriz
- */
+
+    /**
+     * Gera a matriz perspectiva final
+     *
+     * @param width
+     * @param height
+     * @param pontos matriz de pontos
+     * @return matriz
+     */
     public Matriz GerarPerspectiva(long width, long height, Matriz pontos) {
 
         Vetor window = new Vetor(2);
@@ -339,7 +362,7 @@ public class Camera {
 
         newAux = Matriz.multiplicacao(MJP, newAux);
 
-       
+
         return newAux;
 
 

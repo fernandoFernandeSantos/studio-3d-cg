@@ -7,6 +7,7 @@ package Classes;
 import java.util.ArrayList;
 
 /**
+ * Representa uma face do poligono
  *
  * @author marcelo-note
  */
@@ -17,15 +18,26 @@ public class Face implements java.io.Serializable {
     private boolean Visivel;
     private Vetor vetorPlano;
 
+    /**
+     * Construtor da face, recebe o poligono atual
+     *
+     * @param pol
+     */
     public Face(Poligono pol) {
         parentPol = pol;
-        //pontos = new ArrayList<>();
+
         arestas = new ArrayList<>();
     }
 
+    /**
+     * Construtor da face, recebe o poligono e as arestas da face F
+     *
+     * @param pol
+     * @param _arestas
+     */
     public Face(Poligono pol, ArrayList<Aresta> _arestas) {
         parentPol = pol;
-        //pontos = _pontos;
+
         arestas = _arestas;
     }
 
@@ -35,6 +47,7 @@ public class Face implements java.io.Serializable {
 
     /**
      * Método retorna as arestas da face
+     *
      * @return ArrayList de Arestas
      */
     public ArrayList<Aresta> getArestas() {
@@ -59,7 +72,7 @@ public class Face implements java.io.Serializable {
 //        double D = (vp.get(0) + (vp.get(1) + (vp.get(2)))) + d;
         double D = vp.get(0) * v.get(0) + vp.get(1) * v.get(1) + vp.get(2) * v.get(2) + d;
 
-       
+
         if (D < 0) {
             //System.out.println("a frente");
             return false;
@@ -200,7 +213,7 @@ public class Face implements java.io.Serializable {
 
         Vetor v2 = Vetor.subtracao(new Vetor(c.getX(), c.getY(), c.getZ()),
                 new Vetor(a.getX(), a.getY(), a.getZ()));
-        
+
         Ponto centrO = this.parentPol.getCentro();
         //gera o vetor normal com os vetores obtidos acima
         Vetor normal = Vetor.produtoVetorial(v1, v2);
@@ -219,6 +232,6 @@ public class Face implements java.io.Serializable {
         }
 
 
-       
+
     }
 }
