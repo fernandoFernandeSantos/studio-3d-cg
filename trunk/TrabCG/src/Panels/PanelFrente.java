@@ -66,7 +66,8 @@ public class PanelFrente extends javax.swing.JPanel {
             //antes de desenhar tem que inverter o eixo y
             pol.usarjpv(this.getWidth(), this.getHeight());
             //quando vai desenhar escolhe o tipo de visualização
-            //identifica tipo de visualização | 1 -> Wireframe | 2 -> Wireframe com ocultação | 3 -> Sombreamento costante |4 - phong
+            //identifica tipo de visualização | 1 -> Wireframe | 2 -> Wireframe com ocultação | 
+            //3 -> Sombreamento costante |4 - phong
             switch (viusalizacao) {
                 case 1:
                     g2D.setColor(pol.getCor());
@@ -122,7 +123,7 @@ public class PanelFrente extends javax.swing.JPanel {
                             int blue = (int) (Ib * (double) p.getCorFace().
                                     getBlue());
                             int transparencia = (int) (255 * (1 - p.getKt()));
-                            //para a verificação das variáveis
+                            //para a verificação das variáveis acima
                             int auxRed = 0, auxGreen = 0, auxBlue = 0;
                             if ((red <= 255) && (red >= 0)) {
                                 auxRed = red;
