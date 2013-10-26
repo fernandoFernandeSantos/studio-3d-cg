@@ -222,9 +222,11 @@ public class Interface extends javax.swing.JFrame {
     public ArrayList<Poligono> getPoligonosTransformados() {
         return this.poligonosTransformados;
     }
+
     /**
      * Seta os spinner do vrp e do ponto focal e a camera
-     * @param camera 
+     *
+     * @param camera
      */
     public void setCamera(Camera camera) {
         //vrp
@@ -298,7 +300,7 @@ public class Interface extends javax.swing.JFrame {
         abaObjetos = new javax.swing.JPanel();
         buttonPiramide = new javax.swing.JPanel();
         buttonEsfera = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        piramide = new javax.swing.JButton();
         buttonPrisma = new javax.swing.JButton();
         jPanel19 = new javax.swing.JPanel();
         jLabel8 = new javax.swing.JLabel();
@@ -777,10 +779,10 @@ public class Interface extends javax.swing.JFrame {
             }
         });
 
-        jButton2.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/piramide.png"))); // NOI18N
-        jButton2.addActionListener(new java.awt.event.ActionListener() {
+        piramide.setIcon(new javax.swing.ImageIcon(getClass().getResource("/Resources/piramide.png"))); // NOI18N
+        piramide.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton2ActionPerformed(evt);
+                piramideActionPerformed(evt);
             }
         });
 
@@ -799,7 +801,7 @@ public class Interface extends javax.swing.JFrame {
                 .addContainerGap(67, Short.MAX_VALUE)
                 .addComponent(buttonEsfera, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(piramide, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(buttonPrisma, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(64, 64, 64))
@@ -809,7 +811,7 @@ public class Interface extends javax.swing.JFrame {
             .addGroup(buttonPiramideLayout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(buttonPiramideLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton2, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(piramide, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(buttonEsfera, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                     .addComponent(buttonPrisma, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -1759,7 +1761,7 @@ public class Interface extends javax.swing.JFrame {
             .addGroup(geralLayout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jButton4)
-                .addContainerGap())
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         geralLayout.setVerticalGroup(
             geralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1853,7 +1855,7 @@ public class Interface extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(panelFundo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -1868,13 +1870,15 @@ public class Interface extends javax.swing.JFrame {
     private void buttonPrismaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonPrismaActionPerformed
         this.cliqueAtual = 7;
     }//GEN-LAST:event_buttonPrismaActionPerformed
-/**
- * Conforme o evento e o poligono  selecionado cria o evento no painel frente
- * @param evt 
- */
+    /**
+     * Conforme o evento e o poligono selecionado desenha o objeto no painel
+     * frente
+     *
+     * @param evt
+     */
     private void panelFrenteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelFrenteMouseClicked
-       //Clicou no painel frente ve qual poligono está selecionado
-       // e cria o poligono
+        //Clicou no painel frente ve qual poligono está selecionado
+        // e cria o poligono
         Poligono pol = new Poligono();
         switch (cliqueAtual) {
             case 1:
@@ -1946,12 +1950,13 @@ public class Interface extends javax.swing.JFrame {
     private void panelFrenteMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelFrenteMouseEntered
         // TODO add your handling code here:
     }//GEN-LAST:event_panelFrenteMouseEntered
-/**
- * Se mudou o estado do spinner svrpx
- * @param evt 
- */
+    /**
+     * Se mudou o estado do spinner svrpx
+     *
+     * @param evt
+     */
     private void svrpXStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_svrpXStateChanged
-       
+
         vrpX = Double.valueOf(svrpX.getValue().toString());
         if (this.camera != null) {
             this.camera.setVx(vrpX);
@@ -1961,10 +1966,11 @@ public class Interface extends javax.swing.JFrame {
         jaSalvo = false;
 
     }//GEN-LAST:event_svrpXStateChanged
-/**
- * Se mudou o estado do spinner svrpy
- * @param evt 
- */
+    /**
+     * Se mudou o estado do spinner svrpy
+     *
+     * @param evt
+     */
     private void svrpYStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_svrpYStateChanged
         vrpY = Double.valueOf(svrpY.getValue().toString());
         this.camera.setVy(vrpY);
@@ -1973,10 +1979,11 @@ public class Interface extends javax.swing.JFrame {
 
         jaSalvo = false;
     }//GEN-LAST:event_svrpYStateChanged
-/**
- * Se mudou o estado do spinner svrpz
- * @param evt 
- */
+    /**
+     * Se mudou o estado do spinner svrpz
+     *
+     * @param evt
+     */
     private void svrpZStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_svrpZStateChanged
         vrpZ = Double.valueOf(svrpZ.getValue().toString());
         this.camera.setVz(vrpZ);
@@ -1986,10 +1993,11 @@ public class Interface extends javax.swing.JFrame {
         jaSalvo = false;
 
     }//GEN-LAST:event_svrpZStateChanged
-/**
- * Se mudou o estado do spinner spontox (ponto focal)
- * @param evt 
- */
+    /**
+     * Se mudou o estado do spinner spontox (ponto focal)
+     *
+     * @param evt
+     */
     private void spontoXStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spontoXStateChanged
         pontoX = Double.valueOf(spontoX.getValue().toString());
         this.camera.setFPx(pontoX);
@@ -1999,10 +2007,11 @@ public class Interface extends javax.swing.JFrame {
         jaSalvo = false;
 
     }//GEN-LAST:event_spontoXStateChanged
-/**
- * Se mudou o estado do spinner spontoY (ponto focal)
- * @param evt 
- */
+    /**
+     * Se mudou o estado do spinner spontoY (ponto focal)
+     *
+     * @param evt
+     */
     private void spontoYStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spontoYStateChanged
         pontoY = Double.valueOf(spontoY.getValue().toString());
         this.camera.setFPy(pontoY);
@@ -2011,7 +2020,11 @@ public class Interface extends javax.swing.JFrame {
 
         jaSalvo = false;
     }//GEN-LAST:event_spontoYStateChanged
-
+    /**
+     * Se mudou o estado do spinner spontoz (ponto focal)
+     *
+     * @param evt
+     */
     private void spontoZStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_spontoZStateChanged
         pontoZ = Double.valueOf(spontoZ.getValue().toString());
         this.camera.setFPz(pontoZ);
@@ -2019,19 +2032,13 @@ public class Interface extends javax.swing.JFrame {
         repaint();
 
         jaSalvo = false;
-//        if (zbuffer == null) {
-//            zbuffer = new ZBuffer(this.getZBuffer(), this.panelPerspectiva.
-//                    getWidth(), this.panelPerspectiva.getHeight());
-//            zbuffer.setVisible(true);
-//            zbuffer.repaint();
-//        } else {
-//            setZBuffer();
-//        }
 
-
-//        paint(vrpX, vrpY, vrpZ, pontoX, pontoY, pontoZ, distancia, poli);
     }//GEN-LAST:event_spontoZStateChanged
-
+    /**
+     * Se mudou o estado do spinner distancia
+     *
+     * @param evt
+     */
     private void sdistanciaStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_sdistanciaStateChanged
         distancia = Double.valueOf(sdistancia.getValue().toString());
         this.camera.setDistancia(distancia);
@@ -2039,23 +2046,21 @@ public class Interface extends javax.swing.JFrame {
         repaint();
 
         jaSalvo = false;
-//        if (zbuffer == null) {
-//            zbuffer = new ZBuffer(this.getZBuffer(), this.panelPerspectiva.
-//                    getWidth(), this.panelPerspectiva.getHeight());
-//            zbuffer.setVisible(true);
-//            zbuffer.repaint();
-//        } else {
-//            setZBuffer();
-//        }
-
-
-//        paint(vrpX, vrpY, vrpZ, pontoX, pontoY, pontoZ, distancia, poli);
     }//GEN-LAST:event_sdistanciaStateChanged
-
+    /**
+     * Botão transladar
+     *
+     * @param evt
+     */
     private void buttonTransladarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonTransladarActionPerformed
         cliqueAtual = 2;
     }//GEN-LAST:event_buttonTransladarActionPerformed
-
+    /**
+     * Este metodo verifica qual opção foi selecionada transladar, sisalhar,
+     * selecionar e escalonar para o panel frente e executa a opção desejada
+     *
+     * @param evt
+     */
     private void panelFrenteMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelFrenteMouseDragged
         if (!this.poligonos.isEmpty()) {
             if (cliqueAtual == 2) {
@@ -2150,28 +2155,33 @@ public class Interface extends javax.swing.JFrame {
             repaint();
 
             jaSalvo = false;
-//                 if (zbuffer == null) {
-//            zbuffer = new ZBuffer(this.getZBuffer(), this.panelPerspectiva.getWidth(), this.panelPerspectiva.getHeight());
-//            zbuffer.setVisible(true);
-//            zbuffer.repaint();
-//        } else {
-//            setZBuffer();
-//        }
-
 
         }
     }//GEN-LAST:event_panelFrenteMouseDragged
-
+    /**
+     * Botão da Esfera
+     *
+     * @param evt
+     */
     private void buttonEsferaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonEsferaActionPerformed
 
         cliqueAtual = 5;
 
     }//GEN-LAST:event_buttonEsferaActionPerformed
-
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    /**
+     * Botão da Piramide
+     *
+     * @param evt
+     */
+    private void piramideActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_piramideActionPerformed
         cliqueAtual = 6;
-    }//GEN-LAST:event_jButton2ActionPerformed
-
+    }//GEN-LAST:event_piramideActionPerformed
+    /**
+     * Conforme o evento e o poligono selecionado desenha o objeto no painel da
+     * lateral
+     *
+     * @param evt
+     */
     private void panelLateralMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelLateralMouseClicked
 
         Poligono pol = new Poligono();
@@ -2232,23 +2242,14 @@ public class Interface extends javax.swing.JFrame {
             this.poligonos.add(pol);
             this.poligonosTransformados.add(pol.Transformar(true));
         }
-
-
         repaint();
-
-
-//        jaSalvo = false;
-//             if (zbuffer == null) {
-//            zbuffer = new ZBuffer(this.getZBuffer(), this.panelPerspectiva.getWidth(), this.panelPerspectiva.getHeight());
-//            zbuffer.setVisible(true);
-//            zbuffer.repaint();
-//        } else {
-//            setZBuffer();
-//        }
-
-
     }//GEN-LAST:event_panelLateralMouseClicked
-
+    /**
+     * Conforme o evento e o poligono selecionado desenha o objeto no painel da
+     * topo
+     *
+     * @param evt
+     */
     private void panelTopoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelTopoMouseClicked
         Poligono pol = new Poligono();
         switch (cliqueAtual) {
@@ -2308,20 +2309,13 @@ public class Interface extends javax.swing.JFrame {
             this.poligonosTransformados.add(pol.Transformar(true));
         }
         repaint();
-
-//        jaSalvo = false;
-//             if (zbuffer == null) {
-//            zbuffer = new ZBuffer(this.getZBuffer(), this.panelPerspectiva.getWidth(), this.panelPerspectiva.getHeight());
-//            zbuffer.setVisible(true);
-//            zbuffer.repaint();
-//        } else {
-//            setZBuffer();
-//        }
-
-
-
     }//GEN-LAST:event_panelTopoMouseClicked
-
+    /**
+     * Este metodo verifica qual opção foi selecionada transladar, sisalhar,
+     * selecionar e escalonar para o panel lateral e executa a opção desejada
+     *
+     * @param evt
+     */
     private void panelLateralMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelLateralMouseDragged
         if (!this.poligonos.isEmpty()) {
             if (cliqueAtual == 2) {
@@ -2428,7 +2422,12 @@ public class Interface extends javax.swing.JFrame {
 
         }
     }//GEN-LAST:event_panelLateralMouseDragged
-
+    /**
+     * Este metodo verifica qual opção foi selecionada transladar, sisalhar,
+     * selecionar e escalonar para o panel topo e executa a opção desejada
+     *
+     * @param evt
+     */
     private void panelTopoMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelTopoMouseDragged
         if (!this.poligonos.isEmpty()) {
             if (cliqueAtual == 2) {
@@ -2524,18 +2523,13 @@ public class Interface extends javax.swing.JFrame {
         }
 
         jaSalvo = false;
-//        if (zbuffer == null) {
-//            zbuffer = new ZBuffer(this.getZBuffer(), this.panelPerspectiva.
-//                    getWidth(), this.panelPerspectiva.getHeight());
-//            zbuffer.setVisible(true);
-//            zbuffer.repaint();
-//        } else {
-//            setZBuffer();
-//        }
-
-
     }//GEN-LAST:event_panelTopoMouseDragged
-
+    /**
+     * Conforme o estado do spinner de base muda as configurações de base do
+     * poligono
+     *
+     * @param evt
+     */
     private void BaseSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_BaseSpinnerStateChanged
         if (this.poligonos != null) {
             if (!this.poligonos.isEmpty()) {
@@ -2554,26 +2548,21 @@ public class Interface extends javax.swing.JFrame {
                 if ("Esfera".equals(selecionado.getTipo())) {
                     selecionado.GerarEsfera((int) BaseSpinner.getValue(),
                             (int) RaioSpinner.getValue());
-//                    selecionado.createSphere((int) RaioSpinner.getValue(),
-//                            (int) BaseSpinner.getValue());
                 }
                 this.poligonosTransformados.set(PoligonosBox.
                         getSelectedIndex(), selecionado.Transformar(true));
-//                Poligono p = poligonos.get(PoligonosBox.getSelectedIndex());
-//                Poligono pt = poligonosTransformados.get(PoligonosBox.
-//                        getSelectedIndex());
-//                pt.setCorFace(p.getFaces().get(0).getCor());
+
             }
         }
         repaint();
-
-
         jaSalvo = false;
-
-
-
     }//GEN-LAST:event_BaseSpinnerStateChanged
-
+    /**
+     * Conforme o estado do spinner de raio muda as configurações de raio do
+     * poligono
+     *
+     * @param evt
+     */
     private void RaioSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_RaioSpinnerStateChanged
         if (this.poligonos != null) {
             if (!this.poligonos.isEmpty()) {
@@ -2592,8 +2581,6 @@ public class Interface extends javax.swing.JFrame {
                 if ("Esfera".equals(selecionado.getTipo())) {
                     selecionado.GerarEsfera((int) BaseSpinner.getValue(),
                             (int) RaioSpinner.getValue());
-//                    selecionado.createSphere((int) RaioSpinner.getValue(),
-//                            (int) BaseSpinner.getValue());
                 }
                 this.poligonosTransformados.set(PoligonosBox.
                         getSelectedIndex(), selecionado.Transformar(true));
@@ -2606,7 +2593,12 @@ public class Interface extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_RaioSpinnerStateChanged
-
+    /**
+     * Conforme o estado do spinner de altura muda as configurações de altura do
+     * poligono
+     *
+     * @param evt
+     */
     private void AlturaSpinnerStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_AlturaSpinnerStateChanged
         if (this.poligonos != null) {
             if (!this.poligonos.isEmpty()) {
@@ -2625,8 +2617,6 @@ public class Interface extends javax.swing.JFrame {
                 if ("Esfera".equals(selecionado.getTipo())) {
                     selecionado.GerarEsfera((int) BaseSpinner.getValue(),
                             (int) RaioSpinner.getValue());
-//                    selecionado.createSphere((int) RaioSpinner.getValue(),
-//                            (int) BaseSpinner.getValue());
                 }
                 this.poligonosTransformados.set(PoligonosBox.
                         getSelectedIndex(), selecionado.Transformar(true));
@@ -2646,7 +2636,11 @@ public class Interface extends javax.swing.JFrame {
 
     private void panelLateralMouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_panelLateralMouseWheelMoved
     }//GEN-LAST:event_panelLateralMouseWheelMoved
-
+    /**
+     * Pega as rotações do botão do meio do mouse
+     *
+     * @param evt
+     */
     private void formMouseWheelMoved(java.awt.event.MouseWheelEvent evt) {//GEN-FIRST:event_formMouseWheelMoved
         if (evt.getWheelRotation() == 1) {
             if (((Integer) this.BaseSpinner.getValue() - 1) >= 3) {
@@ -2658,37 +2652,61 @@ public class Interface extends javax.swing.JFrame {
         }
 
     }//GEN-LAST:event_formMouseWheelMoved
-
+    /**
+     * Visualização em wireframe
+     *
+     * @param evt
+     */
     private void WireframeRadioButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_WireframeRadioButtonActionPerformed
     {//GEN-HEADEREND:event_WireframeRadioButtonActionPerformed
         this.visualizacaoAtual = 1;
         repaint();
     }//GEN-LAST:event_WireframeRadioButtonActionPerformed
-
+    /**
+     * Visualização em wireframe
+     *
+     * @param evt
+     */
     private void WireframeRadioButtonMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_WireframeRadioButtonMouseClicked
     {//GEN-HEADEREND:event_WireframeRadioButtonMouseClicked
         this.visualizacaoAtual = 1;
         repaint();
     }//GEN-LAST:event_WireframeRadioButtonMouseClicked
-
+    /**
+     * Visualização em wireframe com ocultação
+     *
+     * @param evt
+     */
     private void WireframeOcultacaoRadioButtonMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_WireframeOcultacaoRadioButtonMouseClicked
     {//GEN-HEADEREND:event_WireframeOcultacaoRadioButtonMouseClicked
         this.visualizacaoAtual = 2;
         repaint();
     }//GEN-LAST:event_WireframeOcultacaoRadioButtonMouseClicked
-
+    /**
+     * Visualização em sombreamento
+     *
+     * @param evt
+     */
     private void SombreamentoRadioButtonMouseClicked(java.awt.event.MouseEvent evt)//GEN-FIRST:event_SombreamentoRadioButtonMouseClicked
     {//GEN-HEADEREND:event_SombreamentoRadioButtonMouseClicked
         this.visualizacaoAtual = 3;
         repaint();
     }//GEN-LAST:event_SombreamentoRadioButtonMouseClicked
-
+    /**
+     * Opção de cores da aresta
+     *
+     * @param evt
+     */
     private void ArestaPanelColorChooserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_ArestaPanelColorChooserMouseClicked
         MyColorChooser.createAndShowGUI(this, 1);
 
         jaSalvo = false;
     }//GEN-LAST:event_ArestaPanelColorChooserMouseClicked
-
+    /**
+     * Evento para mudança do poligono selecionado
+     *
+     * @param evt
+     */
     private void PoligonosBoxItemStateChanged(java.awt.event.ItemEvent evt)//GEN-FIRST:event_PoligonosBoxItemStateChanged
     {//GEN-HEADEREND:event_PoligonosBoxItemStateChanged
         if (this.poligonos.size() > 0) {
@@ -2698,16 +2716,23 @@ public class Interface extends javax.swing.JFrame {
                     get(this.PoligonosBox.getSelectedIndex()).getCorFace());
         }
     }//GEN-LAST:event_PoligonosBoxItemStateChanged
-
+    /**
+     * Panel de cor
+     *
+     * @param evt
+     */
     private void FacePanelColorChooserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_FacePanelColorChooserMouseClicked
         MyColorChooser.createAndShowGUI(this, 2);
 
         jaSalvo = false;
     }//GEN-LAST:event_FacePanelColorChooserMouseClicked
-
     private void mostrarPontosStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_mostrarPontosStateChanged
     }//GEN-LAST:event_mostrarPontosStateChanged
-
+    /**
+     * Evento para mostrar os pontos
+     *
+     * @param evt
+     */
     private void mostrarPontosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_mostrarPontosActionPerformed
 
         if (mostrarPontos.isSelected()) {
@@ -2717,42 +2742,70 @@ public class Interface extends javax.swing.JFrame {
         }
         repaint();
     }//GEN-LAST:event_mostrarPontosActionPerformed
-
+    /**
+     * Zera o x e y (anterior) para não usar o mouse dragged de forma errada
+     *
+     * @param evt
+     */
     private void panelFrenteMouseReleased(java.awt.event.MouseEvent evt)//GEN-FIRST:event_panelFrenteMouseReleased
     {//GEN-HEADEREND:event_panelFrenteMouseReleased
         Xanteior = 0;
         Yanteior = 0;
     }//GEN-LAST:event_panelFrenteMouseReleased
-
+    /**
+     * Zera o x e y (anterior) para não usar o mouse dragged de forma errada
+     *
+     * @param evt
+     */
     private void panelLateralMouseReleased(java.awt.event.MouseEvent evt)//GEN-FIRST:event_panelLateralMouseReleased
     {//GEN-HEADEREND:event_panelLateralMouseReleased
         Xanteior = 0;
         Yanteior = 0;
     }//GEN-LAST:event_panelLateralMouseReleased
-
+    /**
+     * Zera o x e y (anterior) para não usar o mouse dragged de forma errada
+     *
+     * @param evt
+     */
     private void panelTopoMouseReleased(java.awt.event.MouseEvent evt)//GEN-FIRST:event_panelTopoMouseReleased
     {//GEN-HEADEREND:event_panelTopoMouseReleased
         Xanteior = 0;
         Yanteior = 0;
     }//GEN-LAST:event_panelTopoMouseReleased
-
+    /**
+     * Visualização com wireframe com ocultação
+     *
+     * @param evt
+     */
     private void WireframeOcultacaoRadioButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_WireframeOcultacaoRadioButtonActionPerformed
     {//GEN-HEADEREND:event_WireframeOcultacaoRadioButtonActionPerformed
         this.visualizacaoAtual = 2;
         repaint();
     }//GEN-LAST:event_WireframeOcultacaoRadioButtonActionPerformed
-
+    /**
+     * Visualização sombreamento
+     *
+     * @param evt
+     */
     private void SombreamentoRadioButtonActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_SombreamentoRadioButtonActionPerformed
     {//GEN-HEADEREND:event_SombreamentoRadioButtonActionPerformed
         this.visualizacaoAtual = 3;
         repaint();
     }//GEN-LAST:event_SombreamentoRadioButtonActionPerformed
-
+    /**
+     * escalonar clicado
+     *
+     * @param evt
+     */
     private void buttonEscalonarActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_buttonEscalonarActionPerformed
     {//GEN-HEADEREND:event_buttonEscalonarActionPerformed
         this.cliqueAtual = 4;
     }//GEN-LAST:event_buttonEscalonarActionPerformed
-
+    /**
+     * Selecionar clicado
+     *
+     * @param evt
+     */
     private void buttonSelecionarActionPerformed(java.awt.event.ActionEvent evt)//GEN-FIRST:event_buttonSelecionarActionPerformed
     {//GEN-HEADEREND:event_buttonSelecionarActionPerformed
         this.cliqueAtual = 1;
@@ -2761,7 +2814,11 @@ public class Interface extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         this.cliqueAtual = 8;
     }//GEN-LAST:event_jButton1ActionPerformed
-
+    /**
+     * Opção de salvar
+     *
+     * @param evt
+     */
     private void jMenuItem1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem1ActionPerformed
         try {
             this.salvar();
@@ -2773,7 +2830,11 @@ public class Interface extends javax.swing.JFrame {
                     ex);
         }
     }//GEN-LAST:event_jMenuItem1ActionPerformed
-
+    /**
+     * Opção de abriar de arquivo
+     *
+     * @param evt
+     */
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         try {
             this.abrir();
@@ -2790,8 +2851,13 @@ public class Interface extends javax.swing.JFrame {
 
     private void panelFundoComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_panelFundoComponentResized
     }//GEN-LAST:event_panelFundoComponentResized
-
+    /**
+     * Botão maximizar do panel frente
+     *
+     * @param evt
+     */
     private void jButtonFrenteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonFrenteActionPerformed
+        //verifica em qual situação esta
         if (Interface.getMaximized() == 0) {
             panelFrente.setSize(panelFundo.getWidth(), panelFundo.getHeight());
             panelFrente.repaint();
@@ -2803,9 +2869,7 @@ public class Interface extends javax.swing.JFrame {
                 aux.EscalarX(tamanhoPanelFundoX / tamanhoPanelFrenteX);
                 aux.EscalarY(tamanhoPanelFundoY / tamanhoPanelFrenteY);
                 aux.EscalarZ(tamanhoPanelFundoY / tamanhoPanelFrenteY);
-//                aux.EscalarX(1.5);
-//                aux.EscalarY(1.5);
-//                aux.EscalarZ(1.5);
+
                 long novoX = (Math.round((tamanhoPanelFundoX * aux2.getCentro().
                         getX()) / tamanhoPanelFrenteX));
                 long novoY = (Math.round((tamanhoPanelFundoY * aux2.getCentro().
@@ -2903,7 +2967,11 @@ public class Interface extends javax.swing.JFrame {
             Interface.setMaximized(0);
         }
     }//GEN-LAST:event_jButtonLateralActionPerformed
-
+    /**
+     * botão maximizar do topo
+     *
+     * @param evt
+     */
     private void jButtonTopoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonTopoActionPerformed
         if (Interface.getMaximized() == 0) {
             panelTopo.setSize(panelFundo.getWidth(), panelFundo.getHeight());
@@ -2958,7 +3026,11 @@ public class Interface extends javax.swing.JFrame {
             Interface.setMaximized(0);
         }
     }//GEN-LAST:event_jButtonTopoActionPerformed
-
+    /**
+     * botão Maximizar da perspectiva
+     *
+     * @param evt
+     */
     private void jButtonPerspectivaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButtonPerspectivaActionPerformed
         if (Interface.getMaximized() == 0) {
             panelPerspectiva.setSize(panelFundo.getWidth(), panelFundo.
@@ -2987,7 +3059,11 @@ public class Interface extends javax.swing.JFrame {
     private void panelFrenteComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_panelFrenteComponentResized
         panelFrente.repaint();
     }//GEN-LAST:event_panelFrenteComponentResized
-
+    /**
+     * Deleta o poligono selecionado
+     *
+     * @param evt
+     */
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
 
         if (!this.poligonos.isEmpty()) {
@@ -3000,7 +3076,11 @@ public class Interface extends javax.swing.JFrame {
 
         jaSalvo = false;
     }//GEN-LAST:event_jButton3ActionPerformed
-
+    /**
+     * Evento para deletar o poligono (confirmação)
+     *
+     * @param evt
+     */
     private void jMenuItem3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem3ActionPerformed
         try {
             this.salvarComo();
@@ -3015,7 +3095,11 @@ public class Interface extends javax.swing.JFrame {
 
     private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
     }//GEN-LAST:event_formComponentResized
-
+    /**
+     * Menu par criação de uma nova cena
+     *
+     * @param evt
+     */
     private void jMenuItem4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem4ActionPerformed
         if (jaSalvo) {
             i.criaNovo(this);
@@ -3040,7 +3124,11 @@ public class Interface extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jMenuItem4ActionPerformed
-
+    /**
+     * Menu fechar
+     *
+     * @param evt
+     */
     private void jMenuItem5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem5ActionPerformed
         if (jaSalvo) {
             i.criaNovo(this);
@@ -3065,7 +3153,11 @@ public class Interface extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jMenuItem5ActionPerformed
-
+    /**
+     * Botão do zBuffer
+     *
+     * @param evt
+     */
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         if (zbuffer == null) {
             zbuffer = new ZBuffer(this.getZBuffer(), this.panelPerspectiva.
@@ -3078,7 +3170,11 @@ public class Interface extends javax.swing.JFrame {
 
 
     }//GEN-LAST:event_jButton4ActionPerformed
-
+    /**
+     * Botão escalar
+     *
+     * @param evt
+     */
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         Poligono selecionado = poligonos.get(PoligonosBox.
                 getSelectedIndex());
@@ -3088,7 +3184,11 @@ public class Interface extends javax.swing.JFrame {
                 getSelectedIndex(), selecionado.Transformar(true));
         repaint();
     }//GEN-LAST:event_jButton5ActionPerformed
-
+    /**
+     * n para o calculo de reflexão
+     *
+     * @param evt
+     */
     private void nPolStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_nPolStateChanged
         poligonos.get(PoligonosBox.getSelectedIndex()).setN((float) nPol.
                 getValue());
@@ -3097,7 +3197,11 @@ public class Interface extends javax.swing.JFrame {
 
         repaint();
     }//GEN-LAST:event_nPolStateChanged
-
+    /**
+     * Ka red
+     *
+     * @param evt
+     */
     private void KaRStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_KaRStateChanged
         poligonos.get(PoligonosBox.getSelectedIndex()).setKaR((float) KaR.
                 getValue());
@@ -3105,7 +3209,11 @@ public class Interface extends javax.swing.JFrame {
                 setKaR((float) KaR.getValue());
         repaint();
     }//GEN-LAST:event_KaRStateChanged
-
+    /**
+     * Ka green
+     *
+     * @param evt
+     */
     private void KaGStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_KaGStateChanged
         poligonos.get(PoligonosBox.getSelectedIndex()).setKaG((float) KaG.
                 getValue());
@@ -3113,7 +3221,11 @@ public class Interface extends javax.swing.JFrame {
                 setKaG((float) KaG.getValue());
         repaint();
     }//GEN-LAST:event_KaGStateChanged
-
+    /**
+     * Ka blue
+     *
+     * @param evt
+     */
     private void KaBStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_KaBStateChanged
         poligonos.get(PoligonosBox.getSelectedIndex()).setKaB((float) KaB.
                 getValue());
@@ -3121,7 +3233,11 @@ public class Interface extends javax.swing.JFrame {
                 setKaB((float) KaB.getValue());
         repaint();
     }//GEN-LAST:event_KaBStateChanged
-
+    /**
+     * Kd red
+     *
+     * @param evt
+     */
     private void KdRStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_KdRStateChanged
         poligonos.get(PoligonosBox.getSelectedIndex()).setKdR((float) KdR.
                 getValue());
@@ -3129,7 +3245,11 @@ public class Interface extends javax.swing.JFrame {
                 setKdR((float) KdR.getValue());
         repaint();
     }//GEN-LAST:event_KdRStateChanged
-
+    /**
+     * Kd green
+     *
+     * @param evt
+     */
     private void KdGStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_KdGStateChanged
         poligonos.get(PoligonosBox.getSelectedIndex()).setKdG((float) KdG.
                 getValue());
@@ -3138,7 +3258,11 @@ public class Interface extends javax.swing.JFrame {
 
         repaint();
     }//GEN-LAST:event_KdGStateChanged
-
+    /**
+     * Kd blue
+     *
+     * @param evt
+     */
     private void KdBStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_KdBStateChanged
         poligonos.get(PoligonosBox.getSelectedIndex()).setKdB((float) KdB.
                 getValue());
@@ -3146,7 +3270,11 @@ public class Interface extends javax.swing.JFrame {
                 setKdB((float) KdB.getValue());
         repaint();
     }//GEN-LAST:event_KdBStateChanged
-
+    /**
+     * Ks red
+     *
+     * @param evt
+     */
     private void KsRStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_KsRStateChanged
         poligonos.get(PoligonosBox.getSelectedIndex()).setKsR((float) KsR.
                 getValue());
@@ -3155,7 +3283,11 @@ public class Interface extends javax.swing.JFrame {
 
         repaint();
     }//GEN-LAST:event_KsRStateChanged
-
+    /**
+     * Ks green
+     *
+     * @param evt
+     */
     private void KsGStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_KsGStateChanged
         poligonos.get(PoligonosBox.getSelectedIndex()).setKsG((float) KsG.
                 getValue());
@@ -3164,7 +3296,11 @@ public class Interface extends javax.swing.JFrame {
 
         repaint();
     }//GEN-LAST:event_KsGStateChanged
-
+    /**
+     * Ks blue
+     *
+     * @param evt
+     */
     private void KsBStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_KsBStateChanged
         poligonos.get(PoligonosBox.getSelectedIndex()).setKsB((float) KsB.
                 getValue());
@@ -3173,50 +3309,86 @@ public class Interface extends javax.swing.JFrame {
 
         repaint();
     }//GEN-LAST:event_KsBStateChanged
-
+    /**
+     * I red
+     *
+     * @param evt
+     */
     private void IrStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_IrStateChanged
         luzAmbiente.setIr((float) Ir.getValue());
         repaint();
     }//GEN-LAST:event_IrStateChanged
-
+    /**
+     * I green
+     *
+     * @param evt
+     */
     private void IgStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_IgStateChanged
         luzAmbiente.setIg((float) Ig.getValue());
         repaint();
     }//GEN-LAST:event_IgStateChanged
-
+    /**
+     * I blue
+     *
+     * @param evt
+     */
     private void IbStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_IbStateChanged
         luzAmbiente.setIb((float) Ib.getValue());
         repaint();
     }//GEN-LAST:event_IbStateChanged
-
+    /**
+     * FL X
+     *
+     * @param evt
+     */
     private void FLXStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_FLXStateChanged
         luzFundo.setLocal(new Ponto("", (int) FLX.getValue(), (int) FLY.
                 getValue(), (int) FLZ.getValue()));
         repaint();
     }//GEN-LAST:event_FLXStateChanged
-
+    /**
+     * FL Y
+     *
+     * @param evt
+     */
     private void FLYStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_FLYStateChanged
         luzFundo.setLocal(new Ponto("", (int) FLX.getValue(), (int) FLY.
                 getValue(), (int) FLZ.getValue()));
         repaint();
     }//GEN-LAST:event_FLYStateChanged
-
+    /**
+     * FL Z
+     *
+     * @param evt
+     */
     private void FLZStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_FLZStateChanged
         luzFundo.setLocal(new Ponto("", (int) FLX.getValue(), (int) FLY.
                 getValue(), (int) FLZ.getValue()));
         repaint();
     }//GEN-LAST:event_FLZStateChanged
-
+    /**
+     * FL Red
+     *
+     * @param evt
+     */
     private void FLRStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_FLRStateChanged
         luzFundo.setIr((float) FLR.getValue());
         repaint();
     }//GEN-LAST:event_FLRStateChanged
-
+    /**
+     * FL green
+     *
+     * @param evt
+     */
     private void FLGStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_FLGStateChanged
         luzFundo.setIg((float) FLG.getValue());
         repaint();
     }//GEN-LAST:event_FLGStateChanged
-
+    /**
+     * FL Blue
+     *
+     * @param evt
+     */
     private void FLBStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_FLBStateChanged
         luzFundo.setIb((float) FLB.getValue());
         repaint();
@@ -3226,7 +3398,11 @@ public class Interface extends javax.swing.JFrame {
         this.visualizacaoAtual = 4;
         repaint();
     }//GEN-LAST:event_jRadioButton1ActionPerformed
-
+    /**
+     * Kt spinner
+     *
+     * @param evt
+     */
     private void ktStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_ktStateChanged
         poligonos.get(PoligonosBox.getSelectedIndex()).setKt((float) kt.
                 getValue());
@@ -3234,7 +3410,11 @@ public class Interface extends javax.swing.JFrame {
                 setKt((float) kt.getValue());
         repaint();
     }//GEN-LAST:event_ktStateChanged
-
+    /**
+     * Seta a cor das arestas do(s) poligonos(s)
+     *
+     * @param c color
+     */
     public void setArestasCor(Color c) {
         if (this.poligonos.size() > 0) {
             this.poligonos.get(this.PoligonosBox.getSelectedIndex()).setCor(c);
@@ -3245,6 +3425,11 @@ public class Interface extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * seta a cor das faces dos poligonos
+     *
+     * @param c
+     */
     public void setFacesCor(Color c) {
         if (this.poligonos.size() > 0) {
             this.poligonos.get(this.PoligonosBox.getSelectedIndex()).setCorFace(
@@ -3256,6 +3441,12 @@ public class Interface extends javax.swing.JFrame {
         }
     }
 
+    /**
+     * Faz a abertura de um arquivo, utiliza a classe MyFileHandler
+     *
+     * @throws FileNotFoundException arquivo não existe
+     * @throws IOException erro na leitura do arquivo
+     */
     public void abrir() throws FileNotFoundException, IOException {
         JFileChooser fileChosser = new JFileChooser();
         fileChosser.setFileFilter(new FileType());
@@ -3277,6 +3468,12 @@ public class Interface extends javax.swing.JFrame {
 
     }
 
+    /**
+     * Salva a cena atual
+     *
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
     public void salvar() throws FileNotFoundException, IOException {
 
         if (this.nomeArquivo.equals("/nothing")) {
@@ -3292,6 +3489,12 @@ public class Interface extends javax.swing.JFrame {
         jaSalvo = true;
     }
 
+    /**
+     * Escolhar nome para salvar a cena
+     *
+     * @throws FileNotFoundException
+     * @throws IOException
+     */
     public void salvarComo() throws FileNotFoundException, IOException {
 
         File arquivo = new File("Cena.3DM");
@@ -3517,6 +3720,42 @@ public class Interface extends javax.swing.JFrame {
 
         return buffer;
     }
+
+    /**
+     * Luz ambiente
+     *
+     * @return Iluminacao
+     */
+    public Iluminacao getLuzAmbiente() {
+        return luzAmbiente;
+    }
+
+    /**
+     * Seta luz ambiente
+     *
+     * @param luzAmbiente
+     */
+    public void setLuzAmbiente(Iluminacao luzAmbiente) {
+        this.luzAmbiente = luzAmbiente;
+    }
+
+    /**
+     * Retorna a luz de fundo
+     *
+     * @return Iluminacao
+     */
+    public Iluminacao getLuzFundo() {
+        return luzFundo;
+    }
+
+    /**
+     * seta a luz de fundo
+     *
+     * @param luzFundo
+     */
+    public void setLuzFundo(Iluminacao luzFundo) {
+        this.luzFundo = luzFundo;
+    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JSpinner AlturaSpinner;
     private javax.swing.JPanel ArestaPanelColorChooser;
@@ -3560,7 +3799,6 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JPanel colorPanel;
     private javax.swing.JPanel geral;
     private javax.swing.JButton jButton1;
-    private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
     private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
@@ -3633,6 +3871,7 @@ public class Interface extends javax.swing.JFrame {
     public javax.swing.JPanel panelLateral;
     public javax.swing.JPanel panelPerspectiva;
     public javax.swing.JPanel panelTopo;
+    private javax.swing.JButton piramide;
     private javax.swing.JTextField redimensionar;
     private javax.swing.JSpinner sdistancia;
     private static javax.swing.JSpinner spontoX;
@@ -3642,20 +3881,4 @@ public class Interface extends javax.swing.JFrame {
     private static javax.swing.JSpinner svrpY;
     private static javax.swing.JSpinner svrpZ;
     // End of variables declaration//GEN-END:variables
-
-    public Iluminacao getLuzAmbiente() {
-        return luzAmbiente;
-    }
-
-    public void setLuzAmbiente(Iluminacao luzAmbiente) {
-        this.luzAmbiente = luzAmbiente;
-    }
-
-    public Iluminacao getLuzFundo() {
-        return luzFundo;
-    }
-
-    public void setLuzFundo(Iluminacao luzFundo) {
-        this.luzFundo = luzFundo;
-    }
 }
