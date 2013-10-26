@@ -280,6 +280,8 @@ public class PanelPerspectiva extends javax.swing.JPanel {
      * @param g graphics
      */
     public void sobreamento(Poligono p, Face f, Graphics g) {
+        //os x e y daqui (getX() e getY()) os pia fazem na perspectiva, ou seja pegam o x e y em perspectiva
+        //nossa face que esta sendo passada por parametro, o getX e getY dela estao sendo passados por parametro?
         ArrayList<Aresta> arestaFaceAtual = f.getArestas();
         double yInferior = ((Aresta) arestaFaceAtual.get(0)).getP1().getX();
         double ySuperior = ((Aresta) arestaFaceAtual.get(0)).getP1().getY();
@@ -361,6 +363,17 @@ public class PanelPerspectiva extends javax.swing.JPanel {
             double e3 = (parametroU2 * (pD.getY() - pC.getY())) / (pD.getY() - pC.getY());
             double e4 = ((1.0 - parametroU2) * (pD.getY() - pC.getY())) / (pD.getY()
                     - pC.getY());
+            //até aqui é x e y perspectiva...
+            
+            
+            //daqui para baixo é eles fazem x, y e z normais, acho que seria em mundo...
+            //lá onde eu chamo o phong teria que montar a face com os pontos em perspectiva e no mundo
+            //na classe ponto eu criei novos atributos mX, mY, mZ e cameraZ
+            //teria que, lá onde chamo o phong, setar esses atributos e utilizar aqui para baixo (cameraZ só usa no zbuffer)
+            //outra coisa que tem que ver é se minhas medias dos vetores normais estao sendo feitas corretamente
+            //isso é feita tbm onde chamo o phong (if == 4)
+            
+            
             double Nxi = pB.getnX() * e1 + pA.getnX() * e2;
             double Nyi = pB.getnY() * e1 + pA.getnY() * e2;
             double Nzi = pB.getnZ() * e1 + pA.getnZ() * e2;

@@ -14,13 +14,16 @@ public class Ponto implements java.io.Serializable {
     private double X;
     private double Y;
     private double Z;
-
     double nX;
     double nY;
     double nZ;
     double Ir;
     double Ig;
     double Ib;
+    double mX;
+    double mY;
+    double mZ;
+    double cameraZ;
 
     /**
      * Cria uma instancia de um ponto normal
@@ -55,96 +58,121 @@ public class Ponto implements java.io.Serializable {
 
     /**
      * Faz a cópia do ponto
+     *
      * @return um novo ponto como cópia
      */
     public Ponto copy() {
         Ponto r = new Ponto(this.nome, this.X, this.Y, this.Z);
         return r;
     }
+
     /**
      * Imprime um ponto iniciando com a string de parametro
+     *
      * @param s string
      */
     public void print(String s) {
         System.out.println(s + " -> nome = " + this.getNome() + " x= " + this.getX() + " y= " + this.getY() + " Z= " + this.getZ() + " \n");
     }
-/**
- * Get Nome
- * @return 
- */
+
+    /**
+     * Get Nome
+     *
+     * @return
+     */
     public String getNome() {
         return nome;
     }
-/**
- * Get x do ponto
- * @return 
- */
+
+    /**
+     * Get x do ponto
+     *
+     * @return
+     */
     public double getX() {
         return X;
     }
-/**
- * Get y do ponto
- * @return 
- */
+
+    /**
+     * Get y do ponto
+     *
+     * @return
+     */
     public double getY() {
         return Y;
     }
-/**
- * Get z do ponto
- * @return 
- */
+
+    /**
+     * Get z do ponto
+     *
+     * @return
+     */
     public double getZ() {
         return Z;
     }
-/**
- * Set Nome
- * @param nome 
- */
+
+    /**
+     * Set Nome
+     *
+     * @param nome
+     */
     public void setNome(String nome) {
         this.nome = nome;
     }
-/**
- * Set X
- * @param X 
- */
+
+    /**
+     * Set X
+     *
+     * @param X
+     */
     public void setX(double X) {
         this.X = X;
     }
-/**
- * Set Y
- * @param Y 
- */
+
+    /**
+     * Set Y
+     *
+     * @param Y
+     */
     public void setY(double Y) {
         this.Y = Y;
     }
-/**
- * Set Z
- * @param Z 
- */
+
+    /**
+     * Set Z
+     *
+     * @param Z
+     */
     public void setZ(double Z) {
         this.Z = Z;
     }
-/**
- * Constrói um vetor com o ponto atual
- * @return uma instancia de Vetor
- */
+
+    /**
+     * Constrói um vetor com o ponto atual
+     *
+     * @return uma instancia de Vetor
+     */
     public Vetor vetor() {
         return new Vetor(this.X, this.Y, this.Z, 1);
     }
-/**
- * Codigo Hash
- * @return hash = 5
- */
+
+    /**
+     * Codigo Hash
+     *
+     * @return hash = 5
+     */
     @Override
     public int hashCode() {
         int hash = 5;
         return hash;
     }
-/**
- * Comparador entre dois pontos
- * @param objeto do tipo ponto
- * @return se igual true, senão false
- */
+
+    /**
+     * Comparador entre dois pontos
+     *
+     * @param objeto do tipo ponto
+     * @return se igual true, senão false
+     */
     @Override
     public boolean equals(Object obj) {
         if (obj == null) {
@@ -165,88 +193,145 @@ public class Ponto implements java.io.Serializable {
         }
         return true;
     }
-/**
- * Get nX
- * @return 
- */
+
+    /**
+     * Get nX
+     *
+     * @return
+     */
     public double getnX() {
         return nX;
     }
-/**
- * set nX
- * @param nX 
- */
+
+    /**
+     * set nX
+     *
+     * @param nX
+     */
     public void setnX(double nX) {
         this.nX = nX;
     }
-/**
- * Get nY
- * @return 
- */
+
+    /**
+     * Get nY
+     *
+     * @return
+     */
     public double getnY() {
         return nY;
     }
-/**
- * set nY
- * @param nY 
- */
+
+    /**
+     * set nY
+     *
+     * @param nY
+     */
     public void setnY(double nY) {
         this.nY = nY;
     }
-/**
- * get nZ
- * @return 
- */
+
+    /**
+     * get nZ
+     *
+     * @return
+     */
     public double getnZ() {
         return nZ;
     }
-/**
- * set nZ
- * @param nZ 
- */
+
+    /**
+     * set nZ
+     *
+     * @param nZ
+     */
     public void setnZ(double nZ) {
         this.nZ = nZ;
     }
-/**
- * 
- * @return 
- */
+
+    /**
+     *
+     * @return
+     */
     public double getIr() {
         return Ir;
     }
-/**
- * set Ir
- * @param Ir 
- */
+
+    /**
+     * set Ir
+     *
+     * @param Ir
+     */
     public void setIr(double Ir) {
         this.Ir = Ir;
     }
-/**
- * Get Ig
- * @return 
- */
+
+    /**
+     * Get Ig
+     *
+     * @return
+     */
     public double getIg() {
         return Ig;
     }
-/**
- * set Ig
- * @param Ig 
- */
+
+    /**
+     * set Ig
+     *
+     * @param Ig
+     */
     public void setIg(double Ig) {
         this.Ig = Ig;
     }
-/**
- * get Ib
- * @return 
- */
+
+    /**
+     * get Ib
+     *
+     * @return
+     */
     public double getIb() {
         return Ib;
     }
-/**
- * set Ib
- * @param Ib 
- */
+
+    /**
+     * set Ib
+     *
+     * @param Ib
+     */
     public void setIb(double Ib) {
         this.Ib = Ib;
     }
+
+    public double getmX() {
+        return mX;
+    }
+
+    public void setmX(double mX) {
+        this.mX = mX;
+    }
+
+    public double getmY() {
+        return mY;
+    }
+
+    public void setmY(double mY) {
+        this.mY = mY;
+    }
+
+    public double getmZ() {
+        return mZ;
+    }
+
+    public void setmZ(double mZ) {
+        this.mZ = mZ;
+    }
+
+    public double getCameraZ() {
+        return cameraZ;
+    }
+
+    public void setCameraZ(double cameraZ) {
+        this.cameraZ = cameraZ;
+    }
+    
+    
 }
