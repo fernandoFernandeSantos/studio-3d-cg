@@ -30,8 +30,10 @@ import Main.Init;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import sun.util.calendar.ZoneInfo;
 
 /**
  *
@@ -3148,7 +3150,7 @@ public class Interface extends javax.swing.JFrame {
                 }
             } else {
                 if (resp == 1) {
-                    //System.exit(0);
+                    System.exit(0);
                 }
             }
         }
@@ -3559,16 +3561,31 @@ public class Interface extends javax.swing.JFrame {
             }
         }
 
+
         int altura = this.panelPerspectiva.getHeight();
         int largura = this.panelPerspectiva.getWidth();
+        int ymax = altura;
+        int xmax = largura;
+
+        Color matrizCores[][] = new Color[xmax][ymax];
+        BufferedImage buffer = new BufferedImage(xmax, ymax, BufferedImage.TYPE_INT_RGB);
+        for (int j = 0; j < xmax; j++) {
+            for (int k = 0; k < ymax; k++) {
+                buffer.setRGB(j, k, panelPerspectiva.getBackground().getRGB());
+            }
+        }
+        double matrizProfundidade[][] = new double[xmax][ymax];
+        for (int i = 0; i < xmax; i++) {
+            for (int j = 0; j < ymax; j++) {
+                matrizProfundidade[i][j] = Double.MAX_VALUE;
+            }
+
+        }
         //scanlines
         if (!poligonos.isEmpty()) {
             for (Poligono p : poligonos) {
-//            g2D.setColor(p.getCor());
                 camera.GerarIntermediarios();
-//                p.getMatrizPontos().print("P");
                 Poligono Paux = camera.GerarPerspectiva(largura, altura, p);
-//                Paux.getMatrizPontos().print("Paux");
                 Matriz aux = camera.getMatrizAux();
                 Poligono ocultaFace = Paux.copy();
                 ocultaFace.setPontos(aux);
@@ -3580,125 +3597,551 @@ public class Interface extends javax.swing.JFrame {
                     zmaux.set(2, i, aux.get(2, i));
                 }
                 zpol.setPontos(zmaux);
-//                zpol.getMatrizPontos().print("zpol");
                 for (int i = 0; i < Paux.getFaces().size(); i++) {
                     Face f = Paux.getFaces().get(i);
                     Face f1 = ocultaFace.getFaces().get(i);
-                    Face f2 = zpol.getFaces().get(i);
                     f1.gerarVetorPlano();
                     Vetor norma = f1.getVetorPlano();
                     norma.normalizar();
-                    ArrayList<Ponto> pt = f.getPontos();
                     if (Vetor.produtoEscalar(camera.getVRPtoFP3(), norma) > 0) {
-                        f2.gerarVetorPlano();
-                        norma = f2.getVetorPlano();
-                        Ponto pontoQualquer = f2.getPontos().get(0);
-                        double d = -(norma.get(0) * pontoQualquer.getX())
-                                - (norma.get(1) * pontoQualquer.getY())
-                                - (norma.get(2) * pontoQualquer.getZ());
-                        ArrayList<Aresta> arestas = f.getArestas();
-                        //utilizo para encontrar os limites
-                        double minimoY = arestas.get(0).getP1().getY();
-                        double maximoY = arestas.get(0).getP1().getY();
-                        //acho o limite das faces
-                        for (Aresta a : arestas) {
-                            Ponto p1 = a.getP1();
-                            Ponto p2 = a.getP2();
-
-                            if (minimoY > p1.getY() || minimoY > p2.getY()) {
-                                if (minimoY > p1.getY()) {
-                                    minimoY = p1.getY();
-                                } else {
-                                    minimoY = p2.getY();
-                                }
-                            }
-
-                            if (maximoY < p1.getY() || maximoY < p2.getY()) {
-                                if (maximoY < p1.getY()) {
-                                    maximoY = p1.getY();
-                                } else {
-                                    maximoY = p2.getY();
-                                }
-                            }
-                        }
-
-                        ArrayList<Aresta> pintar = new ArrayList<>(arestas);
-                        //verifico se aresta esta na vertical, se esta, já esta pintada, removo da lista de pintura.
-                        for (int e = 0; e < pintar.size(); ++e) {
-                            if (pintar.get(e).getP1().getY() == pintar.get(
-                                    e).getP2().getY()) {
-                                pintar.remove(e);
-                            }
-                        }
-                        //faço a pintura linha por linha, calculando por meio do algoritmo de recorte se uma aresta esta contida na face ou não.
-                        for (int y = (int) maximoY; (y > (int) minimoY) && (y
-                                > 0); --y) {
-                            double x1 = 0;
-                            double x2 = 0;
-                            boolean ok = true;
-                            for (int e = 0; e < pintar.size(); ++e) {
-                                Ponto p1 = pintar.get(e).getP1();
-
-                                Ponto p2 = pintar.get(e).getP2();
-
-                                double eqR = (y - p1.getY()) / (p2.getY() - p1.
-                                        getY());
-
-                                if ((eqR >= 0.0) && (eqR <= 1.0)) {
-                                    if (ok) {
-                                        x1 = eqR * (p2.getX() - p1.getX()) + p1.
-                                                getX();
-                                        ok = false;
-                                    } else {
-                                        x2 = eqR * (p2.getX() - p1.getX()) + p1.
-                                                getX();
-                                        break;
+                        Face f2 = zpol.getFaces().get(i);
+                        for (int j = 0; j < f2.getPontos().size(); j++) {
+                            double mediaX = 0;
+                            double mediaY = 0;
+                            double mediaZ = 0;
+                            int counter = 1;
+                            for (int k = 0; k < zpol.getFaces().size(); k++) {
+                                for (int l = 0; l < zpol.getFaces().get(k).getPontos().size(); l++) {
+                                    if (f2.getPontos().get(j).getNome() == zpol.getFaces().get(k).getPontos().get(l).getNome()) {
+                                        zpol.getFaces().get(k).gerarVetorPlano();
+                                        zpol.getFaces().get(k).getVetorPlano().normalizar();
+                                        mediaX += zpol.getFaces().get(k).getVetorPlano().get(0);
+                                        mediaY += zpol.getFaces().get(k).getVetorPlano().get(1);
+                                        mediaZ += zpol.getFaces().get(k).getVetorPlano().get(2);
+                                        counter++;
                                     }
                                 }
                             }
-//                             g.drawLine((int) (x1), y, (int) (x2), y);
-
-                            int inicial = (int) x1;
-                            int finall = (int) x2;
-
-                            if (inicial > finall) {
-                                int auxI = inicial;
-                                inicial = finall;
-                                finall = auxI;
-                            }
-                            double zA = -d - norma.get(0) * inicial - norma.get(
-                                    1) * y;
-//                          
-                            if (zA < zBuffer[inicial + fator][y + fator]) {
-                                zBuffer[inicial + fator][y + fator] = zA;
-                                bufferImagem.setRGB(inicial + fator, y + fator,
-                                        p.getCorFace().getRGB());
-                            }
-                            for (int j = inicial; j < finall; j++) {
-                                zA = zA - norma.get(0) / norma.get(2);
-//                                try {
-                                if (zA < zBuffer[j + fator][y + fator]) {
-                                    zBuffer[j + fator][y + fator] = zA;
-                                    bufferImagem.setRGB(j + fator, y + fator, p.
-                                            getCorFace().getRGB());
+                            f2.getPontos().get(j).setnX(mediaX / counter);
+                            f2.getPontos().get(j).setnY(mediaY / counter);
+                            f2.getPontos().get(j).setnZ(mediaZ / counter);
+                            f2.getPontos().get(j).setCameraZ(mediaZ);
+                        }
+                        for (int j = 0; j < f2.getPontos().size(); j++) {
+                            for (int k = 0; k < p.getPontos().size(); k++) {
+                                if (p.getPontos().get(k).getNome() == f2.getPontos().get(j).getNome()) {
+                                    f2.getPontos().get(j).setmX(p.getPontos().get(k).getX());
+                                    f2.getPontos().get(j).setmY(p.getPontos().get(k).getY());
+                                    f2.getPontos().get(j).setmZ(p.getPontos().get(k).getZ());
                                 }
-//                                } catch (ArrayIndexOutOfBoundsException a) {
+                            }
+                            for (int k = 0; k < zpol.getPontos().size(); k++) {
+                                if (f2.getPontos().get(j).getNome() == zpol.getPontos().get(k).getNome()) {
+                                    f2.getPontos().get(j).setCameraZ(zpol.getPontos().get(k).getZ());
+                                }
+                            }
+                        }
 
-//                                }
+                        
+                        //get arestas
+                        java.util.List list = f2.getArestas();
+                        double yinf = ((Aresta) list.get(0)).getP1().getX();
+                        double ysup = ((Aresta) list.get(0)).getP1().getY();
+                        for (int j = 1; j < list.size(); j++) {
+                            if (((Aresta) list.get(j)).getP1().getY() < yinf) {
+                                yinf = ((Aresta) list.get(j)).getP1().getY();
+                            }
+                            if (((Aresta) list.get(j)).getP1().getY() > ysup) {
+                                ysup = ((Aresta) list.get(j)).getP1().getY();
+                            }
+                            if (((Aresta) list.get(j)).getP2().getY() < yinf) {
+                                yinf = ((Aresta) list.get(j)).getP2().getY();
+                            }
+                            if (((Aresta) list.get(j)).getP2().getY() > ysup) {
+                                ysup = ((Aresta) list.get(j)).getP2().getY();
+                            }
+                        }
+
+                        int y = (int) (ysup >= (double) ymax ? ymax - 1 : ysup);
+                        while (y > (int) yinf && y > 0) {
+                            double x1 = 0.0D;
+                            double x2 = 0.0D;
+                            double u1 = 0.0D;
+                            double u2 = 0.0D;
+                            boolean first = true;
+                            Ponto pa = null;
+                            Ponto pb = null;
+                            Ponto pc = null;
+                            Ponto pd = null;
+                            for (int j = 0; j < list.size(); j++) {
+                                Ponto p1 = ((Aresta) list.get(j)).getP1();
+                                Ponto p2 = ((Aresta) list.get(j)).getP2();
+                                if ((int) p1.getY() == (int) p2.getY()) {
+                                    continue;
+                                }
+                                double u = ((double) y - p1.getY()) / (p2.getY() - p1.getY());
+                                if (u < 0.0D || u > 1.0D || y == (int) (p1.getY() <= p2.getY() ? p1.getY() : p2.getY())) {
+                                    continue;
+                                }
+                                if (first) {
+                                    x1 = u * (p2.getX() - p1.getX()) + p1.getX();
+                                    pa = p1;
+                                    pb = p2;
+                                    u1 = u;
+                                    first = false;
+                                    continue;
+                                }
+                                x2 = u * (p2.getX() - p1.getX()) + p1.getX();
+                                pc = p1;
+                                pd = p2;
+                                u2 = u;
+                                break;
                             }
 
-
-
+                            if (x1 != 0.0D || x2 != 0.0D) {
+                                if (x1 > x2) {
+                                    double aux2 = x1;
+                                    x1 = x2;
+                                    x2 = aux2;
+                                    Ponto paux = pa;
+                                    pa = pc;
+                                    pc = paux;
+                                    paux = pb;
+                                    pb = pd;
+                                    pd = paux;
+                                    aux2 = u1;
+                                    u1 = u2;
+                                    u2 = aux2;
+                                }
+                                
+                               
+                                double e1 = (u1 * (pb.getY() - pa.getY())) / (pb.getY() - pa.getY());
+                                double e2 = ((1.0D - u1) * (pb.getY() - pa.getY())) / (pb.getY() - pa.getY());
+                                double e3 = (u2 * (pd.getY() - pc.getY())) / (pd.getY() - pc.getY());
+                                double e4 = ((1.0D - u2) * (pd.getY() - pc.getY())) / (pd.getY() - pc.getY());
+                               
+                                 //os gets x e y acima são da perspectiva
+                                
+                                double Nxi = pb.getnX() * e1 + pa.getnX() * e2;
+                                double Nyi = pb.getnY() * e1 + pa.getnY() * e2;
+                                double Nzi = pb.getnZ() * e1 + pa.getnZ() * e2;
+                                double Nxf = pd.getnX() * e3 + pc.getnX() * e4;
+                                double Nyf = pd.getnY() * e3 + pc.getnY() * e4;
+                                double Nzf = pd.getnZ() * e3 + pc.getnZ() * e4;
+                                
+                                //get mZ, mX e mY sao do mundo (ou camera, nao tenho ctz)
+                                //get cameraZ é o z em camera, aqui
+                                
+                                
+                                
+                                // o que tem que ser feito verificar se os meus mX, mY, mZ e cameraZ
+                                //sao realmente o que tem que ser
+                                // também verificar se os vetores normais medios estao corretos.
+                                
+                                double Zi = pb.getmZ() * e1 + pa.getmZ() * e2;
+                                double Zf = pd.getmZ() * e3 + pc.getmZ() * e4;
+                                double Yi = pb.getmY() * e1 + pa.getmY() * e2;
+                                double Yf = pd.getmY() * e3 + pc.getmY() * e4;
+                                double Xi = pb.getmX() * e1 + pa.getmX() * e2;
+                                double Xf = pd.getmX() * e3 + pc.getmX() * e4;
+                                double Zci = pb.getCameraZ() * e1 + pa.getCameraZ() * e2;
+                                double Zcf = pd.getCameraZ() * e3 + pc.getCameraZ() * e4;
+                                double deltaX = x2 - x1;
+                                double deltaNx = (Nxf - Nxi) / deltaX;
+                                double deltaNy = (Nyf - Nyi) / deltaX;
+                                double deltaNz = (Nzf - Nzi) / deltaX;
+                                double deltaZM = (Zf - Zi) / deltaX;
+                                double deltaXM = (Xf - Xi) / deltaX;
+                                double deltaYM = (Yf - Yi) / deltaX;
+                                double deltaZC = (Zcf - Zci) / deltaX;
+                                int x = x1 <= 0.0D ? 0 : (int) Math.floor(x1);
+                                double Nx = Nxi;
+                                double Ny = Nyi;
+                                double Nz = Nzi;
+                                double Z = Zi;
+                                double X = Xi;
+                                double Y = Yi;
+                                double ZC = Zci;
+                                if (x == 0) {
+                                    Nx += deltaNx * -x1;
+                                    Ny += deltaNy * -x1;
+                                    Nz += deltaNz * -x1;
+                                    Z += deltaZM * -x1;
+                                    X += deltaXM * -x1;
+                                    Y += deltaYM * -x1;
+                                    ZC += deltaZC * -x1;
+                                }
+                                while ((double) x < x2 && x < xmax) {
+                                    if (ZC < matrizProfundidade[x][y]) {
+//                                        System.out.println("entrou aqui");
+                                        matrizProfundidade[x][y] = ZC;
+                                        Ponto ponto = new Ponto("", X, Y, Z);
+                                        ponto.setnX(Nx);
+                                        ponto.setnY(Ny);
+                                        ponto.setnZ(Nz);
+                                        phong(p, ponto);
+                                        int red = (int) (ponto.getIr() * (double) p.getCorFace().getRed());
+                                        int green = (int) (ponto.getIg() * (double) p.getCorFace().getGreen());
+                                        int blue = (int) (ponto.getIb() * (double) p.getCorFace().getBlue());
+                                        System.out.println(red + " " + green + " " + blue);
+                                        matrizCores[x][y] = new Color(red <= 255 ? red >= 0 ? red : 0 : 255, green <= 255 ? green >= 0 ? green : 0 : 255, blue <= 255 ? blue >= 0 ? blue : 0 : 255);
+                                        buffer.setRGB(x, y, (new Color(red <= 255 ? red >= 0 ? red : 0 : 255, green <= 255 ? green >= 0 ? green : 0 : 255, blue <= 255 ? blue >= 0 ? blue : 0 : 255)).getRGB());
+                                    }
+                                    Nx += deltaNx;
+                                    Ny += deltaNy;
+                                    Nz += deltaNz;
+                                    x++;
+                                    Z += deltaZM;
+                                    X += deltaXM;
+                                    Y += deltaYM;
+                                    ZC += deltaZC;
+                                }
+                            }
+                            y--;
                         }
                     }
                 }
             }
-        }
 
-        return cortaBuffer(bufferImagem, largura, altura, fator);
+        }
+//        BufferedImage buffer = new BufferedImage(xmax, ymax, BufferedImage.TYPE_INT_RGB);
+//        for (int j = 0; j < xmax; j++) {
+//            for (int w = 0; w < ymax; w++) {
+//                int rgb = 0;
+//                try {
+//                    rgb = matrizCores[j][w].getRGB();
+//                } catch (NullPointerException e) {
+//                }
+//                if (rgb != 0) {
+//                    System.out.println("coco");
+//                }
+//                buffer.setRGB(j, w, rgb);
+//            }
+//        }
+
+        return buffer;
 //        return bufferImagem;
     }
 
+    public void phong(Poligono p, Ponto ponto) {
+        ponto.setIr(getIr(p, ponto));
+        ponto.setIg(getIg(p, ponto));
+        ponto.setIb(getIb(p, ponto));
+    }
+
+    private double getIr(Poligono p, Ponto ponto) {
+
+        Matriz src = getCamera().getSRC();
+
+        Matriz local = new Matriz(4, 1);
+        local.set(0, 0, getLuzFundo().getLocal().getX());
+        local.set(1, 0, getLuzFundo().getLocal().getY());
+        local.set(2, 0, getLuzFundo().getLocal().getZ());
+        local.set(3, 0, 1);
+
+        local = Matriz.multiplicacao(src, local);
+
+        Ponto plocal = new Ponto("", local.get(0, 0), local.get(1, 0), local.get(2, 0));
+
+        double ambiente = ambiente(getLuzAmbiente().getIr(), p.getKaR());
+
+//        double difusa = difusa(inter.getLuzFundo().getIr(), p.getKdR(), ponto.
+//                getNormal(), inter.getLuzFundo().getLocal(), ponto);
+        double difusa = difusa(getLuzFundo().getIr(), p.getKdR(), ponto.
+                getNormal(), plocal, ponto);
+
+//        double especular = difusa == 0.0D ? 0.0D : especular(inter.getLuzFundo().
+//                getIr(), p.getKsR(), p.getN(), inter.getLuzFundo().getLocal(),
+//                ponto.getNormal(), new Ponto("", inter.getCamera().getVx(),
+//                inter.getCamera().getVy(), inter.getCamera().getVz()), ponto);
+        double especular = difusa == 0.0D ? 0.0D : especular(getLuzFundo().
+                getIr(), p.getKsR(), p.getN(), plocal,
+                ponto.getNormal(), new Ponto("", getCamera().getVx(),
+                getCamera().getVy(), getCamera().getVz()), ponto);
+        return ambiente + difusa + especular;
+    }
+
+    private double getIg(Poligono p, Ponto ponto) {
+
+        Matriz src = getCamera().getSRC();
+
+        Matriz local = new Matriz(4, 1);
+        local.set(0, 0, getLuzFundo().getLocal().getX());
+        local.set(1, 0, getLuzFundo().getLocal().getY());
+        local.set(2, 0, getLuzFundo().getLocal().getZ());
+        local.set(3, 0, 1);
+
+        local = Matriz.multiplicacao(src, local);
+
+        Ponto plocal = new Ponto("", local.get(0, 0), local.get(1, 0), local.get(2, 0));
+
+        double ambiente = ambiente(getLuzAmbiente().getIg(), p.getKaG());
+
+//        double difusa = difusa(inter.getLuzFundo().getIg(), p.getKdG(), ponto.
+//                getNormal(), inter.getLuzFundo().getLocal(), ponto);
+        double difusa = difusa(getLuzFundo().getIg(), p.getKdG(), ponto.
+                getNormal(), plocal, ponto);
+
+//        double especular = difusa == 0.0D ? 0.0D : especular(inter.getLuzFundo().
+//                getIg(), p.getKsG(), p.getN(), inter.getLuzFundo().getLocal(),
+//                ponto.getNormal(), new Ponto("", inter.getCamera().getVx(),
+//                inter.getCamera().getVy(), inter.getCamera().getVz()), ponto);
+        double especular = difusa == 0.0D ? 0.0D : especular(getLuzFundo().
+                getIg(), p.getKsG(), p.getN(), plocal,
+                ponto.getNormal(), new Ponto("", getCamera().getVx(),
+                getCamera().getVy(), getCamera().getVz()), ponto);
+        return ambiente + difusa + especular;
+    }
+
+    private double getIb(Poligono p, Ponto ponto) {
+
+        Matriz src = getCamera().getSRC();
+
+        Matriz local = new Matriz(4, 1);
+        local.set(0, 0, getLuzFundo().getLocal().getX());
+        local.set(1, 0, getLuzFundo().getLocal().getY());
+        local.set(2, 0, getLuzFundo().getLocal().getZ());
+        local.set(3, 0, 1);
+
+        local = Matriz.multiplicacao(src, local);
+
+        Ponto plocal = new Ponto("", local.get(0, 0), local.get(1, 0), local.get(2, 0));
+
+        double ambiente = ambiente(getLuzAmbiente().getIb(), p.getKaB());
+
+        double difusa = difusa(getLuzFundo().getIb(), p.getKdB(), ponto.
+                getNormal(), getLuzFundo().getLocal(), ponto);
+
+        double especular = difusa == 0.0D ? 0.0D : especular(getLuzFundo().
+                getIb(), p.getKsB(), p.getN(), getLuzFundo().getLocal(),
+                ponto.getNormal(), new Ponto("", getCamera().getVx(),
+                getCamera().getVy(), getCamera().getVz()), ponto);
+        return ambiente + difusa + especular;
+    }
+
+    private static double ambiente(double Ia, double Ka) {
+        return Ia * Ka;
+    }
+
+    private static double difusa(double Il, double Kd, Ponto normal, Ponto L,
+            Ponto pontoObservado) {
+        Ponto l = new Ponto("", pontoObservado.getX() - L.getX(),
+                pontoObservado.getY() - L.getY(), pontoObservado.getZ() - L.
+                getZ());
+        double normaL = norma(l);
+        l.setX(l.getX() / normaL);
+        l.setY(l.getY() / normaL);
+        l.setZ(l.getZ() / normaL);
+        double normaNormal = norma(normal);
+        Ponto n = new Ponto("", normal.getX() / normaNormal, normal.getY()
+                / normaNormal, normal.getZ() / normaNormal);
+        double escalarNL = escalar(n, l);
+        if (escalarNL > 0.0D) {
+            return Il * Kd * escalarNL;
+        } else {
+            return 0.0D;
+        }
+    }
+
+    private static double especular(double Il, double Ks, double expoenteN,
+            Ponto L, Ponto N, Ponto VRP, Ponto A) {
+        Ponto l = new Ponto("", A.getX() - L.getX(), A.getY() - L.getY(), A.
+                getZ() - L.getZ());
+        double normaL = norma(l);
+        l.setX(l.getX() / normaL);
+        l.setY(l.getY() / normaL);
+        l.setZ(l.getZ() / normaL);
+        double normaN = norma(N);
+        Ponto n = new Ponto("", N.getX() / normaN, N.getY() / normaN, N.getZ()
+                / normaN);
+        Ponto r = new Ponto();
+        double DoisLN = 2D * escalar(l, n);
+        r.setX(l.getX() - DoisLN * n.getX());
+        r.setY(l.getY() - DoisLN * n.getY());
+        r.setZ(l.getZ() - DoisLN * n.getZ());
+        Ponto s = new Ponto("", VRP.getX() - A.getX(), VRP.getY() - A.getY(),
+                VRP.getZ() - A.getZ());
+        double normaS = norma(s);
+        s.setX(s.getX() / normaS);
+        s.setY(s.getY() / normaS);
+        s.setZ(s.getZ() / normaS);
+        double escalarRS = escalar(r, s);
+        if (escalarRS > 0.0D) {
+            return Il * Ks * Math.pow(escalarRS, expoenteN);
+        } else {
+            return 0.0D;
+        }
+    }
+
+    public static double norma(Ponto p) {
+        return Math.sqrt(p.getX() * p.getX() + p.getY() * p.getY() + p.getZ()
+                * p.getZ());
+    }
+
+    public static double escalar(Ponto p1, Ponto p2) {
+        return p1.getX() * p2.getX() + p1.getY() * p2.getY() + p1.getZ() * p2.
+                getZ();
+    }
+
+//    public BufferedImage getZBuffer() {
+//        BufferedImage bufferImagem = new BufferedImage(this.panelPerspectiva.
+//                getWidth() + 600, this.panelPerspectiva.getHeight() + 600,
+//                BufferedImage.TYPE_INT_RGB);
+//        double[][] zBuffer = new double[this.panelPerspectiva.getWidth() + 600][this.panelPerspectiva.
+//                getHeight() + 600];
+//        //inicio as parada
+//        int fator = 300;
+//        for (int j = 0; j < bufferImagem.getWidth(); j++) {
+//            for (int k = 0; k < bufferImagem.getHeight(); k++) {
+//                bufferImagem.setRGB(j, k, this.panelPerspectiva.getBackground().
+//                        getRGB());
+//            }
+//        }
+//        for (int j = 0; j < zBuffer.length; j++) {
+//            for (int k = 0; k < zBuffer[0].length; k++) {
+//                zBuffer[j][k] = Long.MAX_VALUE;
+//            }
+//        }
+//
+//        int altura = this.panelPerspectiva.getHeight();
+//        int largura = this.panelPerspectiva.getWidth();
+//        //scanlines
+//        if (!poligonos.isEmpty()) {
+//            for (Poligono p : poligonos) {
+////            g2D.setColor(p.getCor());
+//                camera.GerarIntermediarios();
+////                p.getMatrizPontos().print("P");
+//                Poligono Paux = camera.GerarPerspectiva(largura, altura, p);
+////                Paux.getMatrizPontos().print("Paux");
+//                Matriz aux = camera.getMatrizAux();
+//                Poligono ocultaFace = Paux.copy();
+//                ocultaFace.setPontos(aux);
+//                Poligono zpol = Paux.copy();
+//                Matriz zmaux = new Matriz();
+//                for (int i = zpol.getPontos().size() - 1; i >= 0; i--) {
+//                    zmaux.set(0, i, zpol.getPontos().get(i).getX());
+//                    zmaux.set(1, i, zpol.getPontos().get(i).getY());
+//                    zmaux.set(2, i, aux.get(2, i));
+//                }
+//                zpol.setPontos(zmaux);
+////                zpol.getMatrizPontos().print("zpol");
+//                for (int i = 0; i < Paux.getFaces().size(); i++) {
+//                    Face f = Paux.getFaces().get(i);
+//                    Face f1 = ocultaFace.getFaces().get(i);
+//                    Face f2 = zpol.getFaces().get(i);
+//                    f1.gerarVetorPlano();
+//                    Vetor norma = f1.getVetorPlano();
+//                    norma.normalizar();
+//                    ArrayList<Ponto> pt = f.getPontos();
+//                    if (Vetor.produtoEscalar(camera.getVRPtoFP3(), norma) > 0) {
+//                        f2.gerarVetorPlano();
+//                        norma = f2.getVetorPlano();
+//                        Ponto pontoQualquer = f2.getPontos().get(0);
+//                        double d = -(norma.get(0) * pontoQualquer.getX())
+//                                - (norma.get(1) * pontoQualquer.getY())
+//                                - (norma.get(2) * pontoQualquer.getZ());
+//                        ArrayList<Aresta> arestas = f.getArestas();
+//                        //utilizo para encontrar os limites
+//                        double minimoY = arestas.get(0).getP1().getY();
+//                        double maximoY = arestas.get(0).getP1().getY();
+//                        //acho o limite das faces
+//                        for (Aresta a : arestas) {
+//                            Ponto p1 = a.getP1();
+//                            Ponto p2 = a.getP2();
+//
+//                            if (minimoY > p1.getY() || minimoY > p2.getY()) {
+//                                if (minimoY > p1.getY()) {
+//                                    minimoY = p1.getY();
+//                                } else {
+//                                    minimoY = p2.getY();
+//                                }
+//                            }
+//
+//                            if (maximoY < p1.getY() || maximoY < p2.getY()) {
+//                                if (maximoY < p1.getY()) {
+//                                    maximoY = p1.getY();
+//                                } else {
+//                                    maximoY = p2.getY();
+//                                }
+//                            }
+//                        }
+//
+//                        ArrayList<Aresta> pintar = new ArrayList<>(arestas);
+//                        //verifico se aresta esta na vertical, se esta, já esta pintada, removo da lista de pintura.
+//                        for (int e = 0; e < pintar.size(); ++e) {
+//                            if (pintar.get(e).getP1().getY() == pintar.get(
+//                                    e).getP2().getY()) {
+//                                pintar.remove(e);
+//                            }
+//                        }
+//                        //faço a pintura linha por linha, calculando por meio do algoritmo de recorte se uma aresta esta contida na face ou não.
+//                        for (int y = (int) maximoY; (y > (int) minimoY) && (y
+//                                > 0); --y) {
+//                            double x1 = 0;
+//                            double x2 = 0;
+//                            boolean ok = true;
+//                            for (int e = 0; e < pintar.size(); ++e) {
+//                                Ponto p1 = pintar.get(e).getP1();
+//
+//                                Ponto p2 = pintar.get(e).getP2();
+//
+//                                double eqR = (y - p1.getY()) / (p2.getY() - p1.
+//                                        getY());
+//
+//                                if ((eqR >= 0.0) && (eqR <= 1.0)) {
+//                                    if (ok) {
+//                                        x1 = eqR * (p2.getX() - p1.getX()) + p1.
+//                                                getX();
+//                                        ok = false;
+//                                    } else {
+//                                        x2 = eqR * (p2.getX() - p1.getX()) + p1.
+//                                                getX();
+//                                        break;
+//                                    }
+//                                }
+//                            }
+////                             g.drawLine((int) (x1), y, (int) (x2), y);
+//
+//                            int inicial = (int) x1;
+//                            int finall = (int) x2;
+//
+//                            if (inicial > finall) {
+//                                int auxI = inicial;
+//                                inicial = finall;
+//                                finall = auxI;
+//                            }
+//                            double zA = -d - norma.get(0) * inicial - norma.get(
+//                                    1) * y;
+////                          
+//                            if (zA < zBuffer[inicial + fator][y + fator]) {
+//                                zBuffer[inicial + fator][y + fator] = zA;
+//                                bufferImagem.setRGB(inicial + fator, y + fator,
+//                                        p.getCorFace().getRGB());
+//                            }
+//                            for (int j = inicial; j < finall; j++) {
+//                                zA = zA - norma.get(0) / norma.get(2);
+////                                try {
+//                                if (zA < zBuffer[j + fator][y + fator]) {
+//                                    zBuffer[j + fator][y + fator] = zA;
+//                                    bufferImagem.setRGB(j + fator, y + fator, p.
+//                                            getCorFace().getRGB());
+//                                }
+////                                } catch (ArrayIndexOutOfBoundsException a) {
+//
+////                                }
+//                            }
+//
+//
+//
+//                        }
+//                    }
+//                }
+//            }
+//        }
+//
+//        return cortaBuffer(bufferImagem, largura, altura, fator);
+////        return bufferImagem;
+//    }
     private void setZBuffer() {
         if (zbuffer != null) {
             zbuffer.setZbuffer(this.getZBuffer(), this.panelPerspectiva.
