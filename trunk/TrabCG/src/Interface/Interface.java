@@ -3492,7 +3492,7 @@ public class Interface extends javax.swing.JFrame {
     }
 
     /**
-     * Escolhar nome para salvar a cena
+     * Escolha nome para salvar a cena
      *
      * @throws FileNotFoundException
      * @throws IOException
