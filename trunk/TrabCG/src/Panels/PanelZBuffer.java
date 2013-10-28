@@ -32,7 +32,7 @@ public class PanelZBuffer extends javax.swing.JPanel {
 
     
 
-    
+    @Override
     public void paintComponent(Graphics g) {
         super.paintComponent(g);
         Graphics2D g2D = (Graphics2D) g;

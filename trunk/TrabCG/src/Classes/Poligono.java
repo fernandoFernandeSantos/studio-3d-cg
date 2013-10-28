@@ -56,6 +56,13 @@ public class Poligono implements java.io.Serializable {
     public void setKt(double kt) {
         this.kt = kt;
     }
+    
+    public boolean isTransparente(){
+        if(kt != 0){
+            return true;
+        }
+        return false;
+    }
 
     /**
      * Construtor padrão do poligono

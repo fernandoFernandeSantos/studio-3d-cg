@@ -31,6 +31,8 @@ import java.awt.Component;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.Collections;
+import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -3601,8 +3603,8 @@ public class Interface extends javax.swing.JFrame {
         BufferedImage bufferImagem = new BufferedImage(this.panelPerspectiva.
                 getWidth() + 600, this.panelPerspectiva.getHeight() + 600,
                 BufferedImage.TYPE_INT_RGB);
-        double[][] zBuffer = new double[this.panelPerspectiva.getWidth() + 600][this.panelPerspectiva.
-                getHeight() + 600];
+//        double[][] zBuffer = new double[this.panelPerspectiva.getWidth() + 600][this.panelPerspectiva.
+//                getHeight() + 600];
         //inicio as parada
         int fator = 300;
         for (int j = 0; j < bufferImagem.getWidth(); j++) {
@@ -3611,11 +3613,11 @@ public class Interface extends javax.swing.JFrame {
                         getRGB());
             }
         }
-        for (int j = 0; j < zBuffer.length; j++) {
-            for (int k = 0; k < zBuffer[0].length; k++) {
-                zBuffer[j][k] = Long.MAX_VALUE;
-            }
-        }
+//        for (int j = 0; j < zBuffer.length; j++) {
+//            for (int k = 0; k < zBuffer[0].length; k++) {
+//                zBuffer[j][k] = Long.MAX_VALUE;
+//            }
+//        }
 
 
         int altura = this.panelPerspectiva.getHeight();
@@ -3624,12 +3626,27 @@ public class Interface extends javax.swing.JFrame {
         int xmax = largura;
 
         Color matrizCores[][] = new Color[xmax][ymax];
+        boolean matrizOpaco[][] = new boolean[xmax][ymax];
         BufferedImage buffer = new BufferedImage(xmax, ymax, BufferedImage.TYPE_INT_RGB);
         for (int j = 0; j < xmax; j++) {
             for (int k = 0; k < ymax; k++) {
                 buffer.setRGB(j, k, panelPerspectiva.getBackground().getRGB());
             }
         }
+
+        for (int i = 0; i < xmax; i++) {
+            for (int j = 0; j < ymax; j++) {
+                matrizCores[i][j] = new Color(this.getBackground().getRed(), this.getBackground().getGreen(), this.getBackground().getBlue());
+            }
+
+        }
+
+        for (int i = 0; i < xmax; i++) {
+            for (int j = 0; j < ymax; j++) {
+                matrizOpaco[i][j] = true;
+            }
+        }
+
         double matrizProfundidade[][] = new double[xmax][ymax];
         for (int i = 0; i < xmax; i++) {
             for (int j = 0; j < ymax; j++) {
@@ -3639,10 +3656,81 @@ public class Interface extends javax.swing.JFrame {
         }
         //scanlines
         if (!poligonos.isEmpty()) {
+
+
+            ArrayList<Poligono> poligonosOrganizados = new ArrayList();
+            ArrayList<Poligono> poligonosOrganizadosOpacos = new ArrayList();
+            ArrayList<Poligono> poligonosOrganizadosTransparentes = new ArrayList();
+            ArrayList<Matriz> matrizesAux = new ArrayList<>();
+            ArrayList<Matriz> matrizesAuxOpacos = new ArrayList<>();
+            ArrayList<Matriz> matrizesAuxTransparentes = new ArrayList<>();
+
+            this.getCamera().GerarIntermediarios();
             for (Poligono p : poligonos) {
-                camera.GerarIntermediarios();
-                Poligono Paux = camera.GerarPerspectiva(largura, altura, p);
-                Matriz aux = camera.getMatrizAux();
+                if (p.isTransparente()) {
+                    poligonosOrganizadosTransparentes.add(this.getCamera().GerarPerspectiva(xmax, xmax, p));
+                    matrizesAuxTransparentes.add(this.getCamera().getMatrizAux());
+                } else {
+                    poligonosOrganizadosOpacos.add(this.getCamera().GerarPerspectiva(xmax, xmax, p));
+                    matrizesAuxOpacos.add(this.getCamera().getMatrizAux());
+                }
+            }
+//            matrizesAuxOpacos.get(0).print("asd");
+
+            if (poligonosOrganizadosTransparentes.size() > 1) {
+                for (int cc = 0; cc < (poligonosOrganizadosTransparentes.size() - 1); cc++) {
+                    for (int d = 0; d < poligonosOrganizadosTransparentes.size() - cc - 1; d++) {
+
+                        Vetor a = new Vetor(poligonosOrganizadosTransparentes.get(d).getCentro());
+                        Vetor b = new Vetor(poligonosOrganizadosTransparentes.get(d + 1).getCentro());
+
+                        if (Vetor.subtracao(a, this.getCamera().getVRP3()).getModulo() < Vetor.
+                                subtracao(b, this.getCamera().getVRP3()).getModulo()) /* For descending order use < */ {
+                            Collections.swap(poligonosOrganizadosTransparentes, d, d + 1);
+                            Collections.swap(matrizesAuxTransparentes, d, d + 1);
+                        }
+                    }
+                }
+            }
+//            matrizesAuxOpacos.get(0).print("asd");
+
+            if (poligonosOrganizadosOpacos.size() > 1) {
+                for (int cc = 0; cc < (poligonosOrganizadosOpacos.size() - 1); cc++) {
+                    for (int d = 0; d < poligonosOrganizadosOpacos.size() - cc - 1; d++) {
+
+                        Vetor a = new Vetor(poligonosOrganizadosOpacos.get(d).getCentro());
+                        Vetor b = new Vetor(poligonosOrganizadosOpacos.get(d + 1).getCentro());
+
+                        if (Vetor.subtracao(a, this.getCamera().getVRP3()).getModulo() < Vetor.
+                                subtracao(b, this.getCamera().getVRP3()).getModulo()) /* For descending order use < */ {
+                            Collections.swap(poligonosOrganizadosOpacos, d, d + 1);
+                            Collections.swap(matrizesAuxOpacos, d, d + 1);
+                        }
+                    }
+                }
+            }
+
+            for (Poligono p : poligonosOrganizadosOpacos) {
+                poligonosOrganizados.add(p);
+                matrizesAux.add(matrizesAuxOpacos.get(poligonosOrganizadosOpacos.indexOf(p)));
+            }
+            for (Poligono p : poligonosOrganizadosTransparentes) {
+                poligonosOrganizados.add(p);
+                matrizesAux.add(matrizesAuxTransparentes.get(poligonosOrganizadosTransparentes.indexOf(p)));
+            }
+//            System.out.println(poligonosOrganizados.size());
+//            System.out.println(matrizesAux.size());
+//            matrizesAuxOpacos.get(0).print("asd");
+//            matrizesAux.get(0).print("m1");
+//            matrizesAux.get(1).print("m2");
+            for (Poligono p : poligonosOrganizados) {
+                Poligono Paux = p;
+                Matriz aux = matrizesAux.get(poligonosOrganizados.indexOf(p));
+
+//                camera.GerarIntermediarios();
+//                Poligono Paux = camera.GerarPerspectiva(largura, altura, p);
+//                Paux.getMatrizPontos().print("");
+//                Matriz aux = camera.getMatrizAux();
                 Poligono ocultaFace = Paux.copy();
                 ocultaFace.setPontos(aux);
                 Poligono zpol = Paux.copy();
@@ -3828,20 +3916,61 @@ public class Interface extends javax.swing.JFrame {
                                     ZC += deltaZC * -x1;
                                 }
                                 while ((double) x < x2 && x < xmax) {
+                                    Ponto ponto = new Ponto("", X, Y, Z);
+                                    ponto.setnX(Nx);
+                                    ponto.setnY(Ny);
+                                    ponto.setnZ(Nz);
                                     if (ZC < matrizProfundidade[x][y]) {
 //                                        System.out.println("entrou aqui");
                                         matrizProfundidade[x][y] = ZC;
-                                        Ponto ponto = new Ponto("", X, Y, Z);
-                                        ponto.setnX(Nx);
-                                        ponto.setnY(Ny);
-                                        ponto.setnZ(Nz);
+
                                         phong(p, ponto);
                                         int red = (int) (ponto.getIr() * (double) p.getCorFace().getRed());
                                         int green = (int) (ponto.getIg() * (double) p.getCorFace().getGreen());
                                         int blue = (int) (ponto.getIb() * (double) p.getCorFace().getBlue());
-                                        System.out.println(red + " " + green + " " + blue);
-                                        matrizCores[x][y] = new Color(red <= 255 ? red >= 0 ? red : 0 : 255, green <= 255 ? green >= 0 ? green : 0 : 255, blue <= 255 ? blue >= 0 ? blue : 0 : 255);
-                                        buffer.setRGB(x, y, (new Color(red <= 255 ? red >= 0 ? red : 0 : 255, green <= 255 ? green >= 0 ? green : 0 : 255, blue <= 255 ? blue >= 0 ? blue : 0 : 255)).getRGB());
+                                        if (p.isTransparente()) {//ver trasnaprencia ou nao{
+                                            Color cor = matrizCores[x][y];
+                                            double ktPol = p.getKt();
+
+                                            int RedM = cor.getRed();
+                                            int GreenM = cor.getGreen();
+                                            int BlueM = cor.getBlue();
+
+                                            RedM = (int) ((int) (RedM * (ktPol)) + (red * (1 - ktPol)));
+                                            GreenM = (int) ((int) (GreenM * (ktPol)) + (green * (1 - ktPol)));
+                                            BlueM = (int) ((int) (BlueM * (ktPol)) + (blue * (1 - ktPol)));
+
+                                            matrizCores[x][y] = new Color(RedM <= 255 ? RedM >= 0 ? RedM : 0 : 255,
+                                                    GreenM <= 255 ? GreenM >= 0 ? GreenM : 0 : 255,
+                                                    BlueM <= 255 ? BlueM >= 0 ? BlueM : 0 : 255);
+                                            buffer.setRGB(x, y, matrizCores[x][y].getRGB());
+                                            matrizOpaco[x][y] = false;
+                                        } else {
+                                            matrizCores[x][y] = new Color(red <= 255 ? red >= 0 ? red : 0 : 255, green <= 255 ? green >= 0 ? green : 0 : 255, blue <= 255 ? blue >= 0 ? blue : 0 : 255);
+                                            buffer.setRGB(x, y, (new Color(red <= 255 ? red >= 0 ? red : 0 : 255, green <= 255 ? green >= 0 ? green : 0 : 255, blue <= 255 ? blue >= 0 ? blue : 0 : 255)).getRGB());
+                                        }
+                                    } else if (p.isTransparente() && matrizOpaco[x][y] == false) {
+
+                                        int red = (int) (ponto.getIr() * (double) p.getCorFace().getRed());
+                                        int green = (int) (ponto.getIg() * (double) p.getCorFace().getGreen());
+                                        int blue = (int) (ponto.getIb() * (double) p.getCorFace().getBlue());
+
+                                        Color cor = matrizCores[x][y];
+                                        double ktPol = p.getKt();
+
+                                        int RedM = cor.getRed();
+                                        int GreenM = cor.getGreen();
+                                        int BlueM = cor.getBlue();
+
+
+                                        RedM = (int) ((int) (RedM * (1 - ktPol)) + (red * (ktPol)));
+                                        GreenM = (int) ((int) (GreenM * (1 - ktPol)) + (green * (ktPol)));
+                                        BlueM = (int) ((int) (BlueM * (1 - ktPol)) + (blue * (ktPol)));
+
+                                        matrizCores[x][y] = new Color(RedM <= 255 ? RedM >= 0 ? RedM : 0 : 255,
+                                                GreenM <= 255 ? GreenM >= 0 ? GreenM : 0 : 255,
+                                                BlueM <= 255 ? BlueM >= 0 ? BlueM : 0 : 255);
+                                        buffer.setRGB(x, y, matrizCores[x][y].getRGB());
                                     }
                                     Nx += deltaNx;
                                     Ny += deltaNy;
