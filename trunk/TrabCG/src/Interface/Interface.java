@@ -27,13 +27,12 @@ import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import Classes.MyFileHandler;
 import Main.Init;
+import java.awt.Component;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
-import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import sun.util.calendar.ZoneInfo;
 
 /**
  *
@@ -94,6 +93,7 @@ public class Interface extends javax.swing.JFrame {
     Init i;
     Iluminacao luzAmbiente;
     Iluminacao luzFundo;
+
 
     public Interface(Init _i) {
 
@@ -681,6 +681,11 @@ public class Interface extends javax.swing.JFrame {
         PoligonosBox.addItemListener(new java.awt.event.ItemListener() {
             public void itemStateChanged(java.awt.event.ItemEvent evt) {
                 PoligonosBoxItemStateChanged(evt);
+            }
+        });
+        PoligonosBox.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                PoligonosBoxActionPerformed(evt);
             }
         });
 
@@ -2839,7 +2844,56 @@ public class Interface extends javax.swing.JFrame {
      */
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         try {
+            this.i.criaNovo(this);
             this.abrir();
+            for (Poligono p : poligonos) {
+               if(p.getTipo().equals("Prisma")){
+                     this.PoligonosBox.addItem(("Prisma "+prismas));
+                     prismas++;
+               }
+               if(p.getTipo().equals("Esfera")){
+                     this.PoligonosBox.addItem(("Esfera "+esferas));
+                     esferas++;
+               }
+               if(p.getTipo().equals("Piramide")){
+                     this.PoligonosBox.addItem(("Piramide "+piramides));
+                     piramides++;
+               }
+
+            }
+
+           this.poligonosTransformados.add(this.poligonos.get(0));
+            KaR.setValue(this.poligonos.get(0).getKaR());
+            KaG.setValue(this.poligonos.get(0).getKaG());
+            KaB.setValue(this.poligonos.get(0).getKaB());
+            KdR.setValue(this.poligonos.get(0).getKdR());
+            KdG.setValue(this.poligonos.get(0).getKdG());
+            KdB.setValue(this.poligonos.get(0).getKdB());
+            KsR.setValue(this.poligonos.get(0).getKsR());
+            KsG.setValue(this.poligonos.get(0).getKsG());
+            KsB.setValue(this.poligonos.get(0).getKsB());
+            kt.setValue(this.poligonos.get(0).getKt());
+            svrpX.setValue(this.camera.getVx());
+            svrpY.setValue(this.camera.getVy());
+            svrpZ.setValue(this.camera.getVz());   
+            spontoX.setValue(this.camera.getFPx());
+            spontoY.setValue(this.camera.getFPy());
+            spontoZ.setValue(this.camera.getFPz());
+            sdistancia.setValue(this.camera.getDistancia());
+            Ir.setValue(this.luzAmbiente.getIr());
+            Ig.setValue(this.luzAmbiente.getIg());
+            Ib.setValue(this.luzAmbiente.getIb());
+            
+            FLX.setValue(this.luzFundo.getLocal().getX());
+            FLY.setValue(this.luzFundo.getLocal().getY());
+            FLZ.setValue(this.luzFundo.getLocal().getZ());
+            
+            FLB.setValue(this.luzFundo.getIb());
+            FLR.setValue(this.luzFundo.getIr());
+            FLG.setValue(this.luzFundo.getIg());
+
+            nPol.setValue(this.poligonos.get(0).getN());
+
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null,
                     ex);
@@ -3205,8 +3259,7 @@ public class Interface extends javax.swing.JFrame {
      * @param evt
      */
     private void KaRStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_KaRStateChanged
-        poligonos.get(PoligonosBox.getSelectedIndex()).setKaR((float) KaR.
-                getValue());
+        poligonos.get(PoligonosBox.getSelectedIndex()).setKaR((float) KaR.getValue());
         poligonosTransformados.get(PoligonosBox.getSelectedIndex()).
                 setKaR((float) KaR.getValue());
         repaint();
@@ -3412,6 +3465,9 @@ public class Interface extends javax.swing.JFrame {
                 setKt((float) kt.getValue());
         repaint();
     }//GEN-LAST:event_ktStateChanged
+
+    private void PoligonosBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PoligonosBoxActionPerformed
+    }//GEN-LAST:event_PoligonosBoxActionPerformed
     /**
      * Seta a cor das arestas do(s) poligonos(s)
      *
@@ -3642,7 +3698,7 @@ public class Interface extends javax.swing.JFrame {
                             }
                         }
 
-                        
+
                         //get arestas
                         java.util.List list = f2.getArestas();
                         double yinf = ((Aresta) list.get(0)).getP1().getX();
@@ -3713,31 +3769,31 @@ public class Interface extends javax.swing.JFrame {
                                     u1 = u2;
                                     u2 = aux2;
                                 }
-                                
-                               
+
+
                                 double e1 = (u1 * (pb.getY() - pa.getY())) / (pb.getY() - pa.getY());
                                 double e2 = ((1.0D - u1) * (pb.getY() - pa.getY())) / (pb.getY() - pa.getY());
                                 double e3 = (u2 * (pd.getY() - pc.getY())) / (pd.getY() - pc.getY());
                                 double e4 = ((1.0D - u2) * (pd.getY() - pc.getY())) / (pd.getY() - pc.getY());
-                               
-                                 //os gets x e y acima são da perspectiva
-                                
+
+                                //os gets x e y acima são da perspectiva
+
                                 double Nxi = pb.getnX() * e1 + pa.getnX() * e2;
                                 double Nyi = pb.getnY() * e1 + pa.getnY() * e2;
                                 double Nzi = pb.getnZ() * e1 + pa.getnZ() * e2;
                                 double Nxf = pd.getnX() * e3 + pc.getnX() * e4;
                                 double Nyf = pd.getnY() * e3 + pc.getnY() * e4;
                                 double Nzf = pd.getnZ() * e3 + pc.getnZ() * e4;
-                                
+
                                 //get mZ, mX e mY sao do mundo (ou camera, nao tenho ctz)
                                 //get cameraZ é o z em camera, aqui
-                                
-                                
-                                
+
+
+
                                 // o que tem que ser feito verificar se os meus mX, mY, mZ e cameraZ
                                 //sao realmente o que tem que ser
                                 // também verificar se os vetores normais medios estao corretos.
-                                
+
                                 double Zi = pb.getmZ() * e1 + pa.getmZ() * e2;
                                 double Zf = pd.getmZ() * e3 + pc.getmZ() * e4;
                                 double Yi = pb.getmY() * e1 + pa.getmY() * e2;
