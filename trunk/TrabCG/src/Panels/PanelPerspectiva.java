@@ -28,6 +28,7 @@ public class PanelPerspectiva extends javax.swing.JPanel {
     private Interface inter;
     ArrayList<Poligono> poligonosOrganizados;
     ArrayList<Matriz> matrizesAux;
+    ArrayList<Poligono> poligonosOriginais;
 
     /**
      * Constroi o painel da perspectiva
@@ -39,6 +40,7 @@ public class PanelPerspectiva extends javax.swing.JPanel {
         inter = _i;
         poligonosOrganizados = new ArrayList<>();
         matrizesAux = new ArrayList<>();
+        poligonosOriginais = new ArrayList<>();
     }
 
     @Override
@@ -56,9 +58,11 @@ public class PanelPerspectiva extends javax.swing.JPanel {
         //limpa lixo de operações anteriores
         poligonosOrganizados.clear();
         matrizesAux.clear();
-
+        poligonosOriginais.clear();
+        
         for (Poligono p : inter.getPoligonos()) {
             //gera a perspectiva dos poligonos que estão na camera atual da interface
+            poligonosOriginais.add(p.TransformarPerspectiva());
             poligonosOrganizados.add(c.GerarPerspectiva(this.getWidth(), this.
                     getHeight(), p));
             matrizesAux.add(c.getMatrizAux());
@@ -75,6 +79,7 @@ public class PanelPerspectiva extends javax.swing.JPanel {
                         subtracao(b, c.getVRP3()).getModulo()) /* For descending order use < */ {
                     Collections.swap(poligonosOrganizados, d, d + 1);
                     Collections.swap(matrizesAux, d, d + 1);
+                    Collections.swap(poligonosOriginais,d,d+1);
                 }
             }
         }
@@ -172,23 +177,26 @@ public class PanelPerspectiva extends javax.swing.JPanel {
                                  que sejam igual a face que ele ta olhando no momento ai ele pega a norma 
                                  * dessas faces e faz a media
                                  */
-                                for (int k = 0; k < zpol.getFaces().size();
+                                Poligono p_phong = poligonosOriginais.get(poligonosOrganizados.indexOf(Paux));
+                                for (int k = 0; k < p_phong.getFaces().size();
                                         k++) {
-                                    for (int l = 0; l < zpol.getFaces().get(k).getPontos().size(); l++) {
+                                    for (int l = 0; l <p_phong.getFaces().get(k).
+                                            getPontos().size(); l++) {
                                         if (f2.getPontos().get(j).getNome()
-                                                == zpol.getFaces().get(k).
+                                                == p_phong.getFaces().get(k).
                                                 getPontos().get(l).getNome()) {
-                                            zpol.getFaces().get(k).
+                                            
+                                            p_phong.getFaces().get(k).
                                                     gerarVetorPlano();
-                                            zpol.getFaces().get(k).
+                                            p_phong.getFaces().get(k).
                                                     getVetorPlano().
                                                     normalizar();
                                             //faz uma media de uma face
-                                            mediaX += zpol.getFaces().get(k).
+                                            mediaX += p_phong.getFaces().get(k).
                                                     getVetorPlano().get(0);
-                                            mediaY += zpol.getFaces().get(k).
+                                            mediaY += p_phong.getFaces().get(k).
                                                     getVetorPlano().get(1);
-                                            mediaZ += zpol.getFaces().get(k).
+                                            mediaZ += p_phong.getFaces().get(k).
                                                     getVetorPlano().get(2);
                                             counter++;
                                         }
@@ -316,25 +324,29 @@ public class PanelPerspectiva extends javax.swing.JPanel {
                 if ((int) p1.getY() == (int) p2.getY()) {
                     continue;
                 }
-                double parametroUOriginal = ((double) itY - p1.getY()) / (p2.getY() - p1.getY());
+                double parametroUOriginal = ((double) itY - p1.getY()) / (p2.
+                        getY() - p1.getY());
                 int auxYValue = 0;
                 if (p1.getY() <= p2.getY()) {
                     auxYValue = (int) p1.getY();
                 } else {
                     auxYValue = (int) p2.getY();
                 }
-                if (parametroUOriginal < 0.0 || parametroUOriginal > 1.0 || itY == auxYValue) {
+                if (parametroUOriginal < 0.0 || parametroUOriginal > 1.0 || itY
+                        == auxYValue) {
                     continue;
                 }
                 if (first) {
-                    xFirst = parametroUOriginal * (p2.getX() - p1.getX()) + p1.getX();
+                    xFirst = parametroUOriginal * (p2.getX() - p1.getX()) + p1.
+                            getX();
                     pA = p1;
                     pB = p2;
                     parametroU1 = parametroUOriginal;
                     first = false;
                     continue;
                 }
-                xSecond = parametroUOriginal * (p2.getX() - p1.getX()) + p1.getX();
+                xSecond = parametroUOriginal * (p2.getX() - p1.getX()) + p1.
+                        getX();
                 pC = p1;
                 pD = p2;
                 parametroU2 = parametroUOriginal;
@@ -357,23 +369,27 @@ public class PanelPerspectiva extends javax.swing.JPanel {
                 parametroU1 = parametroU2;
                 parametroU2 = auxiliar;
             }
-            double e1 = (parametroU1 * (pB.getY() - pA.getY())) / (pB.getY() - pA.getY());
-            double e2 = ((1.0 - parametroU1) * (pB.getY() - pA.getY())) / (pB.getY()
+            double e1 = (parametroU1 * (pB.getY() - pA.getY())) / (pB.getY()
                     - pA.getY());
-            double e3 = (parametroU2 * (pD.getY() - pC.getY())) / (pD.getY() - pC.getY());
-            double e4 = ((1.0 - parametroU2) * (pD.getY() - pC.getY())) / (pD.getY()
+            double e2 = ((1.0 - parametroU1) * (pB.getY() - pA.getY())) / (pB.
+                    getY()
+                    - pA.getY());
+            double e3 = (parametroU2 * (pD.getY() - pC.getY())) / (pD.getY()
+                    - pC.getY());
+            double e4 = ((1.0 - parametroU2) * (pD.getY() - pC.getY())) / (pD.
+                    getY()
                     - pC.getY());
             //até aqui é x e y perspectiva...
-            
-            
+
+
             //daqui para baixo é eles fazem x, y e z normais, acho que seria em mundo...
             //lá onde eu chamo o phong teria que montar a face com os pontos em perspectiva e no mundo
             //na classe ponto eu criei novos atributos mX, mY, mZ e cameraZ
             //teria que, lá onde chamo o phong, setar esses atributos e utilizar aqui para baixo (cameraZ só usa no zbuffer)
             //outra coisa que tem que ver é se minhas medias dos vetores normais estao sendo feitas corretamente
             //isso é feita tbm onde chamo o phong (if == 4)
-            
-            
+
+
             double Nxi = pB.getnX() * e1 + pA.getnX() * e2;
             double Nyi = pB.getnY() * e1 + pA.getnY() * e2;
             double Nzi = pB.getnZ() * e1 + pA.getnZ() * e2;
@@ -426,6 +442,7 @@ public class PanelPerspectiva extends javax.swing.JPanel {
                 Z += variacaZM;
                 X += variacaoXM;
             }
+          
 
         }
 
@@ -465,17 +482,15 @@ public class PanelPerspectiva extends javax.swing.JPanel {
         Ponto plocal = new Ponto("", local.get(0, 0), local.get(1, 0), local.get(2, 0));
 
         double ambiente = luzAmbiente(inter.getLuzAmbiente().getIr(), p.getKaR());
-
-
-        double difusa = reflexaoDifusa(inter.getLuzFundo().getIr(), p.getKdR(), ponto.
-                getNormal(), plocal, ponto);
+        double difusa = reflexaoDifusa(inter.getLuzFundo().getIr(), p.getKdR(),
+                ponto.getNormal(), inter.getLuzFundo().getLocal(), ponto);
 
         double especular;
         if (difusa == 0.0) {
             especular = 0;
         } else {
-            especular = reflexaoEspecular(inter.getLuzFundo().
-                    getIr(), p.getKsR(), p.getN(), plocal,
+            especular = reflexaoEspecular(inter.getLuzFundo().getIr(), p.
+                    getKsR(), p.getN(), inter.getLuzFundo().getLocal(),
                     ponto.getNormal(), new Ponto("", inter.getCamera().getVx(),
                     inter.getCamera().getVy(), inter.getCamera().getVz()), ponto);
         }
@@ -502,20 +517,22 @@ public class PanelPerspectiva extends javax.swing.JPanel {
 
         matrizLoca = Matriz.multiplicacao(src, matrizLoca);
 
-        Ponto pLocal = new Ponto("", matrizLoca.get(0, 0), matrizLoca.get(1, 0), matrizLoca.get(2, 0));
+        Ponto pLocal = new Ponto("", matrizLoca.get(0, 0), matrizLoca.get(1, 0),
+                matrizLoca.get(2, 0));
 
         double ambiente = luzAmbiente(inter.getLuzAmbiente().getIg(), p.getKaG());
 
 
-        double difusa = reflexaoDifusa(inter.getLuzFundo().getIg(), p.getKdG(), ponto.
-                getNormal(), pLocal, ponto);
+        double difusa = reflexaoDifusa(inter.getLuzFundo().getIg(), p.getKdG(),
+                ponto.
+                getNormal(), inter.getLuzFundo().getLocal(), ponto);
 
         double especular;
         if (difusa == 0.0) {
             especular = 0;
         } else {
             especular = reflexaoEspecular(inter.getLuzFundo().
-                    getIg(), p.getKsG(), p.getN(), pLocal,
+                    getIg(), p.getKsG(), p.getN(), inter.getLuzFundo().getLocal(),
                     ponto.getNormal(), new Ponto("", inter.getCamera().getVx(),
                     inter.getCamera().getVy(), inter.getCamera().getVz()), ponto);
         }
@@ -539,10 +556,12 @@ public class PanelPerspectiva extends javax.swing.JPanel {
         matrizLocal.set(1, 0, inter.getLuzFundo().getLocal().getY());
         matrizLocal.set(2, 0, inter.getLuzFundo().getLocal().getZ());
         matrizLocal.set(3, 0, 1);
-
+        Ponto pLocal = new Ponto("", matrizLocal.get(0, 0), matrizLocal. get(1, 0), matrizLocal.get(2, 0)
+        );
         double ambiente = luzAmbiente(inter.getLuzAmbiente().getIb(), p.getKaB());
 
-        double difusa = reflexaoDifusa(inter.getLuzFundo().getIb(), p.getKdB(), ponto.
+        double difusa = reflexaoDifusa(inter.getLuzFundo().getIb(), p.getKdB(),
+                ponto.
                 getNormal(), inter.getLuzFundo().getLocal(), ponto);
 
         double especular;
@@ -578,8 +597,9 @@ public class PanelPerspectiva extends javax.swing.JPanel {
      * @param pontoObservado
      * @return double
      */
-    private static double reflexaoDifusa(double Il, double Kd, Ponto normal, Ponto L,
-            Ponto pontoObservado) {
+    private static double reflexaoDifusa(double Il, double Kd, Ponto normal,
+                                         Ponto L,
+                                         Ponto pontoObservado) {
         Ponto l = new Ponto("", pontoObservado.getX() - L.getX(),
                 pontoObservado.getY() - L.getY(), pontoObservado.getZ() - L.
                 getZ());
@@ -610,8 +630,9 @@ public class PanelPerspectiva extends javax.swing.JPanel {
      * @param A
      * @return double com o valor da reflexao especular
      */
-    private static double reflexaoEspecular(double Il, double Ks, double expoenteN,
-            Ponto L, Ponto N, Ponto VRP, Ponto A) {
+    private static double reflexaoEspecular(double Il, double Ks,
+                                            double expoenteN,
+                                            Ponto L, Ponto N, Ponto VRP, Ponto A) {
         Ponto l = new Ponto("", A.getX() - L.getX(), A.getY() - L.getY(), A.
                 getZ() - L.getZ());
         double normaL = norma(l);
@@ -699,7 +720,8 @@ public class PanelPerspectiva extends javax.swing.JPanel {
                 if ((int) p1.getY() == (int) p2.getY()) {
                     continue;
                 }
-                double parametroU = ((double) y - p1.getY()) / (p2.getY() - p1.getY());
+                double parametroU = ((double) y - p1.getY()) / (p2.getY() - p1.
+                        getY());
                 int auxCompar;
                 if (p1.getY() <= p2.getY()) {
                     auxCompar = (int) p1.getY();

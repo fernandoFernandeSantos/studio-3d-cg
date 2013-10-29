@@ -161,6 +161,7 @@ public class PanelFrente extends javax.swing.JPanel {
                             //seta a cor antes do preenchimento
                             g.setColor(cor);
                             preenchimento(f, g);
+                            g2D.setColor(p.getCor());
                             for (Aresta a : f.getArestas()) {
                                 this.drawline(g2D, a);
                             }
