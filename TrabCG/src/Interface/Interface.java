@@ -10,7 +10,6 @@ import Classes.Face;
 import Classes.FileType;
 import Classes.Iluminacao;
 import Classes.Matriz;
-import Classes.Poligono;
 import Classes.Ponto;
 import Classes.Vetor;
 import Panels.MyColorChooser;
@@ -26,15 +25,16 @@ import javax.swing.JColorChooser;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import Classes.MyFileHandler;
+import Classes.Poligono;
 import Main.Init;
-import java.awt.Component;
+import Panels.PanelZBuffer;
 import java.awt.image.BufferedImage;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Collections;
-import java.util.Iterator;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFrame;
 
 /**
  *
@@ -45,7 +45,7 @@ public class Interface extends javax.swing.JFrame {
     /**
      * Creates new form Interface
      */
-    ZBuffer zbuffer;
+
     //coordenadas do vrp
     private double vrpX;
     private double vrpY;
@@ -244,17 +244,6 @@ public class Interface extends javax.swing.JFrame {
 
         sdistancia.setValue((int) camera.getDistancia());
 
-        if (zbuffer == null) {
-            zbuffer = new ZBuffer(this.getZBuffer(), this.panelPerspectiva.
-                    getWidth(), this.panelPerspectiva.getHeight());
-            zbuffer.setVisible(true);
-            zbuffer.repaint();
-        } else {
-            setZBuffer();
-        }
-
-
-
     }
 
     public void addPoligonosBox(String what, int value) {
@@ -391,7 +380,6 @@ public class Interface extends javax.swing.JFrame {
         nPol = new javax.swing.JSpinner();
         jLabel34 = new javax.swing.JLabel();
         kt = new javax.swing.JSpinner();
-        jButton4 = new javax.swing.JButton();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem4 = new javax.swing.JMenuItem();
@@ -399,6 +387,8 @@ public class Interface extends javax.swing.JFrame {
         jMenuItem1 = new javax.swing.JMenuItem();
         jMenuItem3 = new javax.swing.JMenuItem();
         jMenuItem5 = new javax.swing.JMenuItem();
+        jMenu2 = new javax.swing.JMenu();
+        jMenuItem6 = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addMouseWheelListener(new java.awt.event.MouseWheelListener() {
@@ -1754,23 +1744,12 @@ public class Interface extends javax.swing.JFrame {
 
         jScrollPane1.setViewportView(jPanel10);
 
-        jButton4.setText("zbuffer meio zoado");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout geralLayout = new javax.swing.GroupLayout(geral);
         geral.setLayout(geralLayout);
         geralLayout.setHorizontalGroup(
             geralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(colorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-            .addGroup(geralLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jButton4)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         geralLayout.setVerticalGroup(
             geralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1779,9 +1758,7 @@ public class Interface extends javax.swing.JFrame {
                 .addComponent(colorPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 93, Short.MAX_VALUE)
-                .addComponent(jButton4)
-                .addContainerGap())
+                .addContainerGap(127, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
@@ -1849,6 +1826,18 @@ public class Interface extends javax.swing.JFrame {
 
         jMenuBar1.add(jMenu1);
 
+        jMenu2.setText("Zbuffer");
+
+        jMenuItem6.setText("Zbuffer");
+        jMenuItem6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jMenuItem6ActionPerformed(evt);
+            }
+        });
+        jMenu2.add(jMenuItem6);
+
+        jMenuBar1.add(jMenu2);
+
         setJMenuBar(jMenuBar1);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -1864,7 +1853,7 @@ public class Interface extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(panelFundo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+            .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -3211,24 +3200,8 @@ public class Interface extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_jMenuItem5ActionPerformed
-    /**
-     * Botão do zBuffer
-     *
-     * @param evt
-     */
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        if (zbuffer == null) {
-            zbuffer = new ZBuffer(this.getZBuffer(), this.panelPerspectiva.
-                    getWidth(), this.panelPerspectiva.getHeight());
-            zbuffer.setVisible(true);
-            zbuffer.repaint();
-        } else {
-            setZBuffer();
-        }
 
-
-    }//GEN-LAST:event_jButton4ActionPerformed
-    /**
+   /**
      * Botão escalar
      *
      * @param evt
@@ -3470,6 +3443,19 @@ public class Interface extends javax.swing.JFrame {
 
     private void PoligonosBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PoligonosBoxActionPerformed
     }//GEN-LAST:event_PoligonosBoxActionPerformed
+
+    private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
+         
+        JFrame zbuffer = new JFrame();
+        zbuffer.setName("Zbuffer");
+        zbuffer.setSize(panelPerspectiva.getWidth(), panelPerspectiva.getHeight());
+        PanelZBuffer imagem = new PanelZBuffer(this.getZBuffer());
+        zbuffer.add(imagem);
+        zbuffer.setLocationRelativeTo(null);
+        zbuffer.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
+        zbuffer.setVisible(true);
+        
+    }//GEN-LAST:event_jMenuItem6ActionPerformed
     /**
      * Seta a cor das arestas do(s) poligonos(s)
      *
@@ -3603,22 +3589,13 @@ public class Interface extends javax.swing.JFrame {
         BufferedImage bufferImagem = new BufferedImage(this.panelPerspectiva.
                 getWidth() + 600, this.panelPerspectiva.getHeight() + 600,
                 BufferedImage.TYPE_INT_RGB);
-//        double[][] zBuffer = new double[this.panelPerspectiva.getWidth() + 600][this.panelPerspectiva.
-//                getHeight() + 600];
-        //inicio as parada
-        int fator = 300;
+        
         for (int j = 0; j < bufferImagem.getWidth(); j++) {
             for (int k = 0; k < bufferImagem.getHeight(); k++) {
                 bufferImagem.setRGB(j, k, this.panelPerspectiva.getBackground().
                         getRGB());
             }
         }
-//        for (int j = 0; j < zBuffer.length; j++) {
-//            for (int k = 0; k < zBuffer[0].length; k++) {
-//                zBuffer[j][k] = Long.MAX_VALUE;
-//            }
-//        }
-
 
         int altura = this.panelPerspectiva.getHeight();
         int largura = this.panelPerspectiva.getWidth();
@@ -3640,7 +3617,7 @@ public class Interface extends javax.swing.JFrame {
             }
 
         }
-
+        
         for (int i = 0; i < xmax; i++) {
             for (int j = 0; j < ymax; j++) {
                 matrizOpaco[i][j] = true;
@@ -3657,10 +3634,14 @@ public class Interface extends javax.swing.JFrame {
         //scanlines
         if (!poligonos.isEmpty()) {
 
-
             ArrayList<Poligono> poligonosOrganizados = new ArrayList();
             ArrayList<Poligono> poligonosOrganizadosOpacos = new ArrayList();
             ArrayList<Poligono> poligonosOrganizadosTransparentes = new ArrayList();
+            
+            ArrayList<Poligono> poligonosOriginais = new ArrayList<>();
+            ArrayList<Poligono> poligonosOriginaisOpacos = new ArrayList<>();
+            ArrayList<Poligono> poligonosOriginaisTransparentes = new ArrayList<>();
+            
             ArrayList<Matriz> matrizesAux = new ArrayList<>();
             ArrayList<Matriz> matrizesAuxOpacos = new ArrayList<>();
             ArrayList<Matriz> matrizesAuxTransparentes = new ArrayList<>();
@@ -3668,14 +3649,15 @@ public class Interface extends javax.swing.JFrame {
             this.getCamera().GerarIntermediarios();
             for (Poligono p : poligonos) {
                 if (p.isTransparente()) {
-                    poligonosOrganizadosTransparentes.add(this.getCamera().GerarPerspectiva(xmax, xmax, p));
+                    poligonosOrganizadosTransparentes.add(this.getCamera().GerarPerspectiva(xmax, ymax, p));
                     matrizesAuxTransparentes.add(this.getCamera().getMatrizAux());
+                    poligonosOriginaisTransparentes.add(p.TransformarPerspectiva());
                 } else {
-                    poligonosOrganizadosOpacos.add(this.getCamera().GerarPerspectiva(xmax, xmax, p));
+                    poligonosOrganizadosOpacos.add(this.getCamera().GerarPerspectiva(xmax, ymax, p));
                     matrizesAuxOpacos.add(this.getCamera().getMatrizAux());
+                    poligonosOriginaisOpacos.add(p.TransformarPerspectiva());
                 }
             }
-//            matrizesAuxOpacos.get(0).print("asd");
 
             if (poligonosOrganizadosTransparentes.size() > 1) {
                 for (int cc = 0; cc < (poligonosOrganizadosTransparentes.size() - 1); cc++) {
@@ -3688,41 +3670,21 @@ public class Interface extends javax.swing.JFrame {
                                 subtracao(b, this.getCamera().getVRP3()).getModulo()) /* For descending order use < */ {
                             Collections.swap(poligonosOrganizadosTransparentes, d, d + 1);
                             Collections.swap(matrizesAuxTransparentes, d, d + 1);
+                            Collections.swap(poligonosOriginaisTransparentes, d, d + 1);
                         }
                     }
                 }
             }
-//            matrizesAuxOpacos.get(0).print("asd");
-
-            if (poligonosOrganizadosOpacos.size() > 1) {
-                for (int cc = 0; cc < (poligonosOrganizadosOpacos.size() - 1); cc++) {
-                    for (int d = 0; d < poligonosOrganizadosOpacos.size() - cc - 1; d++) {
-
-                        Vetor a = new Vetor(poligonosOrganizadosOpacos.get(d).getCentro());
-                        Vetor b = new Vetor(poligonosOrganizadosOpacos.get(d + 1).getCentro());
-
-                        if (Vetor.subtracao(a, this.getCamera().getVRP3()).getModulo() < Vetor.
-                                subtracao(b, this.getCamera().getVRP3()).getModulo()) /* For descending order use < */ {
-                            Collections.swap(poligonosOrganizadosOpacos, d, d + 1);
-                            Collections.swap(matrizesAuxOpacos, d, d + 1);
-                        }
-                    }
-                }
-            }
-
             for (Poligono p : poligonosOrganizadosOpacos) {
                 poligonosOrganizados.add(p);
+                poligonosOriginais.add(poligonosOriginaisOpacos.get(poligonosOrganizadosOpacos.indexOf(p)));
                 matrizesAux.add(matrizesAuxOpacos.get(poligonosOrganizadosOpacos.indexOf(p)));
             }
             for (Poligono p : poligonosOrganizadosTransparentes) {
                 poligonosOrganizados.add(p);
+                poligonosOriginais.add(poligonosOriginaisTransparentes.get(poligonosOrganizadosTransparentes.indexOf(p)));
                 matrizesAux.add(matrizesAuxTransparentes.get(poligonosOrganizadosTransparentes.indexOf(p)));
             }
-//            System.out.println(poligonosOrganizados.size());
-//            System.out.println(matrizesAux.size());
-//            matrizesAuxOpacos.get(0).print("asd");
-//            matrizesAux.get(0).print("m1");
-//            matrizesAux.get(1).print("m2");
             for (Poligono p : poligonosOrganizados) {
                 Poligono Paux = p;
                 Matriz aux = matrizesAux.get(poligonosOrganizados.indexOf(p));
@@ -3754,14 +3716,15 @@ public class Interface extends javax.swing.JFrame {
                             double mediaY = 0;
                             double mediaZ = 0;
                             int counter = 1;
-                            for (int k = 0; k < zpol.getFaces().size(); k++) {
-                                for (int l = 0; l < zpol.getFaces().get(k).getPontos().size(); l++) {
-                                    if (f2.getPontos().get(j).getNome() == zpol.getFaces().get(k).getPontos().get(l).getNome()) {
-                                        zpol.getFaces().get(k).gerarVetorPlano();
-                                        zpol.getFaces().get(k).getVetorPlano().normalizar();
-                                        mediaX += zpol.getFaces().get(k).getVetorPlano().get(0);
-                                        mediaY += zpol.getFaces().get(k).getVetorPlano().get(1);
-                                        mediaZ += zpol.getFaces().get(k).getVetorPlano().get(2);
+                            Poligono p_phong = poligonosOriginais.get(poligonosOrganizados.indexOf(Paux));
+                            for (int k = 0; k < p_phong.getFaces().size(); k++) {
+                                for (int l = 0; l < p_phong.getFaces().get(k).getPontos().size(); l++) {
+                                    if (f2.getPontos().get(j).getNome() == p_phong.getFaces().get(k).getPontos().get(l).getNome()) {
+                                        p_phong.getFaces().get(k).gerarVetorPlano();
+                                        p_phong.getFaces().get(k).getVetorPlano().normalizar();
+                                        mediaX += p_phong.getFaces().get(k).getVetorPlano().get(0);
+                                        mediaY += p_phong.getFaces().get(k).getVetorPlano().get(1);
+                                        mediaZ += p_phong.getFaces().get(k).getVetorPlano().get(2);
                                         counter++;
                                     }
                                 }
@@ -3935,7 +3898,7 @@ public class Interface extends javax.swing.JFrame {
                                             int RedM = cor.getRed();
                                             int GreenM = cor.getGreen();
                                             int BlueM = cor.getBlue();
-
+                                           
                                             RedM = (int) ((int) (RedM * (ktPol)) + (red * (1 - ktPol)));
                                             GreenM = (int) ((int) (GreenM * (ktPol)) + (green * (1 - ktPol)));
                                             BlueM = (int) ((int) (BlueM * (ktPol)) + (blue * (1 - ktPol)));
@@ -3989,23 +3952,8 @@ public class Interface extends javax.swing.JFrame {
             }
 
         }
-//        BufferedImage buffer = new BufferedImage(xmax, ymax, BufferedImage.TYPE_INT_RGB);
-//        for (int j = 0; j < xmax; j++) {
-//            for (int w = 0; w < ymax; w++) {
-//                int rgb = 0;
-//                try {
-//                    rgb = matrizCores[j][w].getRGB();
-//                } catch (NullPointerException e) {
-//                }
-//                if (rgb != 0) {
-//                    System.out.println("coco");
-//                }
-//                buffer.setRGB(j, w, rgb);
-//            }
-//        }
 
         return buffer;
-//        return bufferImagem;
     }
 
     public void phong(Poligono p, Ponto ponto) {
@@ -4033,14 +3981,14 @@ public class Interface extends javax.swing.JFrame {
 //        double difusa = difusa(inter.getLuzFundo().getIr(), p.getKdR(), ponto.
 //                getNormal(), inter.getLuzFundo().getLocal(), ponto);
         double difusa = difusa(getLuzFundo().getIr(), p.getKdR(), ponto.
-                getNormal(), plocal, ponto);
+                getNormal(),getLuzFundo().getLocal(), ponto);
 
 //        double especular = difusa == 0.0D ? 0.0D : especular(inter.getLuzFundo().
 //                getIr(), p.getKsR(), p.getN(), inter.getLuzFundo().getLocal(),
 //                ponto.getNormal(), new Ponto("", inter.getCamera().getVx(),
 //                inter.getCamera().getVy(), inter.getCamera().getVz()), ponto);
         double especular = difusa == 0.0D ? 0.0D : especular(getLuzFundo().
-                getIr(), p.getKsR(), p.getN(), plocal,
+                getIr(), p.getKsR(), p.getN(),getLuzFundo().getLocal(),
                 ponto.getNormal(), new Ponto("", getCamera().getVx(),
                 getCamera().getVy(), getCamera().getVz()), ponto);
         return ambiente + difusa + especular;
@@ -4065,14 +4013,14 @@ public class Interface extends javax.swing.JFrame {
 //        double difusa = difusa(inter.getLuzFundo().getIg(), p.getKdG(), ponto.
 //                getNormal(), inter.getLuzFundo().getLocal(), ponto);
         double difusa = difusa(getLuzFundo().getIg(), p.getKdG(), ponto.
-                getNormal(), plocal, ponto);
+                getNormal(), getLuzFundo().getLocal(), ponto);
 
 //        double especular = difusa == 0.0D ? 0.0D : especular(inter.getLuzFundo().
 //                getIg(), p.getKsG(), p.getN(), inter.getLuzFundo().getLocal(),
 //                ponto.getNormal(), new Ponto("", inter.getCamera().getVx(),
 //                inter.getCamera().getVy(), inter.getCamera().getVz()), ponto);
         double especular = difusa == 0.0D ? 0.0D : especular(getLuzFundo().
-                getIg(), p.getKsG(), p.getN(), plocal,
+                getIg(), p.getKsG(), p.getN(), getLuzFundo().getLocal(),
                 ponto.getNormal(), new Ponto("", getCamera().getVx(),
                 getCamera().getVy(), getCamera().getVz()), ponto);
         return ambiente + difusa + especular;
@@ -4168,187 +4116,6 @@ public class Interface extends javax.swing.JFrame {
                 getZ();
     }
 
-//    public BufferedImage getZBuffer() {
-//        BufferedImage bufferImagem = new BufferedImage(this.panelPerspectiva.
-//                getWidth() + 600, this.panelPerspectiva.getHeight() + 600,
-//                BufferedImage.TYPE_INT_RGB);
-//        double[][] zBuffer = new double[this.panelPerspectiva.getWidth() + 600][this.panelPerspectiva.
-//                getHeight() + 600];
-//        //inicio as parada
-//        int fator = 300;
-//        for (int j = 0; j < bufferImagem.getWidth(); j++) {
-//            for (int k = 0; k < bufferImagem.getHeight(); k++) {
-//                bufferImagem.setRGB(j, k, this.panelPerspectiva.getBackground().
-//                        getRGB());
-//            }
-//        }
-//        for (int j = 0; j < zBuffer.length; j++) {
-//            for (int k = 0; k < zBuffer[0].length; k++) {
-//                zBuffer[j][k] = Long.MAX_VALUE;
-//            }
-//        }
-//
-//        int altura = this.panelPerspectiva.getHeight();
-//        int largura = this.panelPerspectiva.getWidth();
-//        //scanlines
-//        if (!poligonos.isEmpty()) {
-//            for (Poligono p : poligonos) {
-////            g2D.setColor(p.getCor());
-//                camera.GerarIntermediarios();
-////                p.getMatrizPontos().print("P");
-//                Poligono Paux = camera.GerarPerspectiva(largura, altura, p);
-////                Paux.getMatrizPontos().print("Paux");
-//                Matriz aux = camera.getMatrizAux();
-//                Poligono ocultaFace = Paux.copy();
-//                ocultaFace.setPontos(aux);
-//                Poligono zpol = Paux.copy();
-//                Matriz zmaux = new Matriz();
-//                for (int i = zpol.getPontos().size() - 1; i >= 0; i--) {
-//                    zmaux.set(0, i, zpol.getPontos().get(i).getX());
-//                    zmaux.set(1, i, zpol.getPontos().get(i).getY());
-//                    zmaux.set(2, i, aux.get(2, i));
-//                }
-//                zpol.setPontos(zmaux);
-////                zpol.getMatrizPontos().print("zpol");
-//                for (int i = 0; i < Paux.getFaces().size(); i++) {
-//                    Face f = Paux.getFaces().get(i);
-//                    Face f1 = ocultaFace.getFaces().get(i);
-//                    Face f2 = zpol.getFaces().get(i);
-//                    f1.gerarVetorPlano();
-//                    Vetor norma = f1.getVetorPlano();
-//                    norma.normalizar();
-//                    ArrayList<Ponto> pt = f.getPontos();
-//                    if (Vetor.produtoEscalar(camera.getVRPtoFP3(), norma) > 0) {
-//                        f2.gerarVetorPlano();
-//                        norma = f2.getVetorPlano();
-//                        Ponto pontoQualquer = f2.getPontos().get(0);
-//                        double d = -(norma.get(0) * pontoQualquer.getX())
-//                                - (norma.get(1) * pontoQualquer.getY())
-//                                - (norma.get(2) * pontoQualquer.getZ());
-//                        ArrayList<Aresta> arestas = f.getArestas();
-//                        //utilizo para encontrar os limites
-//                        double minimoY = arestas.get(0).getP1().getY();
-//                        double maximoY = arestas.get(0).getP1().getY();
-//                        //acho o limite das faces
-//                        for (Aresta a : arestas) {
-//                            Ponto p1 = a.getP1();
-//                            Ponto p2 = a.getP2();
-//
-//                            if (minimoY > p1.getY() || minimoY > p2.getY()) {
-//                                if (minimoY > p1.getY()) {
-//                                    minimoY = p1.getY();
-//                                } else {
-//                                    minimoY = p2.getY();
-//                                }
-//                            }
-//
-//                            if (maximoY < p1.getY() || maximoY < p2.getY()) {
-//                                if (maximoY < p1.getY()) {
-//                                    maximoY = p1.getY();
-//                                } else {
-//                                    maximoY = p2.getY();
-//                                }
-//                            }
-//                        }
-//
-//                        ArrayList<Aresta> pintar = new ArrayList<>(arestas);
-//                        //verifico se aresta esta na vertical, se esta, já esta pintada, removo da lista de pintura.
-//                        for (int e = 0; e < pintar.size(); ++e) {
-//                            if (pintar.get(e).getP1().getY() == pintar.get(
-//                                    e).getP2().getY()) {
-//                                pintar.remove(e);
-//                            }
-//                        }
-//                        //faço a pintura linha por linha, calculando por meio do algoritmo de recorte se uma aresta esta contida na face ou não.
-//                        for (int y = (int) maximoY; (y > (int) minimoY) && (y
-//                                > 0); --y) {
-//                            double x1 = 0;
-//                            double x2 = 0;
-//                            boolean ok = true;
-//                            for (int e = 0; e < pintar.size(); ++e) {
-//                                Ponto p1 = pintar.get(e).getP1();
-//
-//                                Ponto p2 = pintar.get(e).getP2();
-//
-//                                double eqR = (y - p1.getY()) / (p2.getY() - p1.
-//                                        getY());
-//
-//                                if ((eqR >= 0.0) && (eqR <= 1.0)) {
-//                                    if (ok) {
-//                                        x1 = eqR * (p2.getX() - p1.getX()) + p1.
-//                                                getX();
-//                                        ok = false;
-//                                    } else {
-//                                        x2 = eqR * (p2.getX() - p1.getX()) + p1.
-//                                                getX();
-//                                        break;
-//                                    }
-//                                }
-//                            }
-////                             g.drawLine((int) (x1), y, (int) (x2), y);
-//
-//                            int inicial = (int) x1;
-//                            int finall = (int) x2;
-//
-//                            if (inicial > finall) {
-//                                int auxI = inicial;
-//                                inicial = finall;
-//                                finall = auxI;
-//                            }
-//                            double zA = -d - norma.get(0) * inicial - norma.get(
-//                                    1) * y;
-////                          
-//                            if (zA < zBuffer[inicial + fator][y + fator]) {
-//                                zBuffer[inicial + fator][y + fator] = zA;
-//                                bufferImagem.setRGB(inicial + fator, y + fator,
-//                                        p.getCorFace().getRGB());
-//                            }
-//                            for (int j = inicial; j < finall; j++) {
-//                                zA = zA - norma.get(0) / norma.get(2);
-////                                try {
-//                                if (zA < zBuffer[j + fator][y + fator]) {
-//                                    zBuffer[j + fator][y + fator] = zA;
-//                                    bufferImagem.setRGB(j + fator, y + fator, p.
-//                                            getCorFace().getRGB());
-//                                }
-////                                } catch (ArrayIndexOutOfBoundsException a) {
-//
-////                                }
-//                            }
-//
-//
-//
-//                        }
-//                    }
-//                }
-//            }
-//        }
-//
-//        return cortaBuffer(bufferImagem, largura, altura, fator);
-////        return bufferImagem;
-//    }
-    private void setZBuffer() {
-        if (zbuffer != null) {
-            zbuffer.setZbuffer(this.getZBuffer(), this.panelPerspectiva.
-                    getWidth(), this.panelPerspectiva.getHeight());
-            zbuffer.setVisible(true);
-            zbuffer.repaint();
-        }
-    }
-
-    private BufferedImage cortaBuffer(BufferedImage bufferImagem, int largura,
-            int altura, int fator) {
-        BufferedImage buffer = new BufferedImage(largura, altura,
-                BufferedImage.TYPE_INT_RGB);
-        for (int j = 0; j < largura; j++) {
-            for (int k = 0; k < altura; k++) {
-                buffer.setRGB(j, k, bufferImagem.getRGB(j + fator, k + fator));
-            }
-        }
-
-        return buffer;
-    }
-
     /**
      * Luz ambiente
      *
@@ -4428,7 +4195,6 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JPanel geral;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
     private javax.swing.JButton jButtonFrente;
     private javax.swing.JButton jButtonLateral;
@@ -4466,12 +4232,14 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
     private javax.swing.JMenu jMenu1;
+    private javax.swing.JMenu jMenu2;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenuItem jMenuItem1;
     private javax.swing.JMenuItem jMenuItem2;
     private javax.swing.JMenuItem jMenuItem3;
     private javax.swing.JMenuItem jMenuItem4;
     private javax.swing.JMenuItem jMenuItem5;
+    private javax.swing.JMenuItem jMenuItem6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel11;

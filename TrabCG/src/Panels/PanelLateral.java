@@ -157,6 +157,7 @@ public class PanelLateral extends javax.swing.JPanel {
                             //seta a cor antes do preenchimento
                             g.setColor(cor);
                             preenchimento(f, g2D);
+                            g2D.setColor(p.getCor());
                             for (Aresta a : f.getArestas()) {
                                 this.drawline(g2D, a);
                             }
