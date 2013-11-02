@@ -247,6 +247,7 @@ public class Interface extends javax.swing.JFrame {
 
     public void addPoligonosBox(String what, int value) {
         //adiciona o poligono ao combo box 
+        System.out.println(what + " " + String.valueOf(value));
         this.PoligonosBox.addItem(what + " " + String.valueOf(value));
     }
 
@@ -2904,8 +2905,9 @@ public class Interface extends javax.swing.JFrame {
      */
     private void jMenuItem2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem2ActionPerformed
         try {
-            this.i.criaNovo(this);
+            this.PoligonosBox.removeAllItems();
             this.abrir();
+
             for (Poligono p : poligonos) {
                 if (p.getTipo().equals("Prisma")) {
                     this.PoligonosBox.addItem(("Prisma " + prismas));
@@ -2918,41 +2920,10 @@ public class Interface extends javax.swing.JFrame {
                 if (p.getTipo().equals("Piramide")) {
                     this.PoligonosBox.addItem(("Piramide " + piramides));
                     piramides++;
-                }
-
+               }
             }
+            
 
-            this.poligonosTransformados.add(this.poligonos.get(0));
-            KaR.setValue(this.poligonos.get(0).getKaR());
-            KaG.setValue(this.poligonos.get(0).getKaG());
-            KaB.setValue(this.poligonos.get(0).getKaB());
-            KdR.setValue(this.poligonos.get(0).getKdR());
-            KdG.setValue(this.poligonos.get(0).getKdG());
-            KdB.setValue(this.poligonos.get(0).getKdB());
-            KsR.setValue(this.poligonos.get(0).getKsR());
-            KsG.setValue(this.poligonos.get(0).getKsG());
-            KsB.setValue(this.poligonos.get(0).getKsB());
-//            kt.setValue(this.poligonos.get(0).getKtR());
-            svrpX.setValue(this.camera.getVx());
-            svrpY.setValue(this.camera.getVy());
-            svrpZ.setValue(this.camera.getVz());
-            spontoX.setValue(this.camera.getFPx());
-            spontoY.setValue(this.camera.getFPy());
-            spontoZ.setValue(this.camera.getFPz());
-            sdistancia.setValue(this.camera.getDistancia());
-            Ir.setValue(this.luzAmbiente.getIr());
-            Ig.setValue(this.luzAmbiente.getIg());
-            Ib.setValue(this.luzAmbiente.getIb());
-
-            FLX.setValue(this.luzFundo.getLocal().getX());
-            FLY.setValue(this.luzFundo.getLocal().getY());
-            FLZ.setValue(this.luzFundo.getLocal().getZ());
-
-            FLB.setValue(this.luzFundo.getIb());
-            FLR.setValue(this.luzFundo.getIr());
-            FLG.setValue(this.luzFundo.getIg());
-
-            nPol.setValue(this.poligonos.get(0).getN());
 
         } catch (FileNotFoundException ex) {
             Logger.getLogger(Interface.class.getName()).log(Level.SEVERE, null,
@@ -3313,6 +3284,8 @@ public class Interface extends javax.swing.JFrame {
                     setKaR((float) KaR.getValue());
         }
         repaint();
+
+
     }//GEN-LAST:event_KaRStateChanged
     /**
      * Ka green
@@ -3714,7 +3687,6 @@ public class Interface extends javax.swing.JFrame {
 //                        getRGB());
 //            }
 //        }
-
         int altura = this.panelPerspectiva.getHeight();
         int largura = this.panelPerspectiva.getWidth();
         int ymax = altura;
@@ -4039,10 +4011,6 @@ public class Interface extends javax.swing.JFrame {
                                         int RedM = cor.getRed();
                                         int GreenM = cor.getGreen();
                                         int BlueM = cor.getBlue();
-
-                                        RedM = (int) ((int) (RedM * (1 - ktPolR)) + (red * (ktPolR)));
-                                        GreenM = (int) ((int) (GreenM * (1 - ktPolG)) + (green * (ktPolG)));
-                                        BlueM = (int) ((int) (BlueM * (1 - ktPolB)) + (blue * (ktPolB)));
 
                                         matrizCores[x][y] = new Color(RedM <= 255 ? RedM >= 0 ? RedM : 0 : 255,
                                                 GreenM <= 255 ? GreenM >= 0 ? GreenM : 0 : 255,

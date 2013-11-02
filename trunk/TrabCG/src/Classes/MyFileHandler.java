@@ -90,14 +90,15 @@ public class MyFileHandler {
             int raio = this.File.readInt();
             int numPontos = this.File.readInt();
             int altura = this.File.readInt();
-            System.out.println("raio = " + raio);
-            System.out.println("numpontos = " + numPontos);
-            System.out.println("altura = " + altura);
+//            System.out.println("raio = " + raio);
+//            System.out.println("numpontos = " + numPontos);
+//            System.out.println("altura = " + altura);
 
             if (tipo.equals("Prisma")) {
                 p.GerarPrisma(numPontos, raio, altura);
                 this.i.prismas++;
                 this.i.addPoligonosBox("Prisma", this.i.prismas);
+                
             }
             if (tipo.equals("Piramide")) {
                 p.GerarPiramide(numPontos, raio, altura);
@@ -352,6 +353,7 @@ public class MyFileHandler {
         this.File.writeDouble(pt.getX());
         this.File.writeDouble(pt.getY());
         this.File.writeDouble(pt.getZ());
+        
         this.File.writeDouble(pt.getnX());
         this.File.writeDouble(pt.getnY());
         this.File.writeDouble(pt.getnZ());
@@ -363,7 +365,7 @@ public class MyFileHandler {
         this.File.writeDouble(pt.getmX());
         this.File.writeDouble(pt.getmY());
         this.File.writeDouble(pt.getmZ());
-
+       
         this.File.writeDouble(pt.getCameraZ());
 
     }
@@ -398,12 +400,15 @@ public class MyFileHandler {
         double x = this.File.readDouble();
         double y = this.File.readDouble();
         double z = this.File.readDouble();
+        
         double nx = this.File.readDouble();
         double ny = this.File.readDouble();
         double nz = this.File.readDouble();
+        
         double ir = this.File.readDouble();
         double ig = this.File.readDouble();
         double ib = this.File.readDouble();
+        
         double mx = this.File.readDouble();
         double my = this.File.readDouble();
         double mz = this.File.readDouble();
