@@ -378,8 +378,13 @@ public class Interface extends javax.swing.JFrame {
         KsG = new javax.swing.JSpinner();
         KsB = new javax.swing.JSpinner();
         nPol = new javax.swing.JSpinner();
-        jLabel34 = new javax.swing.JLabel();
-        kt = new javax.swing.JSpinner();
+        jPanel14 = new javax.swing.JPanel();
+        jLabel26 = new javax.swing.JLabel();
+        jLabel27 = new javax.swing.JLabel();
+        jLabel28 = new javax.swing.JLabel();
+        KtR = new javax.swing.JSpinner();
+        KtG = new javax.swing.JSpinner();
+        KtB = new javax.swing.JSpinner();
         jMenuBar1 = new javax.swing.JMenuBar();
         jMenu1 = new javax.swing.JMenu();
         jMenuItem4 = new javax.swing.JMenuItem();
@@ -1661,7 +1666,7 @@ public class Interface extends javax.swing.JFrame {
                     .addGroup(jPanel13Layout.createSequentialGroup()
                         .addComponent(jLabel22)
                         .addGap(5, 5, 5)
-                        .addComponent(KsB, javax.swing.GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE))
+                        .addComponent(KsB, javax.swing.GroupLayout.DEFAULT_SIZE, 56, Short.MAX_VALUE))
                     .addGroup(jPanel13Layout.createSequentialGroup()
                         .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jLabel20)
@@ -1686,7 +1691,7 @@ public class Interface extends javax.swing.JFrame {
                 .addGroup(jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(KsB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel22))
-                .addContainerGap(17, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         nPol.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(1.0f), Float.valueOf(0.0f), null, Float.valueOf(0.1f)));
@@ -1696,61 +1701,109 @@ public class Interface extends javax.swing.JFrame {
             }
         });
 
-        jLabel34.setText("Kt:");
+        jPanel14.setBorder(javax.swing.BorderFactory.createTitledBorder("Kt"));
 
-        kt.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), null, Float.valueOf(1.0f), Float.valueOf(0.01f)));
-        kt.addChangeListener(new javax.swing.event.ChangeListener() {
+        jLabel26.setText("R:");
+
+        jLabel27.setText("G:");
+
+        jLabel28.setText("B:");
+
+        KtR.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), Float.valueOf(0.0f), Float.valueOf(1.0f), Float.valueOf(0.01f)));
+        KtR.addChangeListener(new javax.swing.event.ChangeListener() {
             public void stateChanged(javax.swing.event.ChangeEvent evt) {
-                ktStateChanged(evt);
+                KtRStateChanged(evt);
             }
         });
+
+        KtG.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), Float.valueOf(0.0f), Float.valueOf(1.0f), Float.valueOf(0.01f)));
+        KtG.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                KtGStateChanged(evt);
+            }
+        });
+
+        KtB.setModel(new javax.swing.SpinnerNumberModel(Float.valueOf(0.0f), Float.valueOf(0.0f), Float.valueOf(1.0f), Float.valueOf(0.01f)));
+        KtB.addChangeListener(new javax.swing.event.ChangeListener() {
+            public void stateChanged(javax.swing.event.ChangeEvent evt) {
+                KtBStateChanged(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel14Layout = new javax.swing.GroupLayout(jPanel14);
+        jPanel14.setLayout(jPanel14Layout);
+        jPanel14Layout.setHorizontalGroup(
+            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel14Layout.createSequentialGroup()
+                .addGap(0, 0, 0)
+                .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel14Layout.createSequentialGroup()
+                        .addComponent(jLabel28)
+                        .addGap(5, 5, 5)
+                        .addComponent(KtB, javax.swing.GroupLayout.DEFAULT_SIZE, 53, Short.MAX_VALUE))
+                    .addGroup(jPanel14Layout.createSequentialGroup()
+                        .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel26)
+                            .addComponent(jLabel27))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(KtR)
+                            .addComponent(KtG))))
+                .addGap(0, 0, 0))
+        );
+        jPanel14Layout.setVerticalGroup(
+            jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel14Layout.createSequentialGroup()
+                .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel26)
+                    .addComponent(KtR, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel27)
+                    .addComponent(KtG, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel14Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(KtB, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel28))
+                .addContainerGap(17, Short.MAX_VALUE))
+        );
 
         javax.swing.GroupLayout jPanel10Layout = new javax.swing.GroupLayout(jPanel10);
         jPanel10.setLayout(jPanel10Layout);
         jPanel10Layout.setHorizontalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel10Layout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel10Layout.createSequentialGroup()
+                        .addGap(41, 41, 41)
                         .addComponent(jLabel13)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(nPol, javax.swing.GroupLayout.PREFERRED_SIZE, 43, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addComponent(nPol, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel10Layout.createSequentialGroup()
-                        .addGap(18, 18, 18)
-                        .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel10Layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jLabel34)))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel10Layout.createSequentialGroup()
-                        .addComponent(kt, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(jPanel10Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 68, Short.MAX_VALUE))))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jPanel14, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(17, Short.MAX_VALUE))
         );
         jPanel10Layout.setVerticalGroup(
             jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel10Layout.createSequentialGroup()
-                .addGap(9, 9, 9)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel10Layout.createSequentialGroup()
-                        .addGap(3, 3, 3)
-                        .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel13)
-                            .addComponent(nPol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(jLabel34)
-                        .addComponent(kt, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(12, 12, 12)
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel13)
+                    .addComponent(nPol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel11, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel12, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jPanel13, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGroup(jPanel10Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jPanel11, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel12, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel14, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel13, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(45, 45, 45))
         );
 
         jScrollPane1.setViewportView(jPanel10);
@@ -1760,7 +1813,7 @@ public class Interface extends javax.swing.JFrame {
         geralLayout.setHorizontalGroup(
             geralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(colorPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+            .addComponent(jScrollPane1)
         );
         geralLayout.setVerticalGroup(
             geralLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -1769,7 +1822,7 @@ public class Interface extends javax.swing.JFrame {
                 .addComponent(colorPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(127, Short.MAX_VALUE))
+                .addContainerGap(82, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel9Layout = new javax.swing.GroupLayout(jPanel9);
@@ -1864,7 +1917,7 @@ public class Interface extends javax.swing.JFrame {
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(panelFundo, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addGroup(layout.createSequentialGroup()
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -1952,7 +2005,6 @@ public class Interface extends javax.swing.JFrame {
         repaint();
 
         jaSalvo = false;
-
 
 
     }//GEN-LAST:event_panelFrenteMouseClicked
@@ -2079,7 +2131,7 @@ public class Interface extends javax.swing.JFrame {
                         getSelectedIndex());
                 Poligono aux2 = this.poligonosTransformados.
                         get(this.PoligonosBox.
-                        getSelectedIndex());
+                                getSelectedIndex());
                 if (Xanteior != 0) {
                     aux.TransladarX(evt.getX() - Xanteior);
                 }
@@ -2115,7 +2167,7 @@ public class Interface extends javax.swing.JFrame {
                         getSelectedIndex());
                 Poligono aux2 = this.poligonosTransformados.
                         get((this.PoligonosBox.
-                        getSelectedIndex()));
+                                getSelectedIndex()));
                 if (Xanteior - evt.getX() < 0) {
                     aux.EscalarX(1.10);
                 } else {
@@ -2141,7 +2193,7 @@ public class Interface extends javax.swing.JFrame {
                         getSelectedIndex());
                 Poligono aux2 = this.poligonosTransformados.
                         get((this.PoligonosBox.
-                        getSelectedIndex()));
+                                getSelectedIndex()));
                 if (Xanteior - evt.getX() < 0) {
                     aux.CizalharXonZ(0.2);
                 } else {
@@ -2194,7 +2246,6 @@ public class Interface extends javax.swing.JFrame {
      * @param evt
      */
     private void panelLateralMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelLateralMouseClicked
-
 
         Poligono pol = new Poligono();
         switch (cliqueAtual) {
@@ -2337,7 +2388,7 @@ public class Interface extends javax.swing.JFrame {
                         getSelectedIndex());
                 Poligono aux2 = this.poligonosTransformados.
                         get(this.PoligonosBox.
-                        getSelectedIndex());
+                                getSelectedIndex());
                 if (Xanteior != 0) {
                     aux.TransladarY(Yanteior - evt.getY());
                 }
@@ -2373,7 +2424,7 @@ public class Interface extends javax.swing.JFrame {
                         getSelectedIndex());
                 Poligono aux2 = this.poligonosTransformados.
                         get((this.PoligonosBox.
-                        getSelectedIndex()));
+                                getSelectedIndex()));
                 if (evt.getY() - Yanteior < 0) {
                     aux.EscalarY(1.10);
                 } else {
@@ -2399,7 +2450,7 @@ public class Interface extends javax.swing.JFrame {
                         getSelectedIndex());
                 Poligono aux2 = this.poligonosTransformados.
                         get((this.PoligonosBox.
-                        getSelectedIndex()));
+                                getSelectedIndex()));
                 if (Xanteior - evt.getX() < 0) {
                     aux.CizalharZonX(0.2);
                 } else {
@@ -2421,7 +2472,6 @@ public class Interface extends javax.swing.JFrame {
 
             }
 
-
             repaint();
 //
 //            jaSalvo = false;
@@ -2432,7 +2482,6 @@ public class Interface extends javax.swing.JFrame {
 //        } else {
 //            setZBuffer();
 //        }
-
 
         }
     }//GEN-LAST:event_panelLateralMouseDragged
@@ -2450,7 +2499,7 @@ public class Interface extends javax.swing.JFrame {
                         getSelectedIndex());
                 Poligono aux2 = this.poligonosTransformados.
                         get(this.PoligonosBox.
-                        getSelectedIndex());
+                                getSelectedIndex());
                 if (Xanteior != 0) {
                     aux.TransladarX(evt.getX() - Xanteior);
                 }
@@ -2486,7 +2535,7 @@ public class Interface extends javax.swing.JFrame {
                         getSelectedIndex());
                 Poligono aux2 = this.poligonosTransformados.
                         get((this.PoligonosBox.
-                        getSelectedIndex()));
+                                getSelectedIndex()));
                 if (Xanteior - evt.getX() < 0) {
                     aux.EscalarX(1.10);
                 } else {
@@ -2512,7 +2561,7 @@ public class Interface extends javax.swing.JFrame {
                         getSelectedIndex());
                 Poligono aux2 = this.poligonosTransformados.
                         get((this.PoligonosBox.
-                        getSelectedIndex()));
+                                getSelectedIndex()));
                 if (Xanteior - evt.getX() < 0) {
                     aux.CizalharXonY(0.2);
                 } else {
@@ -2603,7 +2652,6 @@ public class Interface extends javax.swing.JFrame {
         }
         repaint();
 
-
         jaSalvo = false;
 
 
@@ -2639,9 +2687,7 @@ public class Interface extends javax.swing.JFrame {
         }
         repaint();
 
-
         jaSalvo = false;
-
 
 
     }//GEN-LAST:event_AlturaSpinnerStateChanged
@@ -2886,7 +2932,7 @@ public class Interface extends javax.swing.JFrame {
             KsR.setValue(this.poligonos.get(0).getKsR());
             KsG.setValue(this.poligonos.get(0).getKsG());
             KsB.setValue(this.poligonos.get(0).getKsB());
-            kt.setValue(this.poligonos.get(0).getKt());
+//            kt.setValue(this.poligonos.get(0).getKtR());
             svrpX.setValue(this.camera.getVx());
             svrpY.setValue(this.camera.getVy());
             svrpZ.setValue(this.camera.getVz());
@@ -3230,12 +3276,14 @@ public class Interface extends javax.swing.JFrame {
      * @param evt
      */
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
-        Poligono selecionado = poligonos.get(PoligonosBox.
-                getSelectedIndex());
-        double val = Integer.parseInt(this.redimensionar.getText());
-        selecionado.Escalar(val, val, val);
-        this.poligonosTransformados.set(PoligonosBox.
-                getSelectedIndex(), selecionado.Transformar(true));
+        if (this.poligonos.size() > 0) {
+            Poligono selecionado = poligonos.get(PoligonosBox.
+                    getSelectedIndex());
+            double val = Integer.parseInt(this.redimensionar.getText());
+            selecionado.Escalar(val, val, val);
+            this.poligonosTransformados.set(PoligonosBox.
+                    getSelectedIndex(), selecionado.Transformar(true));
+        }
         repaint();
     }//GEN-LAST:event_jButton5ActionPerformed
     /**
@@ -3244,11 +3292,12 @@ public class Interface extends javax.swing.JFrame {
      * @param evt
      */
     private void nPolStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_nPolStateChanged
-        poligonos.get(PoligonosBox.getSelectedIndex()).setN((float) nPol.
-                getValue());
-        poligonosTransformados.get(PoligonosBox.getSelectedIndex()).
-                setN((float) nPol.getValue());
-
+        if (this.poligonos.size() > 0) {
+            poligonos.get(PoligonosBox.getSelectedIndex()).setN((float) nPol.
+                    getValue());
+            poligonosTransformados.get(PoligonosBox.getSelectedIndex()).
+                    setN((float) nPol.getValue());
+        }
         repaint();
     }//GEN-LAST:event_nPolStateChanged
     /**
@@ -3257,9 +3306,12 @@ public class Interface extends javax.swing.JFrame {
      * @param evt
      */
     private void KaRStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_KaRStateChanged
-        poligonos.get(PoligonosBox.getSelectedIndex()).setKaR((float) KaR.getValue());
-        poligonosTransformados.get(PoligonosBox.getSelectedIndex()).
-                setKaR((float) KaR.getValue());
+        if (this.poligonos.size() > 0) {
+            poligonos.get(PoligonosBox.getSelectedIndex()).setKaR((float) KaR.getValue());
+
+            poligonosTransformados.get(PoligonosBox.getSelectedIndex()).
+                    setKaR((float) KaR.getValue());
+        }
         repaint();
     }//GEN-LAST:event_KaRStateChanged
     /**
@@ -3268,10 +3320,12 @@ public class Interface extends javax.swing.JFrame {
      * @param evt
      */
     private void KaGStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_KaGStateChanged
-        poligonos.get(PoligonosBox.getSelectedIndex()).setKaG((float) KaG.
-                getValue());
-        poligonosTransformados.get(PoligonosBox.getSelectedIndex()).
-                setKaG((float) KaG.getValue());
+        if (this.poligonos.size() > 0) {
+            poligonos.get(PoligonosBox.getSelectedIndex()).setKaG((float) KaG.
+                    getValue());
+            poligonosTransformados.get(PoligonosBox.getSelectedIndex()).
+                    setKaG((float) KaG.getValue());
+        }
         repaint();
     }//GEN-LAST:event_KaGStateChanged
     /**
@@ -3280,10 +3334,12 @@ public class Interface extends javax.swing.JFrame {
      * @param evt
      */
     private void KaBStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_KaBStateChanged
-        poligonos.get(PoligonosBox.getSelectedIndex()).setKaB((float) KaB.
-                getValue());
-        poligonosTransformados.get(PoligonosBox.getSelectedIndex()).
-                setKaB((float) KaB.getValue());
+        if (this.poligonos.size() > 0) {
+            poligonos.get(PoligonosBox.getSelectedIndex()).setKaB((float) KaB.
+                    getValue());
+            poligonosTransformados.get(PoligonosBox.getSelectedIndex()).
+                    setKaB((float) KaB.getValue());
+        }
         repaint();
     }//GEN-LAST:event_KaBStateChanged
     /**
@@ -3292,10 +3348,12 @@ public class Interface extends javax.swing.JFrame {
      * @param evt
      */
     private void KdRStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_KdRStateChanged
-        poligonos.get(PoligonosBox.getSelectedIndex()).setKdR((float) KdR.
-                getValue());
-        poligonosTransformados.get(PoligonosBox.getSelectedIndex()).
-                setKdR((float) KdR.getValue());
+        if (this.poligonos.size() > 0) {
+            poligonos.get(PoligonosBox.getSelectedIndex()).setKdR((float) KdR.
+                    getValue());
+            poligonosTransformados.get(PoligonosBox.getSelectedIndex()).
+                    setKdR((float) KdR.getValue());
+        }
         repaint();
     }//GEN-LAST:event_KdRStateChanged
     /**
@@ -3304,11 +3362,13 @@ public class Interface extends javax.swing.JFrame {
      * @param evt
      */
     private void KdGStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_KdGStateChanged
-        poligonos.get(PoligonosBox.getSelectedIndex()).setKdG((float) KdG.
-                getValue());
-        poligonosTransformados.get(PoligonosBox.getSelectedIndex()).
-                setKdG((float) KdG.getValue());
+        if (this.poligonos.size() > 0) {
+            poligonos.get(PoligonosBox.getSelectedIndex()).setKdG((float) KdG.
+                    getValue());
+            poligonosTransformados.get(PoligonosBox.getSelectedIndex()).
+                    setKdG((float) KdG.getValue());
 
+        }
         repaint();
     }//GEN-LAST:event_KdGStateChanged
     /**
@@ -3317,10 +3377,12 @@ public class Interface extends javax.swing.JFrame {
      * @param evt
      */
     private void KdBStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_KdBStateChanged
-        poligonos.get(PoligonosBox.getSelectedIndex()).setKdB((float) KdB.
-                getValue());
-        poligonosTransformados.get(PoligonosBox.getSelectedIndex()).
-                setKdB((float) KdB.getValue());
+        if (this.poligonos.size() > 0) {
+            poligonos.get(PoligonosBox.getSelectedIndex()).setKdB((float) KdB.
+                    getValue());
+            poligonosTransformados.get(PoligonosBox.getSelectedIndex()).
+                    setKdB((float) KdB.getValue());
+        }
         repaint();
     }//GEN-LAST:event_KdBStateChanged
     /**
@@ -3329,11 +3391,13 @@ public class Interface extends javax.swing.JFrame {
      * @param evt
      */
     private void KsRStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_KsRStateChanged
-        poligonos.get(PoligonosBox.getSelectedIndex()).setKsR((float) KsR.
-                getValue());
-        poligonosTransformados.get(PoligonosBox.getSelectedIndex()).
-                setKsR((float) KsR.getValue());
+        if (this.poligonos.size() > 0) {
+            poligonos.get(PoligonosBox.getSelectedIndex()).setKsR((float) KsR.
+                    getValue());
+            poligonosTransformados.get(PoligonosBox.getSelectedIndex()).
+                    setKsR((float) KsR.getValue());
 
+        }
         repaint();
     }//GEN-LAST:event_KsRStateChanged
     /**
@@ -3342,11 +3406,13 @@ public class Interface extends javax.swing.JFrame {
      * @param evt
      */
     private void KsGStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_KsGStateChanged
-        poligonos.get(PoligonosBox.getSelectedIndex()).setKsG((float) KsG.
-                getValue());
-        poligonosTransformados.get(PoligonosBox.getSelectedIndex()).
-                setKsG((float) KsG.getValue());
+        if (this.poligonos.size() > 0) {
+            poligonos.get(PoligonosBox.getSelectedIndex()).setKsG((float) KsG.
+                    getValue());
+            poligonosTransformados.get(PoligonosBox.getSelectedIndex()).
+                    setKsG((float) KsG.getValue());
 
+        }
         repaint();
     }//GEN-LAST:event_KsGStateChanged
     /**
@@ -3355,11 +3421,13 @@ public class Interface extends javax.swing.JFrame {
      * @param evt
      */
     private void KsBStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_KsBStateChanged
-        poligonos.get(PoligonosBox.getSelectedIndex()).setKsB((float) KsB.
-                getValue());
-        poligonosTransformados.get(PoligonosBox.getSelectedIndex()).
-                setKsB((float) KsB.getValue());
+        if (this.poligonos.size() > 0) {
+            poligonos.get(PoligonosBox.getSelectedIndex()).setKsB((float) KsB.
+                    getValue());
+            poligonosTransformados.get(PoligonosBox.getSelectedIndex()).
+                    setKsB((float) KsB.getValue());
 
+        }
         repaint();
     }//GEN-LAST:event_KsBStateChanged
     /**
@@ -3451,18 +3519,6 @@ public class Interface extends javax.swing.JFrame {
         this.visualizacaoAtual = 4;
         repaint();
     }//GEN-LAST:event_jRadioButton1ActionPerformed
-    /**
-     * Kt spinner
-     *
-     * @param evt
-     */
-    private void ktStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_ktStateChanged
-        poligonos.get(PoligonosBox.getSelectedIndex()).setKt((float) kt.
-                getValue());
-        poligonosTransformados.get(PoligonosBox.getSelectedIndex()).
-                setKt((float) kt.getValue());
-        repaint();
-    }//GEN-LAST:event_ktStateChanged
 
     private void PoligonosBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_PoligonosBoxActionPerformed
     }//GEN-LAST:event_PoligonosBoxActionPerformed
@@ -3484,6 +3540,42 @@ public class Interface extends javax.swing.JFrame {
         this.visualizacaoAtual = 5;
         repaint();
     }//GEN-LAST:event_jRadioButton2ActionPerformed
+
+    private void KtRStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_KtRStateChanged
+        if (this.poligonos.size() > 0) {
+
+            poligonos.get(PoligonosBox.getSelectedIndex()).setKtR((float) KtR.
+                    getValue());
+            poligonosTransformados.get(PoligonosBox.getSelectedIndex()).
+                    setKtR((float) KtR.getValue());
+
+        }
+        repaint();
+    }//GEN-LAST:event_KtRStateChanged
+
+    private void KtGStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_KtGStateChanged
+        if (this.poligonos.size() > 0) {
+
+            poligonos.get(PoligonosBox.getSelectedIndex()).setKtG((float) KtG.
+                    getValue());
+            poligonosTransformados.get(PoligonosBox.getSelectedIndex()).
+                    setKtG((float) KtG.getValue());
+
+        }
+        repaint();
+    }//GEN-LAST:event_KtGStateChanged
+
+    private void KtBStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_KtBStateChanged
+        if (this.poligonos.size() > 0) {
+
+            poligonos.get(PoligonosBox.getSelectedIndex()).setKtB((float) KtB.
+                    getValue());
+            poligonosTransformados.get(PoligonosBox.getSelectedIndex()).
+                    setKtB((float) KtB.getValue());
+
+        }
+        repaint();
+    }//GEN-LAST:event_KtBStateChanged
     /**
      * Seta a cor das arestas do(s) poligonos(s)
      *
@@ -3530,10 +3622,8 @@ public class Interface extends javax.swing.JFrame {
 
         MyFileHandler MFH = new MyFileHandler(this);
 
-
         if (fileChosser.getSelectedFile() != null) {
             arquivo = new File(fileChosser.getSelectedFile().toString());
-
 
             MFH.openFile(arquivo, "r");
             MFH.Load();
@@ -3777,7 +3867,6 @@ public class Interface extends javax.swing.JFrame {
                             }
                         }
 
-
                         //get arestas
                         java.util.List list = f2.getArestas();
                         double yinf = ((Aresta) list.get(0)).getP1().getX();
@@ -3849,14 +3938,12 @@ public class Interface extends javax.swing.JFrame {
                                     u2 = aux2;
                                 }
 
-
                                 double e1 = (u1 * (pb.getY() - pa.getY())) / (pb.getY() - pa.getY());
                                 double e2 = ((1.0D - u1) * (pb.getY() - pa.getY())) / (pb.getY() - pa.getY());
                                 double e3 = (u2 * (pd.getY() - pc.getY())) / (pd.getY() - pc.getY());
                                 double e4 = ((1.0D - u2) * (pd.getY() - pc.getY())) / (pd.getY() - pc.getY());
 
                                 //os gets x e y acima são da perspectiva
-
                                 double Nxi = pb.getnX() * e1 + pa.getnX() * e2;
                                 double Nyi = pb.getnY() * e1 + pa.getnY() * e2;
                                 double Nzi = pb.getnZ() * e1 + pa.getnZ() * e2;
@@ -3866,13 +3953,9 @@ public class Interface extends javax.swing.JFrame {
 
                                 //get mZ, mX e mY sao do mundo (ou camera, nao tenho ctz)
                                 //get cameraZ é o z em camera, aqui
-
-
-
                                 // o que tem que ser feito verificar se os meus mX, mY, mZ e cameraZ
                                 //sao realmente o que tem que ser
                                 // também verificar se os vetores normais medios estao corretos.
-
                                 double Zi = pb.getmZ() * e1 + pa.getmZ() * e2;
                                 double Zf = pd.getmZ() * e3 + pc.getmZ() * e4;
                                 double Yi = pb.getmY() * e1 + pa.getmY() * e2;
@@ -3921,15 +4004,17 @@ public class Interface extends javax.swing.JFrame {
                                         int blue = (int) (ponto.getIb() * (double) p.getCorFace().getBlue());
                                         if (p.isTransparente()) {//ver trasnaprencia ou nao{
                                             Color cor = matrizCores[x][y];
-                                            double ktPol = p.getKt();
+                                            double ktPolR = p.getKtR();
+                                            double ktPolG = p.getKtG();
+                                            double ktPolB = p.getKtB();
 
                                             int RedM = cor.getRed();
                                             int GreenM = cor.getGreen();
                                             int BlueM = cor.getBlue();
 
-                                            RedM = (int) ((int) (RedM * (ktPol)) + (red * (1 - ktPol)));
-                                            GreenM = (int) ((int) (GreenM * (ktPol)) + (green * (1 - ktPol)));
-                                            BlueM = (int) ((int) (BlueM * (ktPol)) + (blue * (1 - ktPol)));
+                                            RedM = (int) ((int) (RedM * (ktPolR)) + (red * (1 - ktPolR)));
+                                            GreenM = (int) ((int) (GreenM * (ktPolG)) + (green * (1 - ktPolG)));
+                                            BlueM = (int) ((int) (BlueM * (ktPolB)) + (blue * (1 - ktPolB)));
 
                                             matrizCores[x][y] = new Color(RedM <= 255 ? RedM >= 0 ? RedM : 0 : 255,
                                                     GreenM <= 255 ? GreenM >= 0 ? GreenM : 0 : 255,
@@ -3947,16 +4032,17 @@ public class Interface extends javax.swing.JFrame {
                                         int blue = (int) (ponto.getIb() * (double) p.getCorFace().getBlue());
 
                                         Color cor = matrizCores[x][y];
-                                        double ktPol = p.getKt();
+                                        double ktPolR = p.getKtR();
+                                        double ktPolG = p.getKtG();
+                                        double ktPolB = p.getKtB();
 
                                         int RedM = cor.getRed();
                                         int GreenM = cor.getGreen();
                                         int BlueM = cor.getBlue();
 
-
-                                        RedM = (int) ((int) (RedM * (1 - ktPol)) + (red * (ktPol)));
-                                        GreenM = (int) ((int) (GreenM * (1 - ktPol)) + (green * (ktPol)));
-                                        BlueM = (int) ((int) (BlueM * (1 - ktPol)) + (blue * (ktPol)));
+                                        RedM = (int) ((int) (RedM * (1 - ktPolR)) + (red * (ktPolR)));
+                                        GreenM = (int) ((int) (GreenM * (1 - ktPolG)) + (green * (ktPolG)));
+                                        BlueM = (int) ((int) (BlueM * (1 - ktPolB)) + (blue * (ktPolB)));
 
                                         matrizCores[x][y] = new Color(RedM <= 255 ? RedM >= 0 ? RedM : 0 : 255,
                                                 GreenM <= 255 ? GreenM >= 0 ? GreenM : 0 : 255,
@@ -4018,7 +4104,7 @@ public class Interface extends javax.swing.JFrame {
         double especular = difusa == 0.0D ? 0.0D : especular(getLuzFundo().
                 getIr(), p.getKsR(), p.getN(), getLuzFundo().getLocal(),
                 ponto.getNormal(), new Ponto("", getCamera().getVx(),
-                getCamera().getVy(), getCamera().getVz()), ponto);
+                        getCamera().getVy(), getCamera().getVz()), ponto);
         return ambiente + difusa + especular;
     }
 
@@ -4050,7 +4136,7 @@ public class Interface extends javax.swing.JFrame {
         double especular = difusa == 0.0D ? 0.0D : especular(getLuzFundo().
                 getIg(), p.getKsG(), p.getN(), getLuzFundo().getLocal(),
                 ponto.getNormal(), new Ponto("", getCamera().getVx(),
-                getCamera().getVy(), getCamera().getVz()), ponto);
+                        getCamera().getVy(), getCamera().getVz()), ponto);
         return ambiente + difusa + especular;
     }
 
@@ -4076,7 +4162,7 @@ public class Interface extends javax.swing.JFrame {
         double especular = difusa == 0.0D ? 0.0D : especular(getLuzFundo().
                 getIb(), p.getKsB(), p.getN(), getLuzFundo().getLocal(),
                 ponto.getNormal(), new Ponto("", getCamera().getVx(),
-                getCamera().getVy(), getCamera().getVz()), ponto);
+                        getCamera().getVy(), getCamera().getVz()), ponto);
         return ambiente + difusa + especular;
     }
 
@@ -4202,6 +4288,9 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JSpinner KsB;
     private javax.swing.JSpinner KsG;
     private javax.swing.JSpinner KsR;
+    private javax.swing.JSpinner KtB;
+    private javax.swing.JSpinner KtG;
+    private javax.swing.JSpinner KtR;
     private javax.swing.JComboBox PoligonosBox;
     private javax.swing.JSpinner RaioSpinner;
     private javax.swing.JRadioButton SombreamentoRadioButton;
@@ -4246,13 +4335,15 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel23;
     private javax.swing.JLabel jLabel24;
     private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
     private javax.swing.JLabel jLabel29;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel30;
     private javax.swing.JLabel jLabel31;
     private javax.swing.JLabel jLabel32;
     private javax.swing.JLabel jLabel33;
-    private javax.swing.JLabel jLabel34;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
     private javax.swing.JLabel jLabel6;
@@ -4273,6 +4364,7 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel11;
     private javax.swing.JPanel jPanel12;
     private javax.swing.JPanel jPanel13;
+    private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel16;
     private javax.swing.JPanel jPanel17;
     private javax.swing.JPanel jPanel18;
@@ -4288,7 +4380,6 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JRadioButton jRadioButton1;
     private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSpinner kt;
     private javax.swing.JCheckBox mostrarPontos;
     private javax.swing.JSpinner nPol;
     public javax.swing.JPanel panelFrente;

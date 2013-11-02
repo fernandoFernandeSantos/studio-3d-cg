@@ -431,12 +431,11 @@ public class PanelPerspectiva extends javax.swing.JPanel {
                         getGreen());
                 int blue = (int) (ponto.getIb() * (double) p.getCorFace().
                         getBlue());
-                int transparencia = (int) (255 * (1 - p.getKt()));
 
                 Color cor = new Color(
                         red <= 255 ? red >= 0 ? red : 0 : 255, green
                         <= 255 ? green >= 0 ? green : 0 : 255, blue
-                        <= 255 ? blue >= 0 ? blue : 0 : 255, transparencia);
+                        <= 255 ? blue >= 0 ? blue : 0 : 255);
                 g.setColor(cor);
                 g.drawRect((int) x, itY, 1, 1);
                 Nx += variacaoNx;
