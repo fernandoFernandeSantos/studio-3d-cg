@@ -10,6 +10,8 @@ import Classes.Poligono;
 import Classes.Ponto;
 import Classes.Vetor;
 import Interface.Interface;
+import static Panels.PanelFrente.escalar;
+import static Panels.PanelFrente.norma;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -315,19 +317,23 @@ public class PanelTopo extends javax.swing.JPanel {
      * @param pontoObservado
      * @return double
      */
-    private static double reflexaoDifusa(double Il, double Kd, Ponto normal, Ponto L, Ponto pontoObservado) {
-        Ponto l = new Ponto("", pontoObservado.getX() - L.getX(), pontoObservado.getY() - L.getY(), pontoObservado.getZ() - L.getZ());
+    private  double reflexaoDifusa(double Il, double Kd, Ponto normal, Ponto L,
+            Ponto pontoObservado) {
+        Ponto l = new Ponto("", pontoObservado.getX() - L.getX(),
+                pontoObservado.getY() - (this.getWidth()- L.getY()), pontoObservado.getZ() - L.
+                getZ());
         double normaL = norma(l);
         l.setX(l.getX() / normaL);
         l.setY(l.getY() / normaL);
         l.setZ(l.getZ() / normaL);
         double normaNormal = norma(normal);
-        Ponto n = new Ponto("", normal.getX() / normaNormal, normal.getY() / normaNormal, normal.getZ() / normaNormal);
+        Ponto n = new Ponto("", normal.getX() / normaNormal, normal.getY()
+                / normaNormal, normal.getZ() / normaNormal);
         double escalarNL = escalar(n, l);
-        if (escalarNL > 0.0D) {
+        if (escalarNL > 0.0) {
             return Il * Kd * escalarNL;
         } else {
-            return 0.0D;
+            return 0.0;
         }
     }
 
@@ -343,29 +349,33 @@ public class PanelTopo extends javax.swing.JPanel {
      * @param A
      * @return valor da reflexão especular
      */
-    private static double reflexaoEspecular(double Il, double Ks, double expoenteN, Ponto L, Ponto N, Ponto VRP, Ponto A) {
-        Ponto l = new Ponto("", A.getX() - L.getX(), A.getY() - L.getY(), A.getZ() - L.getZ());
+    private double reflexaoEspecular(double Il, double Ks, double expoenteN,
+            Ponto L, Ponto N, Ponto VRP, Ponto A) {
+        Ponto l = new Ponto("", A.getX() - L.getX(), A.getY() - (this.getWidth()- L.getY()), A.
+                getZ() - L.getZ());
         double normaL = norma(l);
         l.setX(l.getX() / normaL);
         l.setY(l.getY() / normaL);
         l.setZ(l.getZ() / normaL);
         double normaN = norma(N);
-        Ponto n = new Ponto("", N.getX() / normaN, N.getY() / normaN, N.getZ() / normaN);
+        Ponto n = new Ponto("", N.getX() / normaN, N.getY() / normaN, N.getZ()
+                / normaN);
         Ponto r = new Ponto();
-        double DoisLN = 2D * escalar(l, n);
+        double DoisLN = 2 * escalar(l, n);
         r.setX(l.getX() - DoisLN * n.getX());
         r.setY(l.getY() - DoisLN * n.getY());
         r.setZ(l.getZ() - DoisLN * n.getZ());
-        Ponto s = new Ponto("", VRP.getX() - A.getX(), VRP.getY() - A.getY(), VRP.getZ() - A.getZ());
+        Ponto s = new Ponto("", VRP.getX() - A.getX(), VRP.getY() - A.getY(),
+                VRP.getZ() - A.getZ());
         double normaS = norma(s);
         s.setX(s.getX() / normaS);
         s.setY(s.getY() / normaS);
         s.setZ(s.getZ() / normaS);
         double escalarRS = escalar(r, s);
-        if (escalarRS > 0.0D) {
+        if (escalarRS > 0.0) {
             return Il * Ks * Math.pow(escalarRS, expoenteN);
         } else {
-            return 0.0D;
+            return 0.0;
         }
     }
 
