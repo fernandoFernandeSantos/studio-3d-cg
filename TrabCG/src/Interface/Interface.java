@@ -3759,9 +3759,9 @@ public class Interface extends javax.swing.JFrame {
                 matrizesAux.add(matrizesAuxTransparentes.get(poligonosOrganizadosTransparentes.indexOf(p)));
             }
             //do the magic
-            for (Poligono p : poligonosOrganizados) {
-                Poligono poligonoAuxiliar = p;
-                Matriz aux = matrizesAux.get(poligonosOrganizados.indexOf(p));
+            for (Poligono poligonoAuxiliar : poligonosOrganizados) {
+//                Poligono poligonoAuxiliar = p;
+                Matriz aux = matrizesAux.get(poligonosOrganizados.indexOf(poligonoAuxiliar));
 
                 Poligono ocultaFace = poligonoAuxiliar.copy();
                 ocultaFace.setPontos(aux);
@@ -3785,7 +3785,7 @@ public class Interface extends javax.swing.JFrame {
                             double mediaX = 0;
                             double mediaY = 0;
                             double mediaZ = 0;
-                            int counter = 1;
+                            int contador = 1;
                             Poligono p_phong = poligonosOriginais.get(poligonosOrganizados.indexOf(poligonoAuxiliar));
                             for (int k = 0; k < p_phong.getFaces().size(); k++) {
                                 for (int l = 0; l < p_phong.getFaces().get(k).getPontos().size(); l++) {
@@ -3796,22 +3796,22 @@ public class Interface extends javax.swing.JFrame {
                                         mediaX += p_phong.getFaces().get(k).getVetorPlano().get(0);
                                         mediaY += p_phong.getFaces().get(k).getVetorPlano().get(1);
                                         mediaZ += p_phong.getFaces().get(k).getVetorPlano().get(2);
-                                        counter++;
+                                        contador++;
                                     }
                                 }
                             }
-                            faceZpol.getPontos().get(j).setnX(mediaX / counter);
-                            faceZpol.getPontos().get(j).setnY(mediaY / counter);
-                            faceZpol.getPontos().get(j).setnZ(mediaZ / counter);
+                            faceZpol.getPontos().get(j).setnX(mediaX / contador);
+                            faceZpol.getPontos().get(j).setnY(mediaY / contador);
+                            faceZpol.getPontos().get(j).setnZ(mediaZ / contador);
                             faceZpol.getPontos().get(j).setCameraZ(mediaZ);
                         }
                         for (int j = 0; j < faceZpol.getPontos().size(); j++) {
-                            for (int k = 0; k < p.getPontos().size(); k++) {
-                                if (p.getPontos().get(k).getNome() == null ? faceZpol.getPontos().get(j).getNome() == null
-                                        : p.getPontos().get(k).getNome().equals(faceZpol.getPontos().get(j).getNome())) {
-                                    faceZpol.getPontos().get(j).setmX(p.getPontos().get(k).getX());
-                                    faceZpol.getPontos().get(j).setmY(p.getPontos().get(k).getY());
-                                    faceZpol.getPontos().get(j).setmZ(p.getPontos().get(k).getZ());
+                            for (int k = 0; k < poligonoAuxiliar.getPontos().size(); k++) {
+                                if (poligonoAuxiliar.getPontos().get(k).getNome() == null ? faceZpol.getPontos().get(j).getNome() == null
+                                        : poligonoAuxiliar.getPontos().get(k).getNome().equals(faceZpol.getPontos().get(j).getNome())) {
+                                    faceZpol.getPontos().get(j).setmX(poligonoAuxiliar.getPontos().get(k).getX());
+                                    faceZpol.getPontos().get(j).setmY(poligonoAuxiliar.getPontos().get(k).getY());
+                                    faceZpol.getPontos().get(j).setmZ(poligonoAuxiliar.getPontos().get(k).getZ());
                                 }
                             }
                             for (int k = 0; k < zpol.getPontos().size(); k++) {
@@ -3965,16 +3965,16 @@ public class Interface extends javax.swing.JFrame {
 
                                         matrizProfundidade[x][y] = ZC;
 
-                                        phong(p, ponto);
-                                        int red = (int) (ponto.getIr() * (double) p.getCorFace().getRed());
-                                        int green = (int) (ponto.getIg() * (double) p.getCorFace().getGreen());
-                                        int blue = (int) (ponto.getIb() * (double) p.getCorFace().getBlue());
-                                        if (p.isTransparente()) {
+                                        phong(poligonoAuxiliar, ponto);
+                                        int red = (int) (ponto.getIr() * (double) poligonoAuxiliar.getCorFace().getRed());
+                                        int green = (int) (ponto.getIg() * (double) poligonoAuxiliar.getCorFace().getGreen());
+                                        int blue = (int) (ponto.getIb() * (double) poligonoAuxiliar.getCorFace().getBlue());
+                                        if (poligonoAuxiliar.isTransparente()) {
                                             //ver trasnaprencia ou nao{
                                             Color cor = matrizCores[x][y];
-                                            double ktPolR = p.getKtR();
-                                            double ktPolG = p.getKtG();
-                                            double ktPolB = p.getKtB();
+                                            double ktPolR = poligonoAuxiliar.getKtR();
+                                            double ktPolG = poligonoAuxiliar.getKtG();
+                                            double ktPolB = poligonoAuxiliar.getKtB();
 
                                             int RedM = cor.getRed();
                                             int GreenM = cor.getGreen();
@@ -4030,16 +4030,16 @@ public class Interface extends javax.swing.JFrame {
                                             matrizCores[x][y] = new Color(red, green, blue);
                                             buffer.setRGB(x, y, (new Color(red, green, blue).getRGB()));
                                         }
-                                    } else if (p.isTransparente() && matrizOpaco[x][y] == false) {
+                                    } else if (poligonoAuxiliar.isTransparente() && matrizOpaco[x][y] == false) {
 
-                                        int red = (int) (ponto.getIr() * (double) p.getCorFace().getRed());
-                                        int green = (int) (ponto.getIg() * (double) p.getCorFace().getGreen());
-                                        int blue = (int) (ponto.getIb() * (double) p.getCorFace().getBlue());
+                                        int red = (int) (ponto.getIr() * (double) poligonoAuxiliar.getCorFace().getRed());
+                                        int green = (int) (ponto.getIg() * (double) poligonoAuxiliar.getCorFace().getGreen());
+                                        int blue = (int) (ponto.getIb() * (double) poligonoAuxiliar.getCorFace().getBlue());
 
                                         Color cor = matrizCores[x][y];
-                                        double ktPolR = p.getKtR();
-                                        double ktPolG = p.getKtG();
-                                        double ktPolB = p.getKtB();
+                                        double ktPolR = poligonoAuxiliar.getKtR();
+                                        double ktPolG = poligonoAuxiliar.getKtG();
+                                        double ktPolB = poligonoAuxiliar.getKtB();
 
                                         int RedM = cor.getRed();
                                         int GreenM = cor.getGreen();
