@@ -123,7 +123,6 @@ public class PanelFrente extends javax.swing.JPanel {
                                     getGreen());
                             int blue = (int) (Ib * (double) p.getCorFace().
                                     getBlue());
-                            int transparencia = (int) (255 * (1 - p.getKt()));
                             //para a verificação das variáveis acima
                             int auxRed = 0, auxGreen = 0, auxBlue = 0;
                             if ((red <= 255) && (red >= 0)) {
@@ -158,7 +157,7 @@ public class PanelFrente extends javax.swing.JPanel {
                                     auxBlue = 0;
                                 }
                             }
-                            Color cor = new Color(auxRed, auxGreen, auxBlue, transparencia);
+                            Color cor = new Color(auxRed, auxGreen, auxBlue);
                             //seta a cor antes do preenchimento
                             g.setColor(cor);
                             preenchimento(f, g);

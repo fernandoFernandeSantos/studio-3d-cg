@@ -46,22 +46,37 @@ public class Poligono implements java.io.Serializable {
     double kab;
     double kdb;
     double ksb;
-    double kt;
+    double ktr;
+    double ktb;
+    double ktg;
     double n;
 
-    public double getKt() {
-        return kt;
+    public double getKtR() {
+        return ktr;
     }
 
-    public void setKt(double kt) {
-        this.kt = kt;
+    public void setKtR(double ktr) {
+        this.ktr = ktr;
     }
-    
+
+    public double getKtB() {
+        return ktb;
+    }
+
+    public void setKtB(double ktb) {
+        this.ktb = ktb;
+    }
+
+    public double getKtG() {
+        return ktg;
+    }
+
+    public void setKtG(double ktg) {
+        this.ktg = ktg;
+    }
+
     public boolean isTransparente(){
-        if(kt != 0){
-            return true;
-        }
-        return false;
+        return ktr != 0 || ktb != 0 || ktg != 0;
     }
 
     /**
@@ -80,7 +95,7 @@ public class Poligono implements java.io.Serializable {
         kab = 1;
         kdb = 1;
         ksb = 1;
-        n = 6;
+        n = 1;
 //        this.pontos.add(new Ponto("centro",0,0,0));
 
         RotationX = 0;
@@ -285,7 +300,9 @@ public class Poligono implements java.io.Serializable {
         resultado.kab = kab;
         resultado.kdb = kdb;
         resultado.ksb = ksb;
-        resultado.kt = kt;
+        resultado.ktr = ktr;
+        resultado.ktg = ktg;
+        resultado.ktb = ktb;
         resultado.n = n;
 
         return resultado;

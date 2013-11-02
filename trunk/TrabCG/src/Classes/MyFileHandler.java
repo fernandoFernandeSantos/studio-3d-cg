@@ -234,7 +234,9 @@ public class MyFileHandler {
         this.File.writeDouble(p.getKaB());
         this.File.writeDouble(p.getKdB());
         this.File.writeDouble(p.getKsB());
-        this.File.writeDouble(p.getKt());
+        this.File.writeDouble(p.getKtR());
+        this.File.writeDouble(p.getKtG());
+        this.File.writeDouble(p.getKtB());
         this.File.writeDouble(p.getN());
 
 
@@ -297,7 +299,9 @@ public class MyFileHandler {
         double kab = this.File.readDouble();
         double kdb = this.File.readDouble();
         double ksb = this.File.readDouble();
-        double kt = this.File.readDouble();
+        double ktr = this.File.readDouble();
+        double ktg = this.File.readDouble();
+        double ktb = this.File.readDouble();
         double n = this.File.readDouble();
 
         p.setKaR(kar);
@@ -309,7 +313,9 @@ public class MyFileHandler {
         p.setKaB(kab);
         p.setKdB(kdb);
         p.setKsB(ksb);
-        p.setKt(kt);
+        p.setKtR(ktr);
+        p.setKtG(ktg);
+        p.setKtB(ktb);
         p.setN(n);
 
         Color Cp = this.loadCor();
