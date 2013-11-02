@@ -95,6 +95,9 @@ public class Poligono implements java.io.Serializable {
         kab = 1;
         kdb = 1;
         ksb = 1;
+        ktr = 0;
+        ktg = 0;
+        ktb = 0;
         n = 1;
 //        this.pontos.add(new Ponto("centro",0,0,0));
 
