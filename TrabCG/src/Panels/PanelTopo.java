@@ -104,6 +104,7 @@ public class PanelTopo extends javax.swing.JPanel {
                     }
                     break;
                 case 4:
+                case 5:
                     for (Face f : pol.getFaces()) {
                         f.gerarVetorPlano();
                         Vetor normal = f.getVetorPlano();

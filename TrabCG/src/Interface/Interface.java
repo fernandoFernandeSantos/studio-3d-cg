@@ -45,7 +45,6 @@ public class Interface extends javax.swing.JFrame {
     /**
      * Creates new form Interface
      */
-
     //coordenadas do vrp
     private double vrpX;
     private double vrpY;
@@ -95,7 +94,7 @@ public class Interface extends javax.swing.JFrame {
     Init i;
     Iluminacao luzAmbiente;
     Iluminacao luzFundo;
-
+    public boolean pintaZBuffer = false;
 
     public Interface(Init _i) {
 
@@ -326,6 +325,7 @@ public class Interface extends javax.swing.JFrame {
         WireframeOcultacaoRadioButton = new javax.swing.JRadioButton();
         SombreamentoRadioButton = new javax.swing.JRadioButton();
         jRadioButton1 = new javax.swing.JRadioButton();
+        jRadioButton2 = new javax.swing.JRadioButton();
         jPanel16 = new javax.swing.JPanel();
         jPanel17 = new javax.swing.JPanel();
         Ir = new javax.swing.JSpinner();
@@ -1152,6 +1152,14 @@ public class Interface extends javax.swing.JFrame {
             }
         });
 
+        VisualizacaoRadioButtonGroup.add(jRadioButton2);
+        jRadioButton2.setText("ZBuffer");
+        jRadioButton2.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jRadioButton2ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel8Layout = new javax.swing.GroupLayout(jPanel8);
         jPanel8.setLayout(jPanel8Layout);
         jPanel8Layout.setHorizontalGroup(
@@ -1159,6 +1167,7 @@ public class Interface extends javax.swing.JFrame {
             .addGroup(jPanel8Layout.createSequentialGroup()
                 .addGap(14, 14, 14)
                 .addGroup(jPanel8Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jRadioButton2)
                     .addComponent(jRadioButton1)
                     .addComponent(SombreamentoRadioButton)
                     .addComponent(WireframeOcultacaoRadioButton)
@@ -1176,7 +1185,9 @@ public class Interface extends javax.swing.JFrame {
                 .addComponent(SombreamentoRadioButton)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jRadioButton1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jRadioButton2)
+                .addContainerGap(9, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout jPanel7Layout = new javax.swing.GroupLayout(jPanel7);
@@ -1193,7 +1204,7 @@ public class Interface extends javax.swing.JFrame {
             .addGroup(jPanel7Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jPanel8, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(117, Short.MAX_VALUE))
+                .addContainerGap(92, Short.MAX_VALUE))
         );
 
         abas.addTab("Visualização", jPanel7);
@@ -1877,6 +1888,7 @@ public class Interface extends javax.swing.JFrame {
     private void panelFrenteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelFrenteMouseClicked
         //Clicou no painel frente ve qual poligono está selecionado
         // e cria o poligono
+
         Poligono pol = new Poligono();
         switch (cliqueAtual) {
             case 1:
@@ -2060,6 +2072,7 @@ public class Interface extends javax.swing.JFrame {
      * @param evt
      */
     private void panelFrenteMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelFrenteMouseDragged
+        pintaZBuffer = false;
         if (!this.poligonos.isEmpty()) {
             if (cliqueAtual == 2) {
                 Poligono aux = this.poligonos.get(this.PoligonosBox.
@@ -2182,6 +2195,7 @@ public class Interface extends javax.swing.JFrame {
      */
     private void panelLateralMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelLateralMouseClicked
 
+
         Poligono pol = new Poligono();
         switch (cliqueAtual) {
             case 1:
@@ -2249,6 +2263,7 @@ public class Interface extends javax.swing.JFrame {
      * @param evt
      */
     private void panelTopoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelTopoMouseClicked
+
         Poligono pol = new Poligono();
         switch (cliqueAtual) {
             case 1:
@@ -2315,6 +2330,7 @@ public class Interface extends javax.swing.JFrame {
      * @param evt
      */
     private void panelLateralMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelLateralMouseDragged
+        pintaZBuffer = false;
         if (!this.poligonos.isEmpty()) {
             if (cliqueAtual == 2) {
                 Poligono aux = this.poligonos.get(this.PoligonosBox.
@@ -2427,6 +2443,7 @@ public class Interface extends javax.swing.JFrame {
      * @param evt
      */
     private void panelTopoMouseDragged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_panelTopoMouseDragged
+        pintaZBuffer = false;
         if (!this.poligonos.isEmpty()) {
             if (cliqueAtual == 2) {
                 Poligono aux = this.poligonos.get(this.PoligonosBox.
@@ -2749,6 +2766,8 @@ public class Interface extends javax.swing.JFrame {
     {//GEN-HEADEREND:event_panelFrenteMouseReleased
         Xanteior = 0;
         Yanteior = 0;
+        pintaZBuffer = true;
+        repaint();
     }//GEN-LAST:event_panelFrenteMouseReleased
     /**
      * Zera o x e y (anterior) para não usar o mouse dragged de forma errada
@@ -2759,6 +2778,8 @@ public class Interface extends javax.swing.JFrame {
     {//GEN-HEADEREND:event_panelLateralMouseReleased
         Xanteior = 0;
         Yanteior = 0;
+        pintaZBuffer = true;
+        repaint();
     }//GEN-LAST:event_panelLateralMouseReleased
     /**
      * Zera o x e y (anterior) para não usar o mouse dragged de forma errada
@@ -2769,6 +2790,8 @@ public class Interface extends javax.swing.JFrame {
     {//GEN-HEADEREND:event_panelTopoMouseReleased
         Xanteior = 0;
         Yanteior = 0;
+        pintaZBuffer = true;
+        repaint();
     }//GEN-LAST:event_panelTopoMouseReleased
     /**
      * Visualização com wireframe com ocultação
@@ -2838,22 +2861,22 @@ public class Interface extends javax.swing.JFrame {
             this.i.criaNovo(this);
             this.abrir();
             for (Poligono p : poligonos) {
-               if(p.getTipo().equals("Prisma")){
-                     this.PoligonosBox.addItem(("Prisma "+prismas));
-                     prismas++;
-               }
-               if(p.getTipo().equals("Esfera")){
-                     this.PoligonosBox.addItem(("Esfera "+esferas));
-                     esferas++;
-               }
-               if(p.getTipo().equals("Piramide")){
-                     this.PoligonosBox.addItem(("Piramide "+piramides));
-                     piramides++;
-               }
+                if (p.getTipo().equals("Prisma")) {
+                    this.PoligonosBox.addItem(("Prisma " + prismas));
+                    prismas++;
+                }
+                if (p.getTipo().equals("Esfera")) {
+                    this.PoligonosBox.addItem(("Esfera " + esferas));
+                    esferas++;
+                }
+                if (p.getTipo().equals("Piramide")) {
+                    this.PoligonosBox.addItem(("Piramide " + piramides));
+                    piramides++;
+                }
 
             }
 
-           this.poligonosTransformados.add(this.poligonos.get(0));
+            this.poligonosTransformados.add(this.poligonos.get(0));
             KaR.setValue(this.poligonos.get(0).getKaR());
             KaG.setValue(this.poligonos.get(0).getKaG());
             KaB.setValue(this.poligonos.get(0).getKaB());
@@ -2866,7 +2889,7 @@ public class Interface extends javax.swing.JFrame {
             kt.setValue(this.poligonos.get(0).getKt());
             svrpX.setValue(this.camera.getVx());
             svrpY.setValue(this.camera.getVy());
-            svrpZ.setValue(this.camera.getVz());   
+            svrpZ.setValue(this.camera.getVz());
             spontoX.setValue(this.camera.getFPx());
             spontoY.setValue(this.camera.getFPy());
             spontoZ.setValue(this.camera.getFPz());
@@ -2874,11 +2897,11 @@ public class Interface extends javax.swing.JFrame {
             Ir.setValue(this.luzAmbiente.getIr());
             Ig.setValue(this.luzAmbiente.getIg());
             Ib.setValue(this.luzAmbiente.getIb());
-            
+
             FLX.setValue(this.luzFundo.getLocal().getX());
             FLY.setValue(this.luzFundo.getLocal().getY());
             FLZ.setValue(this.luzFundo.getLocal().getZ());
-            
+
             FLB.setValue(this.luzFundo.getIb());
             FLR.setValue(this.luzFundo.getIr());
             FLG.setValue(this.luzFundo.getIg());
@@ -3201,7 +3224,7 @@ public class Interface extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_jMenuItem5ActionPerformed
 
-   /**
+    /**
      * Botão escalar
      *
      * @param evt
@@ -3445,7 +3468,7 @@ public class Interface extends javax.swing.JFrame {
     }//GEN-LAST:event_PoligonosBoxActionPerformed
 
     private void jMenuItem6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMenuItem6ActionPerformed
-         
+
         JFrame zbuffer = new JFrame();
         zbuffer.setName("Zbuffer");
         zbuffer.setSize(panelPerspectiva.getWidth(), panelPerspectiva.getHeight());
@@ -3454,8 +3477,13 @@ public class Interface extends javax.swing.JFrame {
         zbuffer.setLocationRelativeTo(null);
         zbuffer.setDefaultCloseOperation(JFrame.HIDE_ON_CLOSE);
         zbuffer.setVisible(true);
-        
+
     }//GEN-LAST:event_jMenuItem6ActionPerformed
+
+    private void jRadioButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jRadioButton2ActionPerformed
+        this.visualizacaoAtual = 5;
+        repaint();
+    }//GEN-LAST:event_jRadioButton2ActionPerformed
     /**
      * Seta a cor das arestas do(s) poligonos(s)
      *
@@ -3589,7 +3617,7 @@ public class Interface extends javax.swing.JFrame {
         BufferedImage bufferImagem = new BufferedImage(this.panelPerspectiva.
                 getWidth() + 600, this.panelPerspectiva.getHeight() + 600,
                 BufferedImage.TYPE_INT_RGB);
-        
+
         for (int j = 0; j < bufferImagem.getWidth(); j++) {
             for (int k = 0; k < bufferImagem.getHeight(); k++) {
                 bufferImagem.setRGB(j, k, this.panelPerspectiva.getBackground().
@@ -3617,7 +3645,7 @@ public class Interface extends javax.swing.JFrame {
             }
 
         }
-        
+
         for (int i = 0; i < xmax; i++) {
             for (int j = 0; j < ymax; j++) {
                 matrizOpaco[i][j] = true;
@@ -3637,11 +3665,11 @@ public class Interface extends javax.swing.JFrame {
             ArrayList<Poligono> poligonosOrganizados = new ArrayList();
             ArrayList<Poligono> poligonosOrganizadosOpacos = new ArrayList();
             ArrayList<Poligono> poligonosOrganizadosTransparentes = new ArrayList();
-            
+
             ArrayList<Poligono> poligonosOriginais = new ArrayList<>();
             ArrayList<Poligono> poligonosOriginaisOpacos = new ArrayList<>();
             ArrayList<Poligono> poligonosOriginaisTransparentes = new ArrayList<>();
-            
+
             ArrayList<Matriz> matrizesAux = new ArrayList<>();
             ArrayList<Matriz> matrizesAuxOpacos = new ArrayList<>();
             ArrayList<Matriz> matrizesAuxTransparentes = new ArrayList<>();
@@ -3898,7 +3926,7 @@ public class Interface extends javax.swing.JFrame {
                                             int RedM = cor.getRed();
                                             int GreenM = cor.getGreen();
                                             int BlueM = cor.getBlue();
-                                           
+
                                             RedM = (int) ((int) (RedM * (ktPol)) + (red * (1 - ktPol)));
                                             GreenM = (int) ((int) (GreenM * (ktPol)) + (green * (1 - ktPol)));
                                             BlueM = (int) ((int) (BlueM * (ktPol)) + (blue * (1 - ktPol)));
@@ -3981,14 +4009,14 @@ public class Interface extends javax.swing.JFrame {
 //        double difusa = difusa(inter.getLuzFundo().getIr(), p.getKdR(), ponto.
 //                getNormal(), inter.getLuzFundo().getLocal(), ponto);
         double difusa = difusa(getLuzFundo().getIr(), p.getKdR(), ponto.
-                getNormal(),getLuzFundo().getLocal(), ponto);
+                getNormal(), getLuzFundo().getLocal(), ponto);
 
 //        double especular = difusa == 0.0D ? 0.0D : especular(inter.getLuzFundo().
 //                getIr(), p.getKsR(), p.getN(), inter.getLuzFundo().getLocal(),
 //                ponto.getNormal(), new Ponto("", inter.getCamera().getVx(),
 //                inter.getCamera().getVy(), inter.getCamera().getVz()), ponto);
         double especular = difusa == 0.0D ? 0.0D : especular(getLuzFundo().
-                getIr(), p.getKsR(), p.getN(),getLuzFundo().getLocal(),
+                getIr(), p.getKsR(), p.getN(), getLuzFundo().getLocal(),
                 ponto.getNormal(), new Ponto("", getCamera().getVx(),
                 getCamera().getVy(), getCamera().getVz()), ponto);
         return ambiente + difusa + especular;
@@ -4258,6 +4286,7 @@ public class Interface extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
     private javax.swing.JRadioButton jRadioButton1;
+    private javax.swing.JRadioButton jRadioButton2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSpinner kt;
     private javax.swing.JCheckBox mostrarPontos;

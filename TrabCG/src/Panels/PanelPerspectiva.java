@@ -59,7 +59,7 @@ public class PanelPerspectiva extends javax.swing.JPanel {
         poligonosOrganizados.clear();
         matrizesAux.clear();
         poligonosOriginais.clear();
-        
+
         for (Poligono p : inter.getPoligonos()) {
             //gera a perspectiva dos poligonos que estão na camera atual da interface
             poligonosOriginais.add(p.TransformarPerspectiva());
@@ -79,7 +79,7 @@ public class PanelPerspectiva extends javax.swing.JPanel {
                         subtracao(b, c.getVRP3()).getModulo()) /* For descending order use < */ {
                     Collections.swap(poligonosOrganizados, d, d + 1);
                     Collections.swap(matrizesAux, d, d + 1);
-                    Collections.swap(poligonosOriginais,d,d+1);
+                    Collections.swap(poligonosOriginais, d, d + 1);
                 }
             }
         }
@@ -180,12 +180,12 @@ public class PanelPerspectiva extends javax.swing.JPanel {
                                 Poligono p_phong = poligonosOriginais.get(poligonosOrganizados.indexOf(Paux));
                                 for (int k = 0; k < p_phong.getFaces().size();
                                         k++) {
-                                    for (int l = 0; l <p_phong.getFaces().get(k).
+                                    for (int l = 0; l < p_phong.getFaces().get(k).
                                             getPontos().size(); l++) {
                                         if (f2.getPontos().get(j).getNome()
                                                 == p_phong.getFaces().get(k).
                                                 getPontos().get(l).getNome()) {
-                                            
+
                                             p_phong.getFaces().get(k).
                                                     gerarVetorPlano();
                                             p_phong.getFaces().get(k).
@@ -220,6 +220,10 @@ public class PanelPerspectiva extends javax.swing.JPanel {
                     }
 
                     break;
+                case 5:
+                    if (inter.pintaZBuffer) {
+                        g.drawImage(inter.getZBuffer(), 0, 0, null);
+                    }
             }
             if (inter.isMostrarPontos()) {
                 this.paintPointNumbers(Paux, g2D);
@@ -442,7 +446,7 @@ public class PanelPerspectiva extends javax.swing.JPanel {
                 Z += variacaZM;
                 X += variacaoXM;
             }
-          
+
 
         }
 
@@ -556,8 +560,7 @@ public class PanelPerspectiva extends javax.swing.JPanel {
         matrizLocal.set(1, 0, inter.getLuzFundo().getLocal().getY());
         matrizLocal.set(2, 0, inter.getLuzFundo().getLocal().getZ());
         matrizLocal.set(3, 0, 1);
-        Ponto pLocal = new Ponto("", matrizLocal.get(0, 0), matrizLocal. get(1, 0), matrizLocal.get(2, 0)
-        );
+        Ponto pLocal = new Ponto("", matrizLocal.get(0, 0), matrizLocal.get(1, 0), matrizLocal.get(2, 0));
         double ambiente = luzAmbiente(inter.getLuzAmbiente().getIb(), p.getKaB());
 
         double difusa = reflexaoDifusa(inter.getLuzFundo().getIb(), p.getKdB(),
@@ -598,8 +601,8 @@ public class PanelPerspectiva extends javax.swing.JPanel {
      * @return double
      */
     private static double reflexaoDifusa(double Il, double Kd, Ponto normal,
-                                         Ponto L,
-                                         Ponto pontoObservado) {
+            Ponto L,
+            Ponto pontoObservado) {
         Ponto l = new Ponto("", pontoObservado.getX() - L.getX(),
                 pontoObservado.getY() - L.getY(), pontoObservado.getZ() - L.
                 getZ());
@@ -631,8 +634,8 @@ public class PanelPerspectiva extends javax.swing.JPanel {
      * @return double com o valor da reflexao especular
      */
     private static double reflexaoEspecular(double Il, double Ks,
-                                            double expoenteN,
-                                            Ponto L, Ponto N, Ponto VRP, Ponto A) {
+            double expoenteN,
+            Ponto L, Ponto N, Ponto VRP, Ponto A) {
         Ponto l = new Ponto("", A.getX() - L.getX(), A.getY() - L.getY(), A.
                 getZ() - L.getZ());
         double normaL = norma(l);
