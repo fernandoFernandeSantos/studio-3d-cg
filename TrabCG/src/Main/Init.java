@@ -19,7 +19,7 @@ public class Init {
         i.setVisible(true);
     }
     public void criaNovo(Interface it) {
-//        it.setVisible(false);
+        it.setVisible(false);
         it = null;
         System.gc();
         i = new Interface(this);
