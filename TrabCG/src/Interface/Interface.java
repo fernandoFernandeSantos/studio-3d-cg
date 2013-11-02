@@ -3704,16 +3704,16 @@ public class Interface extends javax.swing.JFrame {
     }
 
     public BufferedImage getZBuffer() {
-        BufferedImage bufferImagem = new BufferedImage(this.panelPerspectiva.
-                getWidth() + 600, this.panelPerspectiva.getHeight() + 600,
-                BufferedImage.TYPE_INT_RGB);
+//        BufferedImage bufferImagem = new BufferedImage(this.panelPerspectiva.
+//                getWidth() + 600, this.panelPerspectiva.getHeight() + 600,
+//                BufferedImage.TYPE_INT_RGB);
 
-        for (int j = 0; j < bufferImagem.getWidth(); j++) {
-            for (int k = 0; k < bufferImagem.getHeight(); k++) {
-                bufferImagem.setRGB(j, k, this.panelPerspectiva.getBackground().
-                        getRGB());
-            }
-        }
+//        for (int j = 0; j < bufferImagem.getWidth(); j++) {
+//            for (int k = 0; k < bufferImagem.getHeight(); k++) {
+//                bufferImagem.setRGB(j, k, this.panelPerspectiva.getBackground().
+//                        getRGB());
+//            }
+//        }
 
         int altura = this.panelPerspectiva.getHeight();
         int largura = this.panelPerspectiva.getWidth();
