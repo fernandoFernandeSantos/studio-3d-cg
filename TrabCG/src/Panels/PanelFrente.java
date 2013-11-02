@@ -113,9 +113,9 @@ public class PanelFrente extends javax.swing.JPanel {
                         if (Vetor.produtoEscalar(normal, observador) > 0) {
                             Ponto origem = new Ponto("", 0.0, 0.0, 100);
                             //chama os métodos que fazem o calculo de ir, ig e ib
-                            double Ir = getIr(p, f, origem);
-                            double Ig = getIg(p, f, origem);
-                            double Ib = getIb(p, f, origem);
+                            double Ir = getIr(pol, f, origem);
+                            double Ig = getIg(pol, f, origem);
+                            double Ib = getIb(pol, f, origem);
                             //faz o calculo de cada cor de acordo com o ir, ig e ib já calculado
                             int red = (int) (Ir * (double) p.getCorFace().
                                     getRed());
@@ -333,10 +333,10 @@ public class PanelFrente extends javax.swing.JPanel {
      * @param pontoObservado
      * @return double
      */
-    private static double reflexaoDifusa(double Il, double Kd, Ponto normal, Ponto L,
+    private  double reflexaoDifusa(double Il, double Kd, Ponto normal, Ponto L,
             Ponto pontoObservado) {
         Ponto l = new Ponto("", pontoObservado.getX() - L.getX(),
-                pontoObservado.getY() - L.getY(), pontoObservado.getZ() - L.
+                pontoObservado.getY() - (this.getWidth()- L.getY()), pontoObservado.getZ() - L.
                 getZ());
         double normaL = norma(l);
         l.setX(l.getX() / normaL);
@@ -365,9 +365,9 @@ public class PanelFrente extends javax.swing.JPanel {
      * @param A
      * @return valor da reflexão especular
      */
-    private static double reflexaoEspecular(double Il, double Ks, double expoenteN,
+    private double reflexaoEspecular(double Il, double Ks, double expoenteN,
             Ponto L, Ponto N, Ponto VRP, Ponto A) {
-        Ponto l = new Ponto("", A.getX() - L.getX(), A.getY() - L.getY(), A.
+        Ponto l = new Ponto("", A.getX() - L.getX(), A.getY() - (this.getWidth()- L.getY()), A.
                 getZ() - L.getZ());
         double normaL = norma(l);
         l.setX(l.getX() / normaL);
