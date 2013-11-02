@@ -383,15 +383,7 @@ public class PanelPerspectiva extends javax.swing.JPanel {
             double e4 = ((1.0 - parametroU2) * (pD.getY() - pC.getY())) / (pD.
                     getY()
                     - pC.getY());
-            //até aqui é x e y perspectiva...
-
-
-            //daqui para baixo é eles fazem x, y e z normais, acho que seria em mundo...
-            //lá onde eu chamo o phong teria que montar a face com os pontos em perspectiva e no mundo
-            //na classe ponto eu criei novos atributos mX, mY, mZ e cameraZ
-            //teria que, lá onde chamo o phong, setar esses atributos e utilizar aqui para baixo (cameraZ só usa no zbuffer)
-            //outra coisa que tem que ver é se minhas medias dos vetores normais estao sendo feitas corretamente
-            //isso é feita tbm onde chamo o phong (if == 4)
+      
 
 
             double Nxi = pB.getnX() * e1 + pA.getnX() * e2;
