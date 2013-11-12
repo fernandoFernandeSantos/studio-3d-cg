@@ -3984,6 +3984,8 @@ public class Interface extends javax.swing.JFrame {
                                             GreenM = (int) ((GreenM * (ktPolG)) + (green * (1 - ktPolG)));
                                             BlueM = (int) ((BlueM * (ktPolB)) + (blue * (1 - ktPolB)));
 
+                                            
+                                            
                                             if (RedM > 255) {
                                                 RedM = 255;
                                             }
@@ -4044,6 +4046,12 @@ public class Interface extends javax.swing.JFrame {
                                         int RedM = cor.getRed();
                                         int GreenM = cor.getGreen();
                                         int BlueM = cor.getBlue();
+                                        
+                                                RedM = (int) ((int) (RedM * (1 - ktPolR)) + (red * (ktPolR)));
+                                        GreenM = (int) ((int) (GreenM * (1 - ktPolG)) + (green * (ktPolG)));
+                                        BlueM = (int) ((int) (BlueM * (1 - ktPolB)) + (blue * (ktPolB)));
+
+                                        
                                         if (RedM > 255) {
                                             RedM = 255;
                                         }
